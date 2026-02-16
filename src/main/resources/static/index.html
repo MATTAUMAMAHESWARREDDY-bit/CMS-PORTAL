@@ -1,0 +1,1554 @@
+<!-- =========================
+     index.html (SINGLE FILE)
+     Kalasalingam University - CMS Portal (Frontend SPA)
+     UPDATED FEATURES:
+     ✅ Show Welcome + username (Admin + User)
+     ✅ Admin: Manage (Upcoming Events list+delete, Content list+delete)
+     ✅ User: Change Password (old/new/confirm)
+     ✅ Multiple photos: selecting again ADDS (does not replace)
+     ========================= -->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kalasalingam University - CMS Portal</title>
+
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0f172a;
+      --card: rgba(15,23,42,.78);
+      --card2: rgba(255,255,255,.92);
+      --muted:#94a3b8;
+      --text:#e2e8f0;
+      --text2:#0f172a;
+      --line: rgba(148,163,184,.35);
+      --line2:#e2e8f0;
+
+      --accent:#eab308;
+      --accent2:#facc15;
+      --danger:#ef4444;
+      --ok:#22c55e;
+
+      --nav:#0f172a;
+      --navbtn:#1e293b;
+      --navhover:#334155;
+
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+      --shadow2: 0 16px 30px rgba(15,23,42,.16);
+      --radius: 18px;
+
+      --font: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; margin:0; font-family:var(--font); }
+    body{
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(56,189,248,.16), transparent 55%),
+                  radial-gradient(900px 600px at 80% 30%, rgba(234,179,8,.14), transparent 55%),
+                  linear-gradient(140deg, #0b1220, #0f172a 45%, #0b1220);
+      color: var(--text);
+      overflow-x:hidden;
+    }
+
+    .bg-photo{
+      position:fixed; inset:0;
+      background-image:
+        linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
+        url("https://www.kalasalingam.ac.in/wp-content/uploads/2021/06/IMG_1793-scaled.jpg");
+      background-size:cover;
+      background-position:center;
+      filter:saturate(1.05) contrast(1.02);
+      z-index:-2;
+    }
+
+    #app{ min-height:100%; display:flex; flex-direction:column; }
+
+    .hidden{ display:none !important; }
+    .row{ display:flex; gap:14px; flex-wrap:wrap; }
+    .grow{ flex:1; min-width:240px; }
+    .muted{ color:var(--muted); }
+    .hr{ height:1px; background:rgba(226,232,240,.16); margin:14px 0; }
+
+    .btn{
+      border:0; outline:0;
+      padding:11px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      letter-spacing:.2px;
+      font-family:var(--font);
+      transition: transform .12s ease, background .12s ease, opacity .12s ease;
+      user-select:none;
+    }
+    .btn:active{ transform:translateY(1px); }
+    .btn-primary{ background:var(--accent); color:#0b1220; }
+    .btn-primary:hover{ background:var(--accent2); }
+    .btn-secondary{ background:#e2e8f0; color:#0f172a; }
+    .btn-ghost{
+      background:transparent; color:var(--text);
+      border:1px solid rgba(226,232,240,.2);
+    }
+    .btn-danger{ background:var(--danger); color:white; }
+    .btn-danger:hover{ opacity:.92; }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; }
+
+    .field{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.45);
+      background: rgba(255,255,255,.96);
+      color:#0f172a;
+      font-size:14px;
+      outline:none;
+    }
+    .field:focus{
+      border-color: rgba(234,179,8,.85);
+      box-shadow: 0 0 0 4px rgba(234,179,8,.18);
+    }
+    .label{
+      font-size:13px;
+      color: rgba(226,232,240,.92);
+      margin:0 0 6px 2px;
+    }
+    .label-dark{
+      font-size:13px;
+      color:#0f172a;
+      margin:0 0 6px 2px;
+      font-weight:600;
+    }
+    textarea.field{ min-height:92px; resize:vertical; }
+    select.field{ padding:11px 10px; }
+    .hint{ font-size:12px; color:rgba(226,232,240,.75); margin-top:6px; }
+    .hint-dark{ font-size:12px; color:#475569; margin-top:6px; }
+
+    .glass-card{
+      width:min(520px, 92vw);
+      border-radius:22px;
+      background: rgba(0,0,0,.56);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      padding:18px 22px 12px 22px;
+    }
+    .panel{
+      width: min(1120px, 94vw);
+      margin: 18px auto;
+      background: rgba(255,255,255,.92);
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      color:var(--text2);
+    }
+    .panel-inner{ padding:18px; }
+
+    #screen-login{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:26px 12px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin: 6px 0 18px;
+    }
+    .logo img{
+      width: 360px;
+      max-width: 92%;
+      height:auto;
+      filter: drop-shadow(0 10px 22px rgba(0,0,0,.35));
+    }
+    .login-grid{ display:flex; flex-direction:column; gap:12px; }
+    .checkline{ display:flex; align-items:center; gap:8px; margin:2px 0 6px; }
+    .checkline input{ width:16px; height:16px; }
+    .checkline span{ font-size:13px; color:rgba(226,232,240,.92); }
+    .login-footer{
+      margin-top:10px;
+      text-align:center;
+      font-size:12px;
+      color:rgba(226,232,240,.75);
+    }
+
+    .topbar{
+      background: var(--nav);
+      color:white;
+      padding: 12px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid rgba(226,232,240,.12);
+    }
+    .topbar .title{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .badge{
+      font-size:12px;
+      padding:4px 10px;
+      border-radius:999px;
+      background: rgba(234,179,8,.18);
+      color: #fde68a;
+      border: 1px solid rgba(234,179,8,.35);
+      font-weight:700;
+    }
+    .nav{
+      display:flex; flex-wrap:wrap;
+      gap:10px;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .nav .navbtn{
+      background: var(--navbtn);
+      color:white;
+      border:1px solid rgba(226,232,240,.12);
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:800;
+      cursor:pointer;
+      transition: background .12s ease, transform .12s ease;
+      user-select:none;
+    }
+    .nav .navbtn:hover{ background: var(--navhover); }
+    .nav .navbtn:active{ transform: translateY(1px); }
+    .nav .navbtn.logout{
+      background: var(--accent);
+      color:#0b1220;
+      border-color: rgba(234,179,8,.55);
+    }
+    .nav .navbtn.logout:hover{ background: var(--accent2); }
+
+    .section-title{
+      font-size:20px;
+      font-weight:900;
+      margin:0 0 12px;
+    }
+    .sub{
+      margin:0 0 14px;
+      color:#475569;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .card-soft{
+      border:1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px;
+      background:white;
+    }
+
+    table{ width:100%; border-collapse:collapse; }
+    th,td{ padding:12px 10px; border-bottom:1px solid #e2e8f0; text-align:left; font-size:14px; }
+    th{ font-size:12px; color:#475569; text-transform:uppercase; letter-spacing:.5px; }
+    tr:hover td{ background:#f8fafc; }
+
+    .status-pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      border:1px solid #e2e8f0;
+    }
+    .pill-active{ background: rgba(34,197,94,.12); color:#166534; border-color: rgba(34,197,94,.25); }
+    .pill-expired{ background: rgba(148,163,184,.16); color:#475569; border-color: rgba(148,163,184,.32); }
+
+    .status{
+      font-size:13px;
+      font-weight:700;
+      color:#334155;
+      padding-left:8px;
+    }
+    .status.ok{ color:#166534; }
+    .status.err{ color:#991b1b; }
+    .status.warn{ color:#92400e; }
+
+    /* File chip */
+    .filechip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid #e2e8f0;
+      background:#f8fafc;
+      color:#0f172a;
+      font-size:13px;
+      font-weight:800;
+      margin-top:8px;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    /* Modal */
+    .modal-backdrop{
+      position:fixed; inset:0; background:rgba(0,0,0,.55);
+      display:flex; align-items:center; justify-content:center;
+      padding:20px;
+      z-index:50;
+    }
+    .modal{
+      width:min(960px, 96vw);
+      background:white;
+      color:#0f172a;
+      border-radius:18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modal-head{
+      padding:12px 14px;
+      background:#0f172a;
+      color:white;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .modal-body{ padding:14px; }
+    .imgbox{
+      width:100%;
+      height:520px;
+      background:#0b1220;
+      border-radius:14px;
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden;
+    }
+    .imgbox img{ max-width:100%; max-height:100%; object-fit:contain; }
+
+    .mini-actions{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      margin-top:10px;
+    }
+
+    @media (max-width: 720px){
+      .topbar{ flex-direction:column; align-items:flex-start; }
+      .nav{ justify-content:flex-start; }
+      .imgbox{ height:340px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-photo" id="bgPhoto"></div>
+
+  <div id="app">
+    <!-- ========================= LOGIN ========================= -->
+    <section id="screen-login">
+      <div class="glass-card" aria-label="Login card">
+        <div class="logo">
+          <img alt="Kalasalingam University Logo"
+               src="https://www.kalasalingam.ac.in/wp-content/uploads/2022/02/Logo.png" />
+        </div>
+
+        <div class="login-grid">
+          <div>
+            <div class="label">Username</div>
+            <input id="loginUser" class="field" type="text" autocomplete="username" />
+          </div>
+
+          <div>
+            <div class="label">Password</div>
+            <input id="loginPass" class="field" type="password" autocomplete="current-password" />
+          </div>
+
+          <label class="checkline">
+            <input id="showPass" type="checkbox" />
+            <span>Show password</span>
+          </label>
+
+          <button class="btn btn-primary" id="btnLogin">LOGIN</button>
+
+          <div class="login-footer">© Kalasalingam University</div>
+          <div class="hint" id="loginStatus"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= ADMIN ========================= -->
+    <section id="screen-admin" class="hidden">
+      <div class="topbar">
+        <div class="title">
+          <span>Admin Dashboard</span>
+          <span class="badge" id="adminBadge">ADMIN</span>
+        </div>
+        <div class="nav">
+          <button class="navbtn" data-admin-tab="HOME">Home</button>
+          <button class="navbtn" data-admin-tab="ADD_EVENT">Add Upcoming Event</button>
+          <button class="navbtn" data-admin-tab="ADD_CONTENT">Add Content</button>
+          <button class="navbtn" data-admin-tab="ADD_USER">Add User</button>
+          <button class="navbtn" data-admin-tab="MANAGE">Manage</button>
+          <button class="navbtn logout" id="btnAdminLogout">Logout</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-inner">
+
+          <div class="admin-tab" id="adminTab_HOME">
+            <div class="section-title">Welcome, <span id="adminName">Admin</span> 👋</div>
+            <p class="sub">Use the top menu to manage events, content, and users.</p>
+            <div class="card-soft">
+              <div style="font-weight:900; margin-bottom:6px;">Upload Notes</div>
+              <div class="muted" style="font-size:13px; line-height:1.55;">
+                • Event Photo is uploaded using <b>File Picker</b><br/>
+                • Content Photos + Report are uploaded using <b>File Picker</b><br/>
+                • Frontend sends <b>multipart/form-data</b> to backend
+              </div>
+            </div>
+          </div>
+
+          <!-- ✅ ADMIN: ADD EVENT (FILE UPLOAD) -->
+          <div class="admin-tab hidden" id="adminTab_ADD_EVENT">
+            <div class="section-title">Add Upcoming Event</div>
+            <p class="sub">Uploads photo using file picker. Backend accepts <b>multipart/form-data</b>.</p>
+
+            <div class="card-soft">
+              <div class="row">
+                <div class="grow">
+                  <div class="label-dark">Event Title</div>
+                  <input id="aeTitle" class="field" type="text" placeholder="e.g., Tech Fest 2026" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Event Date</div>
+                  <input id="aeDate" class="field" type="date" />
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Event Photo (Upload)</div>
+                  <input id="aePhotoFile" class="field" type="file" accept="image/*" />
+                  <div class="hint-dark">Choose image (jpg/png/webp). Backend will store it and return URL.</div>
+                  <div id="aePhotoChip" class="filechip hidden"></div>
+                </div>
+
+                <div class="grow">
+                  <div class="label-dark">Registration Link</div>
+                  <input id="aeRegLink" class="field" type="url" placeholder="https://..." />
+                </div>
+              </div>
+
+              <div style="margin-top:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-primary" id="btnSaveEvent">Save Event</button>
+                <span class="status" id="aeStatus"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ✅ ADMIN: ADD CONTENT (FILE UPLOAD MULTIPLE + REPORT) -->
+          <div class="admin-tab hidden" id="adminTab_ADD_CONTENT">
+            <div class="section-title">Add Content</div>
+            <p class="sub">Uploads multiple photos + report. You can select photos multiple times (it ADDS).</p>
+
+            <div class="card-soft">
+              <div class="row">
+                <div class="grow">
+                  <div class="label-dark">Event Title</div>
+                  <input id="acTitle" class="field" type="text" placeholder="Same title as event" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Event Date</div>
+                  <input id="acDate" class="field" type="date" />
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Description</div>
+                  <textarea id="acDesc" class="field" placeholder="Write event description..."></textarea>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Photos (Upload multiple)</div>
+                  <input id="acPhotoFiles" class="field" type="file" accept="image/*" multiple />
+                  <div class="hint-dark">Tip: You can select once or select again to add more photos.</div>
+                  <div id="acPhotosChip" class="filechip hidden"></div>
+
+                  <div class="mini-actions">
+                    <button class="btn btn-secondary" id="btnClearPhotos" type="button">Clear Selected Photos</button>
+                  </div>
+                </div>
+
+                <div class="grow">
+                  <div class="label-dark">YouTube Links (one per line)</div>
+                  <textarea id="acYoutube" class="field" placeholder="https://youtu.be/...&#10;https://www.youtube.com/watch?v=..."></textarea>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Event Report (Upload)</div>
+                  <input id="acReportFile" class="field" type="file" />
+                  <div class="hint-dark">Upload PDF/DOC/PPT etc. Backend will store and return URL.</div>
+                  <div id="acReportChip" class="filechip hidden"></div>
+                </div>
+              </div>
+
+              <div style="margin-top:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-primary" id="btnSaveContent">Save Content</button>
+                <span class="status" id="acStatus"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin: Add User -->
+          <div class="admin-tab hidden" id="adminTab_ADD_USER">
+            <div class="section-title">Add User</div>
+            <p class="sub">Creates a <b>user</b> or <b>admin</b>.</p>
+
+            <div class="card-soft">
+              <div class="row">
+                <div class="grow">
+                  <div class="label-dark">Username</div>
+                  <input id="auUser" class="field" type="text" placeholder="username" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Password</div>
+                  <input id="auPass" class="field" type="password" placeholder="password" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Role</div>
+                  <select id="auRole" class="field">
+                    <option value="user">user</option>
+                    <option value="admin">admin</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-top:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-primary" id="btnCreateUser">Create User</button>
+                <span class="status" id="auStatus"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ✅ ADMIN: MANAGE -->
+          <div class="admin-tab hidden" id="adminTab_MANAGE">
+            <div class="section-title">Manage</div>
+            <p class="sub">Manage upcoming events and content (view + delete).</p>
+
+            <div class="card-soft">
+              <div class="row" style="align-items:center;">
+                <button class="btn btn-primary" id="btnManageUpcoming">Manage Upcoming Events</button>
+                <button class="btn btn-secondary" id="btnManageContent">Manage Content</button>
+                <span class="status" id="amStatus"></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <div id="adminManageBox" style="overflow:auto;">
+                <div class="muted" style="font-weight:800;">Click a button to load list...</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= USER DETAILS ========================= -->
+    <section id="screen-details" class="hidden">
+      <div class="topbar">
+        <div class="title">
+          <span>Complete Your Profile</span>
+          <span class="badge">FIRST LOGIN</span>
+        </div>
+        <div class="nav">
+          <button class="navbtn logout" id="btnDetailsLogout">Logout</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-inner">
+          <div class="section-title">Complete Your Profile</div>
+          <p class="sub">Fill once. Next time it will open dashboard directly.</p>
+
+          <div class="card-soft">
+            <div class="row">
+              <div class="grow">
+                <div class="label-dark">Name</div>
+                <input id="udName" class="field" type="text" />
+              </div>
+              <div class="grow">
+                <div class="label-dark">Phone</div>
+                <input id="udPhone" class="field" type="tel" />
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px;">
+              <div class="grow">
+                <div class="label-dark">Email</div>
+                <input id="udEmail" class="field" type="email" />
+              </div>
+              <div class="grow">
+                <div class="label-dark">Branch</div>
+                <input id="udBranch" class="field" type="text" />
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px;">
+              <div class="grow">
+                <div class="label-dark">Gender</div>
+                <select id="udGender" class="field">
+                  <option value="">Select</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="grow">
+                <div class="label-dark">DOB</div>
+                <input id="udDob" class="field" type="date" />
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px;">
+              <div class="grow">
+                <div class="label-dark">Address</div>
+                <textarea id="udAddress" class="field"></textarea>
+              </div>
+            </div>
+
+            <div style="margin-top:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+              <button class="btn btn-secondary" id="btnBackToLogin">Back to Login</button>
+              <button class="btn btn-primary" id="btnSubmitDetails">Submit</button>
+              <span class="status" id="udStatus"></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= USER DASHBOARD ========================= -->
+    <section id="screen-user" class="hidden">
+      <div class="topbar">
+        <div class="title">
+          <span>User Dashboard</span>
+          <span class="badge" id="userBadge">USER</span>
+        </div>
+        <div class="nav">
+          <button class="navbtn" data-user-tab="HOME">Home</button>
+          <button class="navbtn" data-user-tab="PROFILE">Profile</button>
+          <button class="navbtn" data-user-tab="EVENTS">Upcoming Events</button>
+          <button class="navbtn" data-user-tab="CONTENT">Content</button>
+          <button class="navbtn" data-user-tab="CHANGE_PASS">Change Password</button>
+          <button class="navbtn logout" id="btnUserLogout">Logout</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-inner">
+          <div class="user-tab" id="userTab_HOME">
+            <div class="section-title">Welcome, <span id="userName">User</span> 👋</div>
+            <p class="sub">Use the top menu to view profile, events, and content.</p>
+            <div class="card-soft">
+              <div style="font-weight:900; margin-bottom:8px;">Quick actions</div>
+              <div class="row">
+                <button class="btn btn-primary" id="goEvents">View Upcoming Events</button>
+                <button class="btn btn-secondary" id="goContent">Open Content</button>
+                <button class="btn btn-secondary" id="goChangePass">Change Password</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="user-tab hidden" id="userTab_PROFILE">
+            <div class="section-title">My Profile</div>
+            <p class="sub">Loaded from <b>user_details</b>.</p>
+
+            <div class="card-soft">
+              <pre id="profileText" style="margin:0; white-space:pre-wrap; font-family:var(--font); font-size:14px; line-height:1.7;">Loading profile...</pre>
+              <div class="hr"></div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-secondary" id="btnRefreshProfile">Refresh</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="user-tab hidden" id="userTab_EVENTS">
+            <div class="section-title">Upcoming Events</div>
+            <p class="sub">Expired events are automatically disabled (based on event_date).</p>
+
+            <div class="card-soft">
+              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px;">
+                <button class="btn btn-primary" id="btnRefreshEvents">Refresh Events</button>
+                <span class="status" id="eventsStatus"></span>
+              </div>
+
+              <div style="overflow:auto;">
+                <table id="eventsTable">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th>Photo</th>
+                      <th>Register</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+
+              <div class="hint-dark" style="margin-top:10px;">
+                Note: Photo/Register links open in new tab if provided by backend.
+              </div>
+            </div>
+          </div>
+
+          <div class="user-tab hidden" id="userTab_CONTENT">
+            <div class="section-title">Event Content</div>
+            <p class="sub">Select Event + Date → Load → then you can open report, photos, and videos.</p>
+
+            <div class="card-soft">
+              <div class="row" style="align-items:flex-end;">
+                <div class="grow">
+                  <div class="label-dark">Event</div>
+                  <select id="cEventTitle" class="field"></select>
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Date</div>
+                  <select id="cEventDate" class="field"></select>
+                </div>
+                <div>
+                  <button class="btn btn-primary" id="btnLoadContent">Load</button>
+                </div>
+                <span class="status" id="contentStatus"></span>
+              </div>
+
+              <div id="contentDetails" class="hidden" style="margin-top:14px;">
+                <div class="card-soft" style="background:#fff; margin-bottom:10px;">
+                  <div class="row" style="align-items:center; justify-content:space-between;">
+                    <div class="grow">
+                      <div style="font-weight:900;" id="selEventName">Event Name: -</div>
+                      <div class="muted" style="font-weight:800;" id="selEventDate">Event Date: -</div>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                      <button class="btn btn-secondary" id="btnOpenReport" disabled>Open Report</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-soft" style="background:#fff; margin-bottom:10px;">
+                  <div class="row" style="align-items:center;">
+                    <div style="font-weight:900;">Photos</div>
+                    <div class="grow"></div>
+                    <button class="btn btn-secondary" id="btnWatchPhotos" disabled>Watch Photos</button>
+                  </div>
+                  <div class="hint-dark">Photos will open in a viewer (modal) if URLs exist.</div>
+                </div>
+
+                <div class="card-soft" style="background:#fff; margin-bottom:10px;">
+                  <div style="font-weight:900; margin-bottom:8px;">Videos</div>
+                  <div class="row" id="videosPanel"></div>
+                  <div class="hint-dark">YouTube links open in new tab.</div>
+                </div>
+
+                <div class="card-soft" style="background:#fff;">
+                  <div style="font-weight:900; margin-bottom:8px;">Description</div>
+                  <div id="descBox" style="white-space:pre-wrap; font-size:14px; line-height:1.7; color:#0f172a;">
+                    (No description)
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ✅ USER: CHANGE PASSWORD -->
+          <div class="user-tab hidden" id="userTab_CHANGE_PASS">
+            <div class="section-title">Change Password</div>
+            <p class="sub">Enter your old password, then new password and confirm.</p>
+
+            <div class="card-soft">
+              <div class="row">
+                <div class="grow">
+                  <div class="label-dark">Old Password</div>
+                  <input id="cpOld" class="field" type="password" placeholder="Old password" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">New Password</div>
+                  <input id="cpNew" class="field" type="password" placeholder="New password" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Confirm Password</div>
+                  <input id="cpCon" class="field" type="password" placeholder="Confirm password" />
+                </div>
+              </div>
+
+              <div class="mini-actions">
+                <button class="btn btn-primary" id="btnChangePass">Change</button>
+                <span class="status" id="cpStatus"></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= PHOTO MODAL ========================= -->
+    <div id="photoModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+      <div class="modal">
+        <div class="modal-head">
+          <div style="font-weight:900;">Photos Viewer</div>
+          <button class="btn btn-ghost" id="btnCloseModal">Close</button>
+        </div>
+        <div class="modal-body">
+          <div class="imgbox">
+            <img id="modalImg" alt="photo" />
+          </div>
+          <div style="margin-top:12px; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-secondary" id="btnPrevPhoto">Previous</button>
+            <div class="muted" id="photoCounter" style="font-weight:800;"></div>
+            <button class="btn btn-secondary" id="btnNextPhoto">Next</button>
+          </div>
+          <div class="hint-dark" id="photoHint" style="text-align:center;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const API_BASE = ""; // example: "http://127.0.0.1:8080"
+    const $ = (id) => document.getElementById(id);
+
+    function setStatus(el, msg, type=""){
+      el.textContent = msg || "";
+      el.classList.remove("ok","err","warn");
+      if(type) el.classList.add(type);
+    }
+
+    function showScreen(name){
+      $("bgPhoto").style.display = (name === "login") ? "block" : "none";
+      $("screen-login").classList.toggle("hidden", name !== "login");
+      $("screen-admin").classList.toggle("hidden", name !== "admin");
+      $("screen-details").classList.toggle("hidden", name !== "details");
+      $("screen-user").classList.toggle("hidden", name !== "user");
+    }
+
+    function saveSession(data){ localStorage.setItem("cms_session", JSON.stringify(data)); }
+    function loadSession(){ try{ return JSON.parse(localStorage.getItem("cms_session") || "null"); }catch{ return null; } }
+    function clearSession(){ localStorage.removeItem("cms_session"); }
+
+    function authHeaders(extra={}){
+      const s = loadSession();
+      const h = { ...extra };
+      if(s?.token){
+        h["Authorization"] = "Bearer " + s.token;
+        h["X-Auth-Token"] = s.token;
+      }
+      return h;
+    }
+
+    async function api(path, options={}){
+      const res = await fetch(API_BASE + path, options);
+      const txt = await res.text();
+      let json = null;
+      try{ json = txt ? JSON.parse(txt) : null; }catch{}
+      if(!res.ok) throw new Error(json?.message || json?.error || txt || ("HTTP " + res.status));
+      return json;
+    }
+
+    function openAdminTab(name){
+      document.querySelectorAll(".admin-tab").forEach(t => t.classList.add("hidden"));
+      const el = $("adminTab_" + name);
+      if(el) el.classList.remove("hidden");
+    }
+    document.querySelectorAll("[data-admin-tab]").forEach(btn => {
+      btn.addEventListener("click", () => openAdminTab(btn.dataset.adminTab));
+    });
+
+    function openUserTab(name){
+      document.querySelectorAll(".user-tab").forEach(t => t.classList.add("hidden"));
+      const el = $("userTab_" + name);
+      if(el) el.classList.remove("hidden");
+    }
+    document.querySelectorAll("[data-user-tab]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tab = btn.dataset.userTab;
+        openUserTab(tab);
+        if(tab === "PROFILE") refreshProfile();
+        if(tab === "EVENTS") refreshEvents();
+        if(tab === "CONTENT") refreshContentDropdowns();
+      });
+    });
+
+    function renderNames(){
+      const s = loadSession();
+      const uname = (s?.username || "").trim() || ((s?.role||"").toLowerCase()==="admin" ? "Admin" : "User");
+      if($("adminName")) $("adminName").textContent = uname;
+      if($("userName")) $("userName").textContent = uname;
+    }
+
+    function routeAfterLogin(s){
+      renderNames();
+      if((s.role||"").toLowerCase() === "admin"){
+        showScreen("admin");
+        openAdminTab("HOME");
+      }else{
+        if(s.firstLogin){
+          showScreen("details");
+          setStatus($("udStatus"), "");
+        }else{
+          showScreen("user");
+          openUserTab("HOME");
+          refreshProfile();
+          refreshEvents();
+          refreshContentDropdowns();
+        }
+      }
+    }
+
+    // ---------------- LOGIN ----------------
+    $("showPass").addEventListener("change", () => {
+      $("loginPass").type = $("showPass").checked ? "text" : "password";
+    });
+
+    async function doLogin(){
+      const u = $("loginUser").value.trim();
+      const p = $("loginPass").value;
+      if(!u || !p){ setStatus($("loginStatus"), "Enter username and password.", "warn"); return; }
+
+      setStatus($("loginStatus"), "Signing in...");
+      try{
+        const data = await api("/api/login", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ username:u, password:p })
+        });
+
+        const session = {
+          token: data.token || data.authToken || "",
+          role: (data.role || "").toLowerCase(),
+          userId: data.userId ?? null,
+          firstLogin: data.firstLogin ?? false,
+          username: data.username || u   // ✅ show name
+        };
+
+        saveSession(session);
+        setStatus($("loginStatus"), "");
+        routeAfterLogin(session);
+
+      }catch(e){
+        setStatus($("loginStatus"), "Login failed: " + e.message, "err");
+      }
+    }
+
+    $("btnLogin").addEventListener("click", doLogin);
+
+    // ---------------- LOGOUTS ----------------
+    $("btnAdminLogout").addEventListener("click", () => { clearSession(); showScreen("login"); });
+    $("btnUserLogout").addEventListener("click", () => { clearSession(); showScreen("login"); });
+    $("btnDetailsLogout").addEventListener("click", () => { clearSession(); showScreen("login"); });
+    $("btnBackToLogin").addEventListener("click", () => { clearSession(); showScreen("login"); });
+
+    // ---------------- ADMIN FILE CHIPS ----------------
+    function showChip(el, text){ el.textContent = text; el.classList.remove("hidden"); }
+    function hideChip(el){ el.textContent = ""; el.classList.add("hidden"); }
+
+    $("aePhotoFile").addEventListener("change", () => {
+      const f = $("aePhotoFile").files?.[0];
+      if(!f) return hideChip($("aePhotoChip"));
+      showChip($("aePhotoChip"), "Selected: " + f.name);
+    });
+
+    // ✅ Multiple photos FIX: accumulate selections
+    let acSelectedPhotos = [];
+
+    $("acPhotoFiles").addEventListener("change", () => {
+      const files = Array.from($("acPhotoFiles").files || []);
+      if(files.length === 0) return;
+
+      // Add (do not replace)
+      acSelectedPhotos = acSelectedPhotos.concat(files);
+
+      showChip($("acPhotosChip"), `Selected: ${acSelectedPhotos.length} photo(s)`);
+      // optional: clear input so selecting same file again triggers change
+      $("acPhotoFiles").value = "";
+    });
+
+    $("btnClearPhotos").addEventListener("click", () => {
+      acSelectedPhotos = [];
+      hideChip($("acPhotosChip"));
+      $("acPhotoFiles").value = "";
+    });
+
+    $("acReportFile").addEventListener("change", () => {
+      const f = $("acReportFile").files?.[0];
+      if(!f) return hideChip($("acReportChip"));
+      showChip($("acReportChip"), "Selected: " + f.name);
+    });
+
+    // ---------------- ADMIN: SAVE EVENT (multipart) ----------------
+    $("btnSaveEvent").addEventListener("click", async () => {
+      const title = $("aeTitle").value.trim();
+      const date  = $("aeDate").value;
+      const reg   = $("aeRegLink").value.trim();
+      const photo = $("aePhotoFile").files?.[0] || null;
+
+      if(!title || !date){ setStatus($("aeStatus"), "Enter title and date.", "warn"); return; }
+      if(!photo){ setStatus($("aeStatus"), "Choose event photo.", "warn"); return; }
+
+      setStatus($("aeStatus"), "Uploading...");
+      try{
+        const fd = new FormData();
+        fd.append("title", title);
+        fd.append("event_date", date);
+        fd.append("registration_link", reg);
+        fd.append("photo", photo);
+
+        await api("/api/admin/event", {
+          method:"POST",
+          headers: authHeaders(), // NOTE: do NOT set Content-Type for FormData
+          body: fd
+        });
+
+        setStatus($("aeStatus"), "✅ Event saved.", "ok");
+        $("aeTitle").value=""; $("aeDate").value=""; $("aeRegLink").value=""; $("aePhotoFile").value="";
+        hideChip($("aePhotoChip"));
+
+      }catch(e){
+        setStatus($("aeStatus"), "❌ " + e.message, "err");
+      }
+    });
+
+    // ---------------- ADMIN: SAVE CONTENT (multipart) ----------------
+    $("btnSaveContent").addEventListener("click", async () => {
+      const title = $("acTitle").value.trim();
+      const date  = $("acDate").value;
+      const desc  = $("acDesc").value.trim();
+      const yt    = $("acYoutube").value.trim();
+      const photos = acSelectedPhotos; // ✅ use accumulated
+      const report = $("acReportFile").files?.[0] || null;
+
+      if(!title || !date){ setStatus($("acStatus"), "Enter event title and date.", "warn"); return; }
+      if(photos.length === 0){ setStatus($("acStatus"), "Choose at least 1 photo.", "warn"); return; }
+      if(!report){ setStatus($("acStatus"), "Choose report file.", "warn"); return; }
+
+      setStatus($("acStatus"), "Uploading...");
+      try{
+        const fd = new FormData();
+        fd.append("event_title", title);
+        fd.append("event_date", date);
+        fd.append("description", desc);
+        fd.append("youtube_links", yt);
+        photos.forEach(f => fd.append("photos", f));
+        fd.append("report", report);
+
+        await api("/api/admin/content", {
+          method:"POST",
+          headers: authHeaders(),
+          body: fd
+        });
+
+        setStatus($("acStatus"), "✅ Content saved.", "ok");
+        $("acTitle").value=""; $("acDate").value=""; $("acDesc").value=""; $("acYoutube").value="";
+        $("acPhotoFiles").value=""; $("acReportFile").value="";
+        acSelectedPhotos = [];
+        hideChip($("acPhotosChip")); hideChip($("acReportChip"));
+
+      }catch(e){
+        setStatus($("acStatus"), "❌ " + e.message, "err");
+      }
+    });
+
+    // ---------------- ADMIN: CREATE USER (json) ----------------
+    $("btnCreateUser").addEventListener("click", async () => {
+      const u = $("auUser").value.trim();
+      const p = $("auPass").value;
+      const r = $("auRole").value;
+      if(!u || !p){ setStatus($("auStatus"), "Enter username and password.", "warn"); return; }
+
+      setStatus($("auStatus"), "Creating...");
+      try{
+        await api("/api/admin/user", {
+          method:"POST",
+          headers: authHeaders({ "Content-Type":"application/json" }),
+          body: JSON.stringify({ username:u, password:p, role:r })
+        });
+
+        setStatus($("auStatus"), "✅ User created.", "ok");
+        $("auUser").value=""; $("auPass").value=""; $("auRole").value="user";
+      }catch(e){
+        setStatus($("auStatus"), "❌ " + e.message, "err");
+      }
+    });
+
+    // ---------------- ADMIN: MANAGE (LIST + DELETE) ----------------
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+    function escapeHtmlAttr(str){ return escapeHtml(str).replaceAll("`","&#096;"); }
+    function normalizeUrl(u){
+      u = String(u || "").trim();
+      if(!u) return u;
+      if(u.startsWith("http://") || u.startsWith("https://")) return u;
+      if(u.startsWith("/")) return API_BASE + u;
+      return API_BASE + "/" + u;
+    }
+
+    $("btnManageUpcoming").addEventListener("click", loadAdminUpcoming);
+    $("btnManageContent").addEventListener("click", loadAdminContents);
+
+    async function loadAdminUpcoming(){
+      setStatus($("amStatus"), "Loading...");
+      const box = $("adminManageBox");
+      box.innerHTML = "";
+      try{
+        const list = await api("/api/admin/events", { method:"GET", headers: authHeaders() });
+
+        if(!Array.isArray(list) || list.length === 0){
+          box.innerHTML = `<div class="muted" style="font-weight:800;">No upcoming events found.</div>`;
+          setStatus($("amStatus"), "");
+          return;
+        }
+
+        box.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th><th>Date</th><th>Photo</th><th>Register</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${list.map(e => {
+                const photo = e.photo_url ? `<a href="${escapeHtmlAttr(normalizeUrl(e.photo_url))}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
+                const reg = e.registration_link ? `<a href="${escapeHtmlAttr(e.registration_link)}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
+                return `
+                  <tr>
+                    <td>${escapeHtml(e.title)}</td>
+                    <td>${escapeHtml(e.event_date)}</td>
+                    <td>${photo}</td>
+                    <td>${reg}</td>
+                    <td><button class="btn btn-danger" onclick="adminDeleteEvent(${Number(e.id)})">Delete</button></td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+        setStatus($("amStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        box.innerHTML = `<div style="color:#991b1b;font-weight:800;">Failed: ${escapeHtml(e.message)}</div>`;
+        setStatus($("amStatus"), "❌ Error.", "err");
+      }
+    }
+
+    async function loadAdminContents(){
+      setStatus($("amStatus"), "Loading...");
+      const box = $("adminManageBox");
+      box.innerHTML = "";
+      try{
+        const list = await api("/api/admin/contents", { method:"GET", headers: authHeaders() });
+
+        if(!Array.isArray(list) || list.length === 0){
+          box.innerHTML = `<div class="muted" style="font-weight:800;">No contents found.</div>`;
+          setStatus($("amStatus"), "");
+          return;
+        }
+
+        box.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Event</th><th>Date</th><th>Report</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${list.map(c => {
+                const rep = c.report ? `<a href="${escapeHtmlAttr(normalizeUrl(c.report))}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
+                return `
+                  <tr>
+                    <td>${escapeHtml(c.event_title)}</td>
+                    <td>${escapeHtml(c.event_date)}</td>
+                    <td>${rep}</td>
+                    <td><button class="btn btn-danger" onclick="adminDeleteContent(${Number(c.id)})">Delete</button></td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+        setStatus($("amStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        box.innerHTML = `<div style="color:#991b1b;font-weight:800;">Failed: ${escapeHtml(e.message)}</div>`;
+        setStatus($("amStatus"), "❌ Error.", "err");
+      }
+    }
+
+    // expose delete functions for inline onclick
+    window.adminDeleteEvent = async (id) => {
+      if(!confirm("Delete this upcoming event?")) return;
+      try{
+        await api("/api/admin/events/" + encodeURIComponent(id), {
+          method:"DELETE",
+          headers: authHeaders()
+        });
+        setStatus($("amStatus"), "✅ Deleted.", "ok");
+        loadAdminUpcoming();
+      }catch(e){
+        setStatus($("amStatus"), "❌ " + e.message, "err");
+      }
+    };
+
+    window.adminDeleteContent = async (id) => {
+      if(!confirm("Delete this content?")) return;
+      try{
+        await api("/api/admin/contents/" + encodeURIComponent(id), {
+          method:"DELETE",
+          headers: authHeaders()
+        });
+        setStatus($("amStatus"), "✅ Deleted.", "ok");
+        loadAdminContents();
+      }catch(e){
+        setStatus($("amStatus"), "❌ " + e.message, "err");
+      }
+    };
+
+    // ---------------- USER DETAILS ----------------
+    $("btnSubmitDetails").addEventListener("click", async () => {
+      const s = loadSession();
+      const payload = {
+        user_id: s?.userId,
+        name: $("udName").value.trim(),
+        address: $("udAddress").value.trim(),
+        phone: $("udPhone").value.trim(),
+        email: $("udEmail").value.trim(),
+        branch: $("udBranch").value.trim(),
+        gender: $("udGender").value,
+        dob: $("udDob").value
+      };
+      if(!payload.user_id){ setStatus($("udStatus"), "Login again.", "err"); return; }
+      if(!payload.name || !payload.address || !payload.phone || !payload.email || !payload.branch || !payload.gender || !payload.dob){
+        setStatus($("udStatus"), "Fill all fields.", "warn"); return;
+      }
+
+      setStatus($("udStatus"), "Saving...");
+      try{
+        await api("/api/user/details", {
+          method:"POST",
+          headers: authHeaders({ "Content-Type":"application/json" }),
+          body: JSON.stringify(payload)
+        });
+
+        s.firstLogin = false;
+        saveSession(s);
+        setStatus($("udStatus"), "✅ Saved.", "ok");
+
+        showScreen("user");
+        openUserTab("HOME");
+        renderNames();
+        refreshProfile();
+        refreshEvents();
+        refreshContentDropdowns();
+      }catch(e){
+        setStatus($("udStatus"), "❌ " + e.message, "err");
+      }
+    });
+
+    // ---------------- USER: Change Password ----------------
+    $("btnChangePass").addEventListener("click", async () => {
+      const oldP = $("cpOld").value;
+      const newP = $("cpNew").value;
+      const conP = $("cpCon").value;
+
+      if(!oldP || !newP || !conP){
+        setStatus($("cpStatus"), "Fill all fields.", "warn");
+        return;
+      }
+      if(newP !== conP){
+        setStatus($("cpStatus"), "New password and confirm must match.", "warn");
+        return;
+      }
+      if(newP.length < 3){
+        setStatus($("cpStatus"), "New password is too short.", "warn");
+        return;
+      }
+
+      setStatus($("cpStatus"), "Changing...");
+      try{
+        const res = await api("/api/user/change-password", {
+          method:"POST",
+          headers: authHeaders({ "Content-Type":"application/json" }),
+          body: JSON.stringify({ oldPassword: oldP, newPassword: newP })
+        });
+        setStatus($("cpStatus"), res?.message || "✅ Password changed.", "ok");
+        $("cpOld").value = ""; $("cpNew").value = ""; $("cpCon").value = "";
+      }catch(e){
+        setStatus($("cpStatus"), "❌ " + e.message, "err");
+      }
+    });
+
+    // ---------------- USER: data load ----------------
+    function parseMultiLines(raw){
+      if(!raw) return [];
+      return String(raw).split(/\n|;|,/g).map(s => s.trim()).filter(Boolean);
+    }
+    function isExpiredISO(yyyy_mm_dd){
+      try{
+        const d = new Date(yyyy_mm_dd + "T00:00:00");
+        const today = new Date(); today.setHours(0,0,0,0);
+        return d < today;
+      }catch{ return false; }
+    }
+
+    $("goEvents")?.addEventListener("click", () => { openUserTab("EVENTS"); refreshEvents(); });
+    $("goContent")?.addEventListener("click", () => { openUserTab("CONTENT"); refreshContentDropdowns(); });
+    $("goChangePass")?.addEventListener("click", () => { openUserTab("CHANGE_PASS"); setStatus($("cpStatus"), ""); });
+
+    $("btnRefreshProfile")?.addEventListener("click", refreshProfile);
+    $("btnRefreshEvents")?.addEventListener("click", refreshEvents);
+
+    async function refreshProfile(){
+      const s = loadSession();
+      if(!s?.userId) return;
+      $("profileText").textContent = "Loading profile...";
+      try{
+        const data = await api("/api/user/profile?userId=" + encodeURIComponent(s.userId), {
+          method:"GET", headers: authHeaders()
+        });
+        $("profileText").textContent =
+          "Name: " + (data.name||"") + "\n" +
+          "Address: " + (data.address||"") + "\n" +
+          "Phone: " + (data.phone||"") + "\n" +
+          "Email: " + (data.email||"") + "\n" +
+          "Branch: " + (data.branch||"") + "\n" +
+          "Gender: " + (data.gender||"") + "\n" +
+          "DOB: " + (data.dob||"");
+      }catch(e){
+        $("profileText").textContent = "Failed: " + e.message;
+      }
+    }
+
+    async function refreshEvents(){
+      const tbody = $("eventsTable").querySelector("tbody");
+      tbody.innerHTML = "";
+      setStatus($("eventsStatus"), "Loading...");
+      try{
+        const rows = await api("/api/events", { method:"GET", headers: authHeaders() });
+        if(!Array.isArray(rows) || rows.length === 0){
+          tbody.innerHTML = `<tr><td colspan="5" class="muted">No events found.</td></tr>`;
+          setStatus($("eventsStatus"), "");
+          return;
+        }
+        rows.forEach(r => {
+          const title = r.title ?? "";
+          const date  = r.event_date ?? r.eventDate ?? "";
+          const photo = r.photo_url ?? r.photoUrl ?? "";
+          const reg   = r.registration_link ?? r.regLink ?? "";
+          const expired = date ? isExpiredISO(date) : false;
+
+          const statusHtml = expired
+            ? `<span class="status-pill pill-expired">● Expired</span>`
+            : `<span class="status-pill pill-active">● Active</span>`;
+
+          const photoHtml = photo
+            ? `<a href="${escapeHtmlAttr(normalizeUrl(photo))}" target="_blank" rel="noopener">Open</a>`
+            : `<span class="muted">-</span>`;
+
+          const regHtml = reg
+            ? `<a href="${escapeHtmlAttr(reg)}" target="_blank" rel="noopener">Register</a>`
+            : `<span class="muted">-</span>`;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${escapeHtml(title)}</td>
+            <td>${escapeHtml(date)}</td>
+            <td>${statusHtml}</td>
+            <td>${photoHtml}</td>
+            <td>${regHtml}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        setStatus($("eventsStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        tbody.innerHTML = `<tr><td colspan="5" style="color:#991b1b;font-weight:700;">Failed: ${escapeHtml(e.message)}</td></tr>`;
+        setStatus($("eventsStatus"), "❌ Error.", "err");
+      }
+    }
+
+    // Content
+    let currentReportUrl = "";
+    let currentPhotos = [];
+    let currentVideos = [];
+
+    $("cEventTitle")?.addEventListener("change", refreshDatesForSelectedTitle);
+
+    async function refreshContentDropdowns(){
+      $("contentDetails").classList.add("hidden");
+      setStatus($("contentStatus"), "");
+      $("cEventTitle").innerHTML = "";
+      $("cEventDate").innerHTML = "";
+
+      try{
+        const titles = await api("/api/content/titles", { method:"GET", headers: authHeaders() });
+        if(!Array.isArray(titles) || titles.length === 0){
+          $("cEventTitle").innerHTML = `<option value="">(no content)</option>`;
+          $("cEventDate").innerHTML = `<option value="">-</option>`;
+          return;
+        }
+        titles.forEach(t => {
+          const opt = document.createElement("option");
+          opt.value = t;
+          opt.textContent = t;
+          $("cEventTitle").appendChild(opt);
+        });
+        $("cEventTitle").selectedIndex = 0;
+        await refreshDatesForSelectedTitle();
+      }catch(e){
+        setStatus($("contentStatus"), "Failed to load: " + e.message, "err");
+      }
+    }
+
+    async function refreshDatesForSelectedTitle(){
+      $("contentDetails").classList.add("hidden");
+      const title = $("cEventTitle").value;
+      $("cEventDate").innerHTML = "";
+      if(!title){ $("cEventDate").innerHTML = `<option value="">-</option>`; return; }
+
+      try{
+        const dates = await api("/api/content/dates?title=" + encodeURIComponent(title), { method:"GET", headers: authHeaders() });
+        if(!Array.isArray(dates) || dates.length === 0){
+          $("cEventDate").innerHTML = `<option value="">(no dates)</option>`;
+          return;
+        }
+        dates.forEach(d => {
+          const opt = document.createElement("option");
+          opt.value = d;
+          opt.textContent = d;
+          $("cEventDate").appendChild(opt);
+        });
+        $("cEventDate").selectedIndex = 0;
+      }catch(e){
+        setStatus($("contentStatus"), "Failed: " + e.message, "err");
+      }
+    }
+
+    $("btnLoadContent")?.addEventListener("click", async () => {
+      const title = $("cEventTitle").value;
+      const date  = $("cEventDate").value;
+      if(!title || !date){ setStatus($("contentStatus"), "Select event and date.", "warn"); return; }
+
+      setStatus($("contentStatus"), "Loading...");
+      $("contentDetails").classList.remove("hidden");
+      $("selEventName").textContent = "Event Name: " + title;
+      $("selEventDate").textContent = "Event Date: " + date;
+
+      $("descBox").textContent = "Loading...";
+      $("videosPanel").innerHTML = "";
+      $("btnOpenReport").disabled = true;
+      $("btnWatchPhotos").disabled = true;
+
+      currentReportUrl = "";
+      currentPhotos = [];
+      currentVideos = [];
+
+      try{
+        const data = await api("/api/content?title=" + encodeURIComponent(title) + "&date=" + encodeURIComponent(date), {
+          method:"GET", headers: authHeaders()
+        });
+
+        currentReportUrl = data.report || "";
+        currentPhotos = parseMultiLines(data.photos || "");
+        currentVideos = parseMultiLines(data.youtube_links || "");
+
+        $("descBox").textContent = data.description || "(No description)";
+
+        $("btnOpenReport").disabled = !currentReportUrl;
+        $("btnWatchPhotos").disabled = currentPhotos.length === 0;
+
+        buildVideoButtons();
+        setStatus($("contentStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        $("descBox").textContent = "Failed: " + e.message;
+        setStatus($("contentStatus"), "❌ Error.", "err");
+      }
+    });
+
+    function buildVideoButtons(){
+      const panel = $("videosPanel");
+      panel.innerHTML = "";
+      if(currentVideos.length === 0){
+        const x = document.createElement("div");
+        x.className = "muted";
+        x.style.fontWeight = "800";
+        x.textContent = "(no videos)";
+        panel.appendChild(x);
+        return;
+      }
+      currentVideos.forEach((link, idx) => {
+        const b = document.createElement("button");
+        b.className = "btn btn-secondary";
+        b.textContent = "Video " + (idx+1);
+        b.addEventListener("click", () => window.open(link, "_blank", "noopener"));
+        panel.appendChild(b);
+      });
+    }
+
+    $("btnOpenReport")?.addEventListener("click", () => {
+      if(!currentReportUrl) return;
+      window.open(normalizeUrl(currentReportUrl), "_blank", "noopener");
+    });
+
+    $("btnWatchPhotos")?.addEventListener("click", () => {
+      if(currentPhotos.length === 0) return;
+      openPhotoModal(currentPhotos);
+    });
+
+    // Modal
+    let modalPhotos = [];
+    let modalIdx = 0;
+
+    function openPhotoModal(photos){
+      modalPhotos = photos.map(normalizeUrl);
+      modalIdx = 0;
+      $("photoModal").classList.remove("hidden");
+      renderModalPhoto();
+    }
+    function closePhotoModal(){
+      $("photoModal").classList.add("hidden");
+      $("modalImg").src = "";
+      $("photoHint").textContent = "";
+    }
+    function renderModalPhoto(){
+      const total = modalPhotos.length;
+      const url = modalPhotos[modalIdx];
+      $("modalImg").src = url;
+      $("photoCounter").textContent = (modalIdx + 1) + " / " + total;
+      $("photoHint").textContent = url;
+    }
+    $("btnCloseModal")?.addEventListener("click", closePhotoModal);
+    $("photoModal")?.addEventListener("click", (e) => { if(e.target === $("photoModal")) closePhotoModal(); });
+    $("btnPrevPhoto")?.addEventListener("click", () => { if(modalIdx>0){ modalIdx--; renderModalPhoto(); } });
+    $("btnNextPhoto")?.addEventListener("click", () => { if(modalIdx<modalPhotos.length-1){ modalIdx++; renderModalPhoto(); } });
+
+    // Boot
+    (function boot(){
+      const s = loadSession();
+      if(s?.role){
+        renderNames();
+        routeAfterLogin(s);
+      } else {
+        showScreen("login");
+      }
+    })();
+  </script>
+</body>
+</html>
