@@ -6,6 +6,10 @@
      ✅ Admin: Manage (Upcoming Events list+delete, Content list+delete)
      ✅ User: Change Password (old/new/confirm)
      ✅ Multiple photos: selecting again ADDS (does not replace)
+
+     ✅ NEW (TOKEN FEATURE) — ONLY CHANGES ADDED (same code/style)
+     ✅ User Dashboard: Book Token (enter username + problem, submit)
+     ✅ Admin Dashboard: Tokens (list tokens, search by username, click username → load profile, update profile)
      ========================= -->
 
 <!doctype html>
@@ -327,6 +331,42 @@
       margin-top:10px;
     }
 
+    /* =========================
+       ✅ TOKEN styles (ADDED ONLY)
+       ========================= */
+    .userlist{
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      overflow:hidden;
+      background:white;
+    }
+    .userlist .item{
+      padding:10px 12px;
+      border-bottom:1px solid #e2e8f0;
+      cursor:pointer;
+      font-weight:800;
+      color:#0f172a;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .userlist .item:hover{ background:#f8fafc; }
+    .userlist .item:last-child{ border-bottom:none; }
+    .mini-pill{
+      font-size:12px;
+      padding:4px 10px;
+      border-radius:999px;
+      background: rgba(234,179,8,.14);
+      border: 1px solid rgba(234,179,8,.28);
+      color:#92400e;
+      font-weight:900;
+      white-space:nowrap;
+      max-width: 320px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
     @media (max-width: 720px){
       .topbar{ flex-direction:column; align-items:flex-start; }
       .nav{ justify-content:flex-start; }
@@ -384,6 +424,10 @@
           <button class="navbtn" data-admin-tab="ADD_CONTENT">Add Content</button>
           <button class="navbtn" data-admin-tab="ADD_USER">Add User</button>
           <button class="navbtn" data-admin-tab="MANAGE">Manage</button>
+
+          <!-- ✅ ADDED ONLY -->
+          <button class="navbtn" data-admin-tab="TOKENS">Tokens</button>
+
           <button class="navbtn logout" id="btnAdminLogout">Logout</button>
         </div>
       </div>
@@ -551,6 +595,102 @@
             </div>
           </div>
 
+          <!-- =========================
+               ✅ ADMIN: TOKENS TAB (ADDED ONLY)
+               ========================= -->
+          <div class="admin-tab hidden" id="adminTab_TOKENS">
+            <div class="section-title">Tokens</div>
+            <p class="sub">Search username → click username → view profile → correct details.</p>
+
+            <div class="card-soft">
+              <div class="row" style="align-items:flex-end;">
+                <div class="grow">
+                  <div class="label-dark">Search username</div>
+                  <input id="atSearchUser" class="field" type="text" placeholder="Type username..." />
+                  <div class="hint-dark">Frontend filter. (Backend list loads on button click)</div>
+                </div>
+                <div>
+                  <button class="btn btn-primary" id="btnLoadTokens">Load Tokens</button>
+                </div>
+                <span class="status" id="atStatus"></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <div class="row" style="align-items:flex-start;">
+                <div class="grow">
+                  <div style="font-weight:900; margin-bottom:8px;">Token Users</div>
+                  <div id="tokenUserList" class="userlist">
+                    <div class="item"><span class="muted">Click "Load Tokens"</span></div>
+                  </div>
+                </div>
+
+                <div class="grow">
+                  <div style="font-weight:900; margin-bottom:8px;">Profile Details</div>
+                  <div class="card-soft" style="background:#fff;">
+                    <div class="muted" id="atSelectedUser" style="font-weight:900;margin-bottom:10px;">No user selected</div>
+
+                    <div class="row">
+                      <div class="grow">
+                        <div class="label-dark">Name</div>
+                        <input id="apName" class="field" type="text" />
+                      </div>
+                      <div class="grow">
+                        <div class="label-dark">Phone</div>
+                        <input id="apPhone" class="field" type="text" />
+                      </div>
+                    </div>
+
+                    <div class="row" style="margin-top:12px;">
+                      <div class="grow">
+                        <div class="label-dark">Email</div>
+                        <input id="apEmail" class="field" type="email" />
+                      </div>
+                      <div class="grow">
+                        <div class="label-dark">Branch</div>
+                        <input id="apBranch" class="field" type="text" />
+                      </div>
+                    </div>
+
+                    <div class="row" style="margin-top:12px;">
+                      <div class="grow">
+                        <div class="label-dark">Gender</div>
+                        <select id="apGender" class="field">
+                          <option value="">Select</option>
+                          <option>Male</option>
+                          <option>Female</option>
+                          <option>Other</option>
+                        </select>
+                      </div>
+                      <div class="grow">
+                        <div class="label-dark">DOB</div>
+                        <input id="apDob" class="field" type="date" />
+                      </div>
+                    </div>
+
+                    <div class="row" style="margin-top:12px;">
+                      <div class="grow">
+                        <div class="label-dark">Address</div>
+                        <textarea id="apAddress" class="field"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="mini-actions" style="justify-content:flex-end;">
+                      <button class="btn btn-secondary" id="btnAdminProfileReload" disabled>Reload</button>
+                      <button class="btn btn-primary" id="btnAdminProfileUpdate" disabled>Update Profile</button>
+                      <span class="status" id="apStatus"></span>
+                    </div>
+                  </div>
+
+                  <div class="hint-dark" style="margin-top:10px;">
+                    Token problem text is shown in the list (right side pill).
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ========================= /ADMIN TOKENS ========================= -->
+
         </div>
       </div>
     </section>
@@ -642,6 +782,10 @@
           <button class="navbtn" data-user-tab="EVENTS">Upcoming Events</button>
           <button class="navbtn" data-user-tab="CONTENT">Content</button>
           <button class="navbtn" data-user-tab="CHANGE_PASS">Change Password</button>
+
+          <!-- ✅ ADDED ONLY -->
+          <button class="navbtn" data-user-tab="TOKEN">Book Token</button>
+
           <button class="navbtn logout" id="btnUserLogout">Logout</button>
         </div>
       </div>
@@ -792,6 +936,37 @@
             </div>
           </div>
 
+          <!-- =========================
+               ✅ USER: BOOK TOKEN TAB (ADDED ONLY)
+               ========================= -->
+          <div class="user-tab hidden" id="userTab_TOKEN">
+            <div class="section-title">Book Token</div>
+            <p class="sub">If you filled wrong details in first login, submit a token request to admin.</p>
+
+            <div class="card-soft">
+              <div class="row">
+                <div class="grow">
+                  <div class="label-dark">Username</div>
+                  <input id="utUsername" class="field" type="text" placeholder="username" />
+                  <div class="hint-dark">Auto filled from login (you can edit if needed).</div>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Problem / Description</div>
+                  <textarea id="utProblem" class="field" placeholder="Explain what detail is wrong and what it should be..."></textarea>
+                </div>
+              </div>
+
+              <div class="mini-actions" style="justify-content:flex-end;">
+                <button class="btn btn-primary" id="btnSubmitToken">Submit Token</button>
+                <span class="status" id="utStatus"></span>
+              </div>
+            </div>
+          </div>
+          <!-- ========================= /USER TOKEN ========================= -->
+
         </div>
       </div>
     </section>
@@ -873,6 +1048,13 @@
       document.querySelectorAll(".user-tab").forEach(t => t.classList.add("hidden"));
       const el = $("userTab_" + name);
       if(el) el.classList.remove("hidden");
+
+      // ✅ TOKEN: auto-fill username from session when opening Book Token tab
+      if(name === "TOKEN"){
+        const s = loadSession();
+        $("utUsername").value = s?.username || "";
+        setStatus($("utStatus"), "");
+      }
     }
     document.querySelectorAll("[data-user-tab]").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -1538,6 +1720,153 @@
     $("photoModal")?.addEventListener("click", (e) => { if(e.target === $("photoModal")) closePhotoModal(); });
     $("btnPrevPhoto")?.addEventListener("click", () => { if(modalIdx>0){ modalIdx--; renderModalPhoto(); } });
     $("btnNextPhoto")?.addEventListener("click", () => { if(modalIdx<modalPhotos.length-1){ modalIdx++; renderModalPhoto(); } });
+
+    /* ==========================================================
+       ✅ TOKEN FEATURE (ADDED ONLY)
+       Expected backend endpoints (change paths if needed):
+       - POST /api/user/token                 { username, problem }
+       - GET  /api/admin/tokens               -> [{ id, username, problem, created_at }]
+       - GET  /api/admin/profile?username=... -> { name, phone, email, branch, gender, dob, address }
+       - POST /api/admin/profile/update       { username, name, phone, email, branch, gender, dob, address }
+       ========================================================== */
+
+    // USER: submit token
+    $("btnSubmitToken")?.addEventListener("click", async () => {
+      const username = $("utUsername").value.trim();
+      const problem  = $("utProblem").value.trim();
+      if(!username || !problem){
+        setStatus($("utStatus"), "Enter username and problem.", "warn");
+        return;
+      }
+      setStatus($("utStatus"), "Submitting...");
+      try{
+        await api("/api/user/token", {
+          method:"POST",
+          headers: authHeaders({ "Content-Type":"application/json" }),
+          body: JSON.stringify({ username, problem })
+        });
+        setStatus($("utStatus"), "✅ Token submitted.", "ok");
+        $("utProblem").value = "";
+      }catch(e){
+        setStatus($("utStatus"), "❌ " + e.message, "err");
+      }
+    });
+
+    // ADMIN: tokens list + search + click to load profile
+    let adminTokensCache = [];
+    let adminSelectedUsername = "";
+
+    function renderTokenList(filterText=""){
+      const listEl = $("tokenUserList");
+      const q = (filterText||"").trim().toLowerCase();
+
+      const rows = adminTokensCache.filter(t => {
+        const u = String(t.username || "").toLowerCase();
+        return !q || u.includes(q);
+      });
+
+      if(!rows.length){
+        listEl.innerHTML = `<div class="item"><span class="muted">No tokens found.</span></div>`;
+        return;
+      }
+
+      listEl.innerHTML = rows.map(t => {
+        const u = escapeHtml(t.username || "");
+        const prob = String(t.problem || "");
+        const pill = escapeHtml(prob ? (prob.length > 40 ? prob.slice(0,40) + "..." : prob) : "Open");
+        return `
+          <div class="item" data-u="${escapeHtmlAttr(String(t.username || ""))}">
+            <span>${u}</span>
+            <span class="mini-pill" title="${escapeHtmlAttr(prob)}">${pill}</span>
+          </div>
+        `;
+      }).join("");
+
+      listEl.querySelectorAll(".item[data-u]").forEach(item => {
+        item.addEventListener("click", () => {
+          const u = item.getAttribute("data-u") || "";
+          loadAdminProfile(u);
+        });
+      });
+    }
+
+    $("btnLoadTokens")?.addEventListener("click", loadAdminTokens);
+    $("atSearchUser")?.addEventListener("input", (e) => renderTokenList(e.target.value));
+
+    async function loadAdminTokens(){
+      setStatus($("atStatus"), "Loading...");
+      try{
+        const tokens = await api("/api/admin/tokens", { method:"GET", headers: authHeaders() });
+        adminTokensCache = Array.isArray(tokens) ? tokens : [];
+        renderTokenList($("atSearchUser").value);
+        setStatus($("atStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        adminTokensCache = [];
+        $("tokenUserList").innerHTML = `<div class="item"><span style="color:#991b1b;font-weight:900;">Failed: ${escapeHtml(e.message)}</span></div>`;
+        setStatus($("atStatus"), "❌ " + e.message, "err");
+      }
+    }
+
+    async function loadAdminProfile(username){
+      adminSelectedUsername = username;
+      $("atSelectedUser").textContent = "Selected: " + username;
+      setStatus($("apStatus"), "Loading...");
+      $("btnAdminProfileReload").disabled = false;
+      $("btnAdminProfileUpdate").disabled = false;
+
+      try{
+        const data = await api("/api/admin/profile?username=" + encodeURIComponent(username), {
+          method:"GET",
+          headers: authHeaders()
+        });
+
+        $("apName").value = data.name || "";
+        $("apPhone").value = data.phone || "";
+        $("apEmail").value = data.email || "";
+        $("apBranch").value = data.branch || "";
+        $("apGender").value = data.gender || "";
+        $("apDob").value = data.dob || "";
+        $("apAddress").value = data.address || "";
+
+        setStatus($("apStatus"), "✅ Profile loaded.", "ok");
+      }catch(e){
+        setStatus($("apStatus"), "❌ " + e.message, "err");
+      }
+    }
+
+    $("btnAdminProfileReload")?.addEventListener("click", () => {
+      if(adminSelectedUsername) loadAdminProfile(adminSelectedUsername);
+    });
+
+    $("btnAdminProfileUpdate")?.addEventListener("click", async () => {
+      if(!adminSelectedUsername){
+        setStatus($("apStatus"), "Select a user first.", "warn");
+        return;
+      }
+
+      const payload = {
+        username: adminSelectedUsername,
+        name: $("apName").value.trim(),
+        phone: $("apPhone").value.trim(),
+        email: $("apEmail").value.trim(),
+        branch: $("apBranch").value.trim(),
+        gender: $("apGender").value,
+        dob: $("apDob").value,
+        address: $("apAddress").value.trim()
+      };
+
+      setStatus($("apStatus"), "Updating...");
+      try{
+        await api("/api/admin/profile/update", {
+          method:"POST",
+          headers: authHeaders({ "Content-Type":"application/json" }),
+          body: JSON.stringify(payload)
+        });
+        setStatus($("apStatus"), "✅ Updated.", "ok");
+      }catch(e){
+        setStatus($("apStatus"), "❌ " + e.message, "err");
+      }
+    });
 
     // Boot
     (function boot(){

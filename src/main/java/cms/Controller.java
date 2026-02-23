@@ -87,6 +87,25 @@ public class Controller {
     }
 
     // =========================
+    // ✅ TOKEN MODELS (ADDED)
+    // =========================
+    static class TokenReq {
+        public String username;
+        public String problem;
+    }
+
+    static class AdminProfileUpdateReq {
+        public String username;
+        public String name;
+        public String address;
+        public String phone;
+        public String email;
+        public String branch;
+        public String gender;
+        public String dob; // yyyy-MM-dd or MM/dd/yyyy
+    }
+
+    // =========================
     // Helpers
     // =========================
     private ResponseEntity<?> unauthorized(String msg) {
@@ -155,6 +174,18 @@ public class Controller {
             }
         }
         return sb.toString();
+    }
+
+    // ✅ ADDED: get userId by username
+    private Integer findUserIdByUsername(String username) {
+        if (username == null || username.isBlank()) return null;
+        List<Integer> ids = jdbc.query(
+                "SELECT id FROM users WHERE username=? LIMIT 1",
+                new Object[]{ username.trim() },
+                (rs, i) -> rs.getInt("id")
+        );
+        if (ids.isEmpty()) return null;
+        return ids.get(0);
     }
 
     // =========================
@@ -472,5 +503,133 @@ public class Controller {
 
         if (rows.isEmpty()) return ResponseEntity.status(404).body(Map.of("error", "No content found"));
         return ResponseEntity.ok(rows.get(0));
+    }
+
+    // ==========================================================
+    // ✅ TOKEN FEATURE ENDPOINTS (ADDED)
+    // ==========================================================
+
+    // USER: Submit token (username + problem)
+    @PostMapping("/user/token")
+    public ResponseEntity<?> submitToken(
+            @RequestHeader(value = "X-Auth-Token", required = false) String token,
+            @RequestBody TokenReq req
+    ) {
+        Session s = requireSession(token);
+        if (s == null) return unauthorized("Missing/invalid token");
+
+        if (req == null || req.username == null || req.problem == null ||
+                req.username.isBlank() || req.problem.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "username/problem required"));
+        }
+
+        // ✅ security: user can submit token only for own username
+        if (!req.username.trim().equalsIgnoreCase(s.username)) {
+            return forbidden("You can submit token only for your own username");
+        }
+
+        jdbc.update(
+                "INSERT INTO token_requests(user_id, username, problem, created_at) VALUES (?,?,?,NOW())",
+                s.userId, s.username, req.problem.trim()
+        );
+
+        return ResponseEntity.ok(Map.of("message", "Token submitted"));
+    }
+
+    // ADMIN: List tokens
+    @GetMapping("/admin/tokens")
+    public ResponseEntity<?> adminListTokens(@RequestHeader(value = "X-Auth-Token", required = false) String token) {
+        Session s = requireSession(token);
+        if (s == null) return unauthorized("Missing/invalid token");
+        if (!isAdmin(s)) return forbidden("Admin only");
+
+        List<Map<String, Object>> rows = jdbc.queryForList(
+                "SELECT id, username, problem, DATE_FORMAT(created_at,'%Y-%m-%d %H:%i') AS created_at " +
+                        "FROM token_requests ORDER BY id DESC"
+        );
+        return ResponseEntity.ok(rows);
+    }
+
+    // ADMIN: Get profile by username (for correction)
+    @GetMapping("/admin/profile")
+    public ResponseEntity<?> adminGetProfileByUsername(
+            @RequestHeader(value = "X-Auth-Token", required = false) String token,
+            @RequestParam("username") String username
+    ) {
+        Session s = requireSession(token);
+        if (s == null) return unauthorized("Missing/invalid token");
+        if (!isAdmin(s)) return forbidden("Admin only");
+
+        Integer userId = findUserIdByUsername(username);
+        if (userId == null) {
+            return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+        }
+
+        List<Map<String, Object>> rows = jdbc.queryForList(
+                "SELECT name,address,phone,email,branch,gender,DATE_FORMAT(dob,'%Y-%m-%d') AS dob " +
+                        "FROM user_details WHERE user_id=?",
+                userId
+        );
+
+        if (rows.isEmpty()) {
+            return ResponseEntity.ok(Map.of(
+                    "username", username.trim(),
+                    "user_id", userId,
+                    "name","", "address","", "phone","", "email","", "branch","", "gender","", "dob",""
+            ));
+        }
+
+        Map<String, Object> out = new HashMap<>(rows.get(0));
+        out.put("username", username.trim());
+        out.put("user_id", userId);
+        return ResponseEntity.ok(out);
+    }
+
+    // ADMIN: Update profile by username
+    @PostMapping("/admin/profile/update")
+    public ResponseEntity<?> adminUpdateProfile(
+            @RequestHeader(value = "X-Auth-Token", required = false) String token,
+            @RequestBody AdminProfileUpdateReq req
+    ) {
+        Session s = requireSession(token);
+        if (s == null) return unauthorized("Missing/invalid token");
+        if (!isAdmin(s)) return forbidden("Admin only");
+
+        if (req == null || req.username == null || req.username.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "username required"));
+        }
+
+        Integer userId = findUserIdByUsername(req.username);
+        if (userId == null) {
+            return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+        }
+
+        Date dob = null;
+        if (req.dob != null && !req.dob.isBlank()) {
+            dob = Date.valueOf(parseDateFlexible(req.dob));
+        }
+
+        jdbc.update(
+                "INSERT INTO user_details(user_id,name,address,phone,email,branch,gender,dob) " +
+                        "VALUES (?,?,?,?,?,?,?,?) " +
+                        "ON DUPLICATE KEY UPDATE name=?, address=?, phone=?, email=?, branch=?, gender=?, dob=?",
+                userId,
+                req.name == null ? "" : req.name,
+                req.address == null ? "" : req.address,
+                req.phone == null ? "" : req.phone,
+                req.email == null ? "" : req.email,
+                req.branch == null ? "" : req.branch,
+                req.gender == null ? "" : req.gender,
+                dob,
+                req.name == null ? "" : req.name,
+                req.address == null ? "" : req.address,
+                req.phone == null ? "" : req.phone,
+                req.email == null ? "" : req.email,
+                req.branch == null ? "" : req.branch,
+                req.gender == null ? "" : req.gender,
+                dob
+        );
+
+        return ResponseEntity.ok(Map.of("message", "Profile updated"));
     }
 }
