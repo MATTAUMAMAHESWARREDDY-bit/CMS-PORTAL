@@ -1,16 +1,3 @@
-<!-- =========================
-     index.html (SINGLE FILE)
-     Kalasalingam University - CMS Portal (Frontend SPA)
-     UPDATED FEATURES:
-     ✅ Show Welcome + username (Admin + User)
-     ✅ Admin: Manage (Upcoming Events list+delete, Content list+delete)
-     ✅ User: Change Password (old/new/confirm)
-     ✅ Multiple photos: selecting again ADDS (does not replace)
-
-     ✅ NEW (TOKEN FEATURE) — ONLY CHANGES ADDED (same code/style)
-     ✅ User Dashboard: Book Token (enter username + problem, submit)
-     ✅ Admin Dashboard: Tokens (list tokens, search by username, click username → load profile, update profile)
-     ========================= -->
 
 <!doctype html>
 <html lang="en">
@@ -21,32 +8,13 @@
 
   <style>
     :root{
-      --bg1:#0b1220;
-      --bg2:#0f172a;
-      --card: rgba(15,23,42,.78);
-      --card2: rgba(255,255,255,.92);
-      --muted:#94a3b8;
-      --text:#e2e8f0;
-      --text2:#0f172a;
-      --line: rgba(148,163,184,.35);
-      --line2:#e2e8f0;
-
-      --accent:#eab308;
-      --accent2:#facc15;
-      --danger:#ef4444;
-      --ok:#22c55e;
-
-      --nav:#0f172a;
-      --navbtn:#1e293b;
-      --navhover:#334155;
-
+      --muted:#94a3b8; --text:#e2e8f0; --text2:#0f172a;
+      --accent:#eab308; --accent2:#facc15; --danger:#ef4444;
+      --nav:#0f172a; --navbtn:#1e293b; --navhover:#334155;
       --shadow: 0 18px 55px rgba(0,0,0,.35);
       --shadow2: 0 16px 30px rgba(15,23,42,.16);
-      --radius: 18px;
-
-      --font: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      --radius: 18px; --font:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
     }
-
     *{ box-sizing:border-box; }
     html,body{ height:100%; margin:0; font-family:var(--font); }
     body{
@@ -56,7 +24,6 @@
       color: var(--text);
       overflow-x:hidden;
     }
-
     .bg-photo{
       position:fixed; inset:0;
       background-image:
@@ -69,7 +36,6 @@
     }
 
     #app{ min-height:100%; display:flex; flex-direction:column; }
-
     .hidden{ display:none !important; }
     .row{ display:flex; gap:14px; flex-wrap:wrap; }
     .grow{ flex:1; min-width:240px; }
@@ -81,20 +47,18 @@
       padding:11px 14px;
       border-radius:12px;
       cursor:pointer;
-      font-weight:700;
+      font-weight:900;
       letter-spacing:.2px;
       font-family:var(--font);
       transition: transform .12s ease, background .12s ease, opacity .12s ease;
       user-select:none;
+      white-space:nowrap;
     }
     .btn:active{ transform:translateY(1px); }
     .btn-primary{ background:var(--accent); color:#0b1220; }
     .btn-primary:hover{ background:var(--accent2); }
     .btn-secondary{ background:#e2e8f0; color:#0f172a; }
-    .btn-ghost{
-      background:transparent; color:var(--text);
-      border:1px solid rgba(226,232,240,.2);
-    }
+    .btn-ghost{ background:transparent; color:var(--text); border:1px solid rgba(226,232,240,.2); }
     .btn-danger{ background:var(--danger); color:white; }
     .btn-danger:hover{ opacity:.92; }
     .btn:disabled{ opacity:.55; cursor:not-allowed; }
@@ -113,17 +77,8 @@
       border-color: rgba(234,179,8,.85);
       box-shadow: 0 0 0 4px rgba(234,179,8,.18);
     }
-    .label{
-      font-size:13px;
-      color: rgba(226,232,240,.92);
-      margin:0 0 6px 2px;
-    }
-    .label-dark{
-      font-size:13px;
-      color:#0f172a;
-      margin:0 0 6px 2px;
-      font-weight:600;
-    }
+    .label{ font-size:13px; color: rgba(226,232,240,.92); margin:0 0 6px 2px; }
+    .label-dark{ font-size:13px; color:#0f172a; margin:0 0 6px 2px; font-weight:800; }
     textarea.field{ min-height:92px; resize:vertical; }
     select.field{ padding:11px 10px; }
     .hint{ font-size:12px; color:rgba(226,232,240,.75); margin-top:6px; }
@@ -169,16 +124,6 @@
       height:auto;
       filter: drop-shadow(0 10px 22px rgba(0,0,0,.35));
     }
-    .login-grid{ display:flex; flex-direction:column; gap:12px; }
-    .checkline{ display:flex; align-items:center; gap:8px; margin:2px 0 6px; }
-    .checkline input{ width:16px; height:16px; }
-    .checkline span{ font-size:13px; color:rgba(226,232,240,.92); }
-    .login-footer{
-      margin-top:10px;
-      text-align:center;
-      font-size:12px;
-      color:rgba(226,232,240,.75);
-    }
 
     .topbar{
       background: var(--nav);
@@ -192,7 +137,7 @@
     }
     .topbar .title{
       display:flex; align-items:center; gap:10px;
-      font-weight:800;
+      font-weight:1000;
       letter-spacing:.2px;
     }
     .badge{
@@ -202,7 +147,7 @@
       background: rgba(234,179,8,.18);
       color: #fde68a;
       border: 1px solid rgba(234,179,8,.35);
-      font-weight:700;
+      font-weight:1000;
     }
     .nav{
       display:flex; flex-wrap:wrap;
@@ -216,7 +161,7 @@
       border:1px solid rgba(226,232,240,.12);
       padding:10px 12px;
       border-radius:12px;
-      font-weight:800;
+      font-weight:1000;
       cursor:pointer;
       transition: background .12s ease, transform .12s ease;
       user-select:none;
@@ -230,17 +175,8 @@
     }
     .nav .navbtn.logout:hover{ background: var(--accent2); }
 
-    .section-title{
-      font-size:20px;
-      font-weight:900;
-      margin:0 0 12px;
-    }
-    .sub{
-      margin:0 0 14px;
-      color:#475569;
-      font-size:13px;
-      line-height:1.45;
-    }
+    .section-title{ font-size:20px; font-weight:1100; margin:0 0 12px; }
+    .sub{ margin:0 0 14px; color:#475569; font-size:13px; line-height:1.45; }
 
     .card-soft{
       border:1px solid #e2e8f0;
@@ -259,15 +195,17 @@
       padding:6px 10px;
       border-radius:999px;
       font-size:12px;
-      font-weight:800;
+      font-weight:1000;
       border:1px solid #e2e8f0;
     }
     .pill-active{ background: rgba(34,197,94,.12); color:#166534; border-color: rgba(34,197,94,.25); }
     .pill-expired{ background: rgba(148,163,184,.16); color:#475569; border-color: rgba(148,163,184,.32); }
+    .pill-present{ background: rgba(59,130,246,.12); color:#1d4ed8; border-color: rgba(59,130,246,.25); }
+    .pill-upcoming{ background: rgba(34,197,94,.12); color:#166534; border-color: rgba(34,197,94,.25); }
 
     .status{
       font-size:13px;
-      font-weight:700;
+      font-weight:1000;
       color:#334155;
       padding-left:8px;
     }
@@ -275,26 +213,24 @@
     .status.err{ color:#991b1b; }
     .status.warn{ color:#92400e; }
 
-    /* File chip */
-    .filechip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:12px;
-      border:1px solid #e2e8f0;
-      background:#f8fafc;
-      color:#0f172a;
-      font-size:13px;
-      font-weight:800;
-      margin-top:8px;
-      max-width:100%;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
+    .tile-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap:12px;
     }
+    .tile{
+      border:1px solid #e2e8f0;
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(15,23,42,.07);
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .tile:hover{ transform: translateY(-1px); box-shadow: 0 14px 28px rgba(15,23,42,.10); }
+    .tile .t-title{ font-weight:1100; color:#0f172a; }
+    .tile .t-sub{ margin-top:6px; font-size:12px; color:#64748b; font-weight:800; }
 
-    /* Modal */
     .modal-backdrop{
       position:fixed; inset:0; background:rgba(0,0,0,.55);
       display:flex; align-items:center; justify-content:center;
@@ -326,47 +262,6 @@
     }
     .imgbox img{ max-width:100%; max-height:100%; object-fit:contain; }
 
-    .mini-actions{
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-      margin-top:10px;
-    }
-
-    /* =========================
-       ✅ TOKEN styles (ADDED ONLY)
-       ========================= */
-    .userlist{
-      border:1px solid #e2e8f0;
-      border-radius:14px;
-      overflow:hidden;
-      background:white;
-    }
-    .userlist .item{
-      padding:10px 12px;
-      border-bottom:1px solid #e2e8f0;
-      cursor:pointer;
-      font-weight:800;
-      color:#0f172a;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-    }
-    .userlist .item:hover{ background:#f8fafc; }
-    .userlist .item:last-child{ border-bottom:none; }
-    .mini-pill{
-      font-size:12px;
-      padding:4px 10px;
-      border-radius:999px;
-      background: rgba(234,179,8,.14);
-      border: 1px solid rgba(234,179,8,.28);
-      color:#92400e;
-      font-weight:900;
-      white-space:nowrap;
-      max-width: 320px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
     @media (max-width: 720px){
       .topbar{ flex-direction:column; align-items:flex-start; }
       .nav{ justify-content:flex-start; }
@@ -386,28 +281,32 @@
           <img alt="Kalasalingam University Logo"
                src="https://www.kalasalingam.ac.in/wp-content/uploads/2022/02/Logo.png" />
         </div>
-
-        <div class="login-grid">
-          <div>
-            <div class="label">Username</div>
-            <input id="loginUser" class="field" type="text" autocomplete="username" />
-          </div>
-
-          <div>
-            <div class="label">Password</div>
-            <input id="loginPass" class="field" type="password" autocomplete="current-password" />
-          </div>
-
-          <label class="checkline">
-            <input id="showPass" type="checkbox" />
-            <span>Show password</span>
-          </label>
-
-          <button class="btn btn-primary" id="btnLogin">LOGIN</button>
-
-          <div class="login-footer">© Kalasalingam University</div>
-          <div class="hint" id="loginStatus"></div>
+        <div style="margin-top:12px;">
+          <div class="label">Username</div>
+          <input id="loginUser" class="field" type="text" autocomplete="username" />
         </div>
+
+        <div style="margin-top:12px;">
+          <div class="label">Password</div>
+          <input id="loginPass" class="field" type="password" autocomplete="current-password" />
+        </div>
+
+        <label style="display:flex;align-items:center;gap:8px;margin:10px 0 0;">
+          <input id="showPass" type="checkbox" style="width:16px;height:16px;" />
+          <span style="font-size:13px;color:rgba(226,232,240,.92);">Show password</span>
+        </label>
+
+        <button class="btn btn-primary" id="btnLogin" style="width:100%;margin-top:12px;">LOGIN</button>
+
+        <!-- ✅ NEW: Forgot Password button (shows after 3 wrong logins) -->
+        <button class="btn btn-ghost hidden" id="btnForgotOpen"
+                style="width:100%;margin-top:10px;border-color:rgba(234,179,8,.45);">
+          Forgot Password (OTP)
+        </button>
+        <div class="hint" id="forgotHint" style="text-align:center;"></div>
+
+        <div style="margin-top:10px;text-align:center;font-size:12px;color:rgba(226,232,240,.75);">© Kalasalingam University</div>
+        <div class="hint" id="loginStatus"></div>
       </div>
     </section>
 
@@ -416,18 +315,23 @@
       <div class="topbar">
         <div class="title">
           <span>Admin Dashboard</span>
-          <span class="badge" id="adminBadge">ADMIN</span>
+          <span class="badge">ADMIN</span>
         </div>
         <div class="nav">
           <button class="navbtn" data-admin-tab="HOME">Home</button>
+          <button class="navbtn" data-admin-tab="CLUBS">Add Club</button>
           <button class="navbtn" data-admin-tab="ADD_EVENT">Add Upcoming Event</button>
           <button class="navbtn" data-admin-tab="ADD_CONTENT">Add Content</button>
+
+          <button class="navbtn" data-admin-tab="UPLOAD_CERT">Upload Certificate</button>
+          <button class="navbtn" data-admin-tab="LIVESCORE_ADMIN">LiveScore</button>
+
           <button class="navbtn" data-admin-tab="ADD_USER">Add User</button>
+          <button class="navbtn" data-admin-tab="USER_DETAILS">User Details</button>
+
+          <button class="navbtn" data-admin-tab="RECRUITMENT">Club Recruitment</button>
+
           <button class="navbtn" data-admin-tab="MANAGE">Manage</button>
-
-          <!-- ✅ ADDED ONLY -->
-          <button class="navbtn" data-admin-tab="TOKENS">Tokens</button>
-
           <button class="navbtn logout" id="btnAdminLogout">Logout</button>
         </div>
       </div>
@@ -437,42 +341,87 @@
 
           <div class="admin-tab" id="adminTab_HOME">
             <div class="section-title">Welcome, <span id="adminName">Admin</span> 👋</div>
-            <p class="sub">Use the top menu to manage events, content, and users.</p>
+            <p class="sub">
+              Backend model: data stored in MySQL (later) / currently as per your backend implementation.
+              Photo/Report uploads go to <b>/uploads</b>.
+            </p>
             <div class="card-soft">
-              <div style="font-weight:900; margin-bottom:6px;">Upload Notes</div>
+              <div style="font-weight:1100; margin-bottom:6px;">Important</div>
               <div class="muted" style="font-size:13px; line-height:1.55;">
-                • Event Photo is uploaded using <b>File Picker</b><br/>
-                • Content Photos + Report are uploaded using <b>File Picker</b><br/>
-                • Frontend sends <b>multipart/form-data</b> to backend
+                • If images/PDF not opening, add backend mapping for <b>/uploads/**</b><br/>
+                • Use Manage to delete test data<br/>
+                • ✅ Club Password system is OFFLINE demo (localStorage). For real security, validate in backend.
               </div>
             </div>
           </div>
 
-          <!-- ✅ ADMIN: ADD EVENT (FILE UPLOAD) -->
+          <!-- ADMIN: CLUBS -->
+          <div class="admin-tab hidden" id="adminTab_CLUBS">
+            <div class="section-title">Add Club</div>
+            <p class="sub">Create club names + set club password (offline demo localStorage).</p>
+
+            <div class="card-soft">
+              <div class="row" style="align-items:flex-end;">
+                <div class="grow">
+                  <div class="label-dark">New Club Name</div>
+                  <input id="clubName" class="field" type="text" placeholder="e.g., AI Club" />
+                </div>
+
+                <div class="grow">
+                  <div class="label-dark">Club Password</div>
+                  <input id="clubPass" class="field" type="password" placeholder="Set club password" />
+                </div>
+
+                <div>
+                  <button class="btn btn-primary" id="btnAddClub">Add Club</button>
+                </div>
+                <span class="status" id="clubStatus"></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <div style="font-weight:1100; margin-bottom:10px;">Existing Clubs</div>
+              <div id="clubListBox" class="card-soft" style="background:#fff;"></div>
+            </div>
+          </div>
+
+          <!-- ADMIN: ADD EVENT -->
           <div class="admin-tab hidden" id="adminTab_ADD_EVENT">
             <div class="section-title">Add Upcoming Event</div>
-            <p class="sub">Uploads photo using file picker. Backend accepts <b>multipart/form-data</b>.</p>
+            <p class="sub">Uploads event photo (image). Stored on backend. ✅ Requires club password.</p>
 
             <div class="card-soft">
               <div class="row">
                 <div class="grow">
-                  <div class="label-dark">Event Title</div>
-                  <input id="aeTitle" class="field" type="text" placeholder="e.g., Tech Fest 2026" />
+                  <div class="label-dark">Club</div>
+                  <select id="aeClub" class="field"></select>
                 </div>
                 <div class="grow">
-                  <div class="label-dark">Event Date</div>
-                  <input id="aeDate" class="field" type="date" />
+                  <div class="label-dark">Event Title</div>
+                  <input id="aeTitle" class="field" type="text" placeholder="e.g., Hackathon 2026" />
                 </div>
               </div>
 
               <div class="row" style="margin-top:12px;">
                 <div class="grow">
-                  <div class="label-dark">Event Photo (Upload)</div>
-                  <input id="aePhotoFile" class="field" type="file" accept="image/*" />
-                  <div class="hint-dark">Choose image (jpg/png/webp). Backend will store it and return URL.</div>
-                  <div id="aePhotoChip" class="filechip hidden"></div>
+                  <div class="label-dark">Club Password</div>
+                  <input id="aeClubPass" class="field" type="password" placeholder="Enter selected club password" />
+                  <div class="hint-dark">If wrong password → event will not save.</div>
                 </div>
+              </div>
 
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Event Date</div>
+                  <input id="aeDate" class="field" type="date" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Event Photo (Image)</div>
+                  <input id="aePhotoFile" class="field" type="file" accept="image/*" />
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
                 <div class="grow">
                   <div class="label-dark">Registration Link</div>
                   <input id="aeRegLink" class="field" type="url" placeholder="https://..." />
@@ -486,13 +435,17 @@
             </div>
           </div>
 
-          <!-- ✅ ADMIN: ADD CONTENT (FILE UPLOAD MULTIPLE + REPORT) -->
+          <!-- ADMIN: ADD CONTENT -->
           <div class="admin-tab hidden" id="adminTab_ADD_CONTENT">
             <div class="section-title">Add Content</div>
-            <p class="sub">Uploads multiple photos + report. You can select photos multiple times (it ADDS).</p>
+            <p class="sub">Uploads multiple photos + optional PDF report to backend. ✅ Requires club password.</p>
 
             <div class="card-soft">
               <div class="row">
+                <div class="grow">
+                  <div class="label-dark">Club</div>
+                  <select id="acClub" class="field"></select>
+                </div>
                 <div class="grow">
                   <div class="label-dark">Event Title</div>
                   <input id="acTitle" class="field" type="text" placeholder="Same title as event" />
@@ -505,6 +458,14 @@
 
               <div class="row" style="margin-top:12px;">
                 <div class="grow">
+                  <div class="label-dark">Club Password</div>
+                  <input id="acClubPass" class="field" type="password" placeholder="Enter selected club password" />
+                  <div class="hint-dark">If wrong password → content will not save.</div>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
                   <div class="label-dark">Description</div>
                   <textarea id="acDesc" class="field" placeholder="Write event description..."></textarea>
                 </div>
@@ -512,14 +473,8 @@
 
               <div class="row" style="margin-top:12px;">
                 <div class="grow">
-                  <div class="label-dark">Photos (Upload multiple)</div>
+                  <div class="label-dark">Photos (Select Multiple)</div>
                   <input id="acPhotoFiles" class="field" type="file" accept="image/*" multiple />
-                  <div class="hint-dark">Tip: You can select once or select again to add more photos.</div>
-                  <div id="acPhotosChip" class="filechip hidden"></div>
-
-                  <div class="mini-actions">
-                    <button class="btn btn-secondary" id="btnClearPhotos" type="button">Clear Selected Photos</button>
-                  </div>
                 </div>
 
                 <div class="grow">
@@ -530,10 +485,8 @@
 
               <div class="row" style="margin-top:12px;">
                 <div class="grow">
-                  <div class="label-dark">Event Report (Upload)</div>
-                  <input id="acReportFile" class="field" type="file" />
-                  <div class="hint-dark">Upload PDF/DOC/PPT etc. Backend will store and return URL.</div>
-                  <div id="acReportChip" class="filechip hidden"></div>
+                  <div class="label-dark">Event Report (PDF File)</div>
+                  <input id="acReportFile" class="field" type="file" accept="application/pdf" />
                 </div>
               </div>
 
@@ -544,10 +497,112 @@
             </div>
           </div>
 
-          <!-- Admin: Add User -->
+          <!-- ADMIN: UPLOAD CERTIFICATE (NEW) -->
+          <div class="admin-tab hidden" id="adminTab_UPLOAD_CERT">
+            <div class="section-title">Upload Certificate</div>
+            <p class="sub">Club → password → Past events → RegNo + file upload. (Overwrite if same club+event+regNo)</p>
+
+            <div class="card-soft">
+              <div id="certClubPicker">
+                <div style="font-weight:1100;margin-bottom:10px;">Select Club</div>
+                <div id="certClubTiles" class="tile-grid"></div>
+              </div>
+
+              <div id="certEventPicker" class="hidden">
+                <div class="row" style="align-items:flex-end;">
+                  <div class="grow">
+                    <div class="label-dark">Selected Club</div>
+                    <input id="certSelectedClub" class="field" type="text" disabled />
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">Club Password</div>
+                    <input id="certClubPass" class="field" type="password" placeholder="Enter club password" />
+                  </div>
+                  <div>
+                    <button class="btn btn-secondary" id="certBackToClubs">Back</button>
+                  </div>
+                  <span class="status" id="certAdminStatus"></span>
+                </div>
+
+                <div class="hr"></div>
+
+                <div style="font-weight:1100;margin-bottom:10px;">Select Past Event</div>
+                <div id="certPastEvents" class="tile-grid"></div>
+
+                <div class="hr"></div>
+
+                <div id="certUploadForm" class="hidden">
+                  <div class="row">
+                    <div class="grow">
+                      <div class="label-dark">Register Number (RegNo)</div>
+                      <input id="certRegNo" class="field" type="text" placeholder="e.g., 9922001234" />
+                    </div>
+                    <div class="grow">
+                      <div class="label-dark">Certificate File (PDF/Image)</div>
+                      <input id="certFile" class="field" type="file" accept="application/pdf,image/*" />
+                    </div>
+                  </div>
+
+                  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                    <button class="btn btn-primary" id="btnUploadCert">Submit</button>
+                    <span class="status" id="certUploadStatus"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMIN: LIVESCORE (NEW) -->
+          <div class="admin-tab hidden" id="adminTab_LIVESCORE_ADMIN">
+            <div class="section-title">LiveScore (Admin)</div>
+            <p class="sub">Club → Present events (today only) → team scores → save/update (overwrite).</p>
+
+            <div class="card-soft">
+              <div id="lsClubPicker">
+                <div style="font-weight:1100;margin-bottom:10px;">Select Club</div>
+                <div id="lsClubTiles" class="tile-grid"></div>
+              </div>
+
+              <div id="lsEventPicker" class="hidden">
+                <div class="row" style="align-items:flex-end;">
+                  <div class="grow">
+                    <div class="label-dark">Selected Club</div>
+                    <input id="lsSelectedClub" class="field" type="text" disabled />
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">Club Password</div>
+                    <input id="lsClubPass" class="field" type="password" placeholder="Enter club password" />
+                  </div>
+                  <div>
+                    <button class="btn btn-secondary" id="lsBackToClubs">Back</button>
+                  </div>
+                  <span class="status" id="lsAdminStatus"></span>
+                </div>
+
+                <div class="hr"></div>
+
+                <div style="font-weight:1100;margin-bottom:10px;">Present Events (Today only)</div>
+                <div id="lsPresentEvents" class="tile-grid"></div>
+
+                <div class="hr"></div>
+
+                <div id="lsScoreForm" class="hidden">
+                  <div style="font-weight:1100;margin-bottom:10px;" id="lsSelectedEventTitle">Event: -</div>
+                  <div id="lsTeamsBox"></div>
+
+                  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                    <button class="btn btn-primary" id="btnSaveLiveScore">Save / Update</button>
+                    <span class="status" id="lsSaveStatus"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMIN: ADD USER -->
           <div class="admin-tab hidden" id="adminTab_ADD_USER">
             <div class="section-title">Add User</div>
-            <p class="sub">Creates a <b>user</b> or <b>admin</b>.</p>
+            <p class="sub">Creates user/admin in backend.</p>
 
             <div class="card-soft">
               <div class="row">
@@ -575,7 +630,125 @@
             </div>
           </div>
 
-          <!-- ✅ ADMIN: MANAGE -->
+          <!-- ADMIN: USER DETAILS -->
+          <div class="admin-tab hidden" id="adminTab_USER_DETAILS">
+            <div class="section-title">User Details</div>
+            <p class="sub">Enter username → view + update password/role/profile.</p>
+
+            <div class="card-soft">
+              <div class="row" style="align-items:flex-end;">
+                <div class="grow">
+                  <div class="label-dark">Register Number / Username</div>
+                  <input id="udLookupUser" class="field" type="text" placeholder="e.g., mahi" />
+                </div>
+                <div>
+                  <button class="btn btn-primary" id="btnLookupUser">OK</button>
+                </div>
+                <span class="status" id="udLookupStatus"></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <div id="udEditBox" class="hidden">
+                <div style="font-weight:1100;margin-bottom:10px;">Edit User</div>
+
+                <div class="row">
+                  <div class="grow">
+                    <div class="label-dark">Username</div>
+                    <input id="udEUsername" class="field" type="text" disabled />
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">Role</div>
+                    <select id="udERole" class="field">
+                      <option value="user">user</option>
+                      <option value="admin">admin</option>
+                    </select>
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">Password</div>
+                    <input id="udEPassword" class="field" type="text" />
+                  </div>
+                </div>
+
+                <div class="hr"></div>
+
+                <div style="font-weight:1100;margin-bottom:8px;">Profile Details</div>
+
+                <div class="row">
+                  <div class="grow">
+                    <div class="label-dark">Name</div>
+                    <input id="udEName" class="field" type="text" />
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">Phone</div>
+                    <input id="udEPhone" class="field" type="text" />
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:12px;">
+                  <div class="grow">
+                    <div class="label-dark">Email</div>
+                    <input id="udEEmail" class="field" type="email" />
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">Branch</div>
+                    <input id="udEBranch" class="field" type="text" />
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:12px;">
+                  <div class="grow">
+                    <div class="label-dark">Gender</div>
+                    <select id="udEGender" class="field">
+                      <option value="">Select</option>
+                      <option>Male</option>
+                      <option>Female</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">DOB</div>
+                    <input id="udEDob" class="field" type="date" />
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:12px;">
+                  <div class="grow">
+                    <div class="label-dark">Address</div>
+                    <textarea id="udEAddress" class="field"></textarea>
+                  </div>
+                </div>
+
+                <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;">
+                  <button class="btn btn-secondary" id="btnClearUserDetails">Clear</button>
+                  <button class="btn btn-primary" id="btnSaveUserDetails">Save Changes</button>
+                  <span class="status" id="udSaveStatus"></span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ADMIN: CLUB RECRUITMENT -->
+          <div class="admin-tab hidden" id="adminTab_RECRUITMENT">
+            <div class="section-title">Club Recruitment</div>
+            <p class="sub">Open/Close recruitment for each club. When OPEN, set registration link.</p>
+
+            <div class="card-soft">
+              <div class="row" style="align-items:center;">
+                <button class="btn btn-primary" id="btnLoadRecruitments">Load Clubs</button>
+                <span class="status" id="recAdminStatus"></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <div id="recAdminBox" style="overflow:auto;">
+                <div class="muted" style="font-weight:1000;">Click “Load Clubs”</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMIN: MANAGE -->
           <div class="admin-tab hidden" id="adminTab_MANAGE">
             <div class="section-title">Manage</div>
             <p class="sub">Manage upcoming events and content (view + delete).</p>
@@ -590,112 +763,16 @@
               <div class="hr"></div>
 
               <div id="adminManageBox" style="overflow:auto;">
-                <div class="muted" style="font-weight:800;">Click a button to load list...</div>
+                <div class="muted" style="font-weight:1000;">Click a button to load list...</div>
               </div>
             </div>
           </div>
-
-          <!-- =========================
-               ✅ ADMIN: TOKENS TAB (ADDED ONLY)
-               ========================= -->
-          <div class="admin-tab hidden" id="adminTab_TOKENS">
-            <div class="section-title">Tokens</div>
-            <p class="sub">Search username → click username → view profile → correct details.</p>
-
-            <div class="card-soft">
-              <div class="row" style="align-items:flex-end;">
-                <div class="grow">
-                  <div class="label-dark">Search username</div>
-                  <input id="atSearchUser" class="field" type="text" placeholder="Type username..." />
-                  <div class="hint-dark">Frontend filter. (Backend list loads on button click)</div>
-                </div>
-                <div>
-                  <button class="btn btn-primary" id="btnLoadTokens">Load Tokens</button>
-                </div>
-                <span class="status" id="atStatus"></span>
-              </div>
-
-              <div class="hr"></div>
-
-              <div class="row" style="align-items:flex-start;">
-                <div class="grow">
-                  <div style="font-weight:900; margin-bottom:8px;">Token Users</div>
-                  <div id="tokenUserList" class="userlist">
-                    <div class="item"><span class="muted">Click "Load Tokens"</span></div>
-                  </div>
-                </div>
-
-                <div class="grow">
-                  <div style="font-weight:900; margin-bottom:8px;">Profile Details</div>
-                  <div class="card-soft" style="background:#fff;">
-                    <div class="muted" id="atSelectedUser" style="font-weight:900;margin-bottom:10px;">No user selected</div>
-
-                    <div class="row">
-                      <div class="grow">
-                        <div class="label-dark">Name</div>
-                        <input id="apName" class="field" type="text" />
-                      </div>
-                      <div class="grow">
-                        <div class="label-dark">Phone</div>
-                        <input id="apPhone" class="field" type="text" />
-                      </div>
-                    </div>
-
-                    <div class="row" style="margin-top:12px;">
-                      <div class="grow">
-                        <div class="label-dark">Email</div>
-                        <input id="apEmail" class="field" type="email" />
-                      </div>
-                      <div class="grow">
-                        <div class="label-dark">Branch</div>
-                        <input id="apBranch" class="field" type="text" />
-                      </div>
-                    </div>
-
-                    <div class="row" style="margin-top:12px;">
-                      <div class="grow">
-                        <div class="label-dark">Gender</div>
-                        <select id="apGender" class="field">
-                          <option value="">Select</option>
-                          <option>Male</option>
-                          <option>Female</option>
-                          <option>Other</option>
-                        </select>
-                      </div>
-                      <div class="grow">
-                        <div class="label-dark">DOB</div>
-                        <input id="apDob" class="field" type="date" />
-                      </div>
-                    </div>
-
-                    <div class="row" style="margin-top:12px;">
-                      <div class="grow">
-                        <div class="label-dark">Address</div>
-                        <textarea id="apAddress" class="field"></textarea>
-                      </div>
-                    </div>
-
-                    <div class="mini-actions" style="justify-content:flex-end;">
-                      <button class="btn btn-secondary" id="btnAdminProfileReload" disabled>Reload</button>
-                      <button class="btn btn-primary" id="btnAdminProfileUpdate" disabled>Update Profile</button>
-                      <span class="status" id="apStatus"></span>
-                    </div>
-                  </div>
-
-                  <div class="hint-dark" style="margin-top:10px;">
-                    Token problem text is shown in the list (right side pill).
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- ========================= /ADMIN TOKENS ========================= -->
 
         </div>
       </div>
     </section>
 
-    <!-- ========================= USER DETAILS ========================= -->
+    <!-- ========================= USER DETAILS (FIRST LOGIN) ========================= -->
     <section id="screen-details" class="hidden">
       <div class="topbar">
         <div class="title">
@@ -774,144 +851,367 @@
       <div class="topbar">
         <div class="title">
           <span>User Dashboard</span>
-          <span class="badge" id="userBadge">USER</span>
+          <span class="badge">USER</span>
         </div>
         <div class="nav">
           <button class="navbtn" data-user-tab="HOME">Home</button>
           <button class="navbtn" data-user-tab="PROFILE">Profile</button>
           <button class="navbtn" data-user-tab="EVENTS">Upcoming Events</button>
           <button class="navbtn" data-user-tab="CONTENT">Content</button>
+
+          <button class="navbtn" data-user-tab="CERTIFICATE">Certificate</button>
+          <button class="navbtn" data-user-tab="LIVESCORE_USER">LiveScore</button>
+
+          <button class="navbtn" data-user-tab="RECRUITMENT">Club Recruitment</button>
+
           <button class="navbtn" data-user-tab="CHANGE_PASS">Change Password</button>
-
-          <!-- ✅ ADDED ONLY -->
-          <button class="navbtn" data-user-tab="TOKEN">Book Token</button>
-
           <button class="navbtn logout" id="btnUserLogout">Logout</button>
         </div>
       </div>
 
       <div class="panel">
         <div class="panel-inner">
+
           <div class="user-tab" id="userTab_HOME">
             <div class="section-title">Welcome, <span id="userName">User</span> 👋</div>
-            <p class="sub">Use the top menu to view profile, events, and content.</p>
+            <p class="sub">Upcoming Events and Content show <b>club list first</b>. Click a club to view.</p>
             <div class="card-soft">
-              <div style="font-weight:900; margin-bottom:8px;">Quick actions</div>
+              <div style="font-weight:1100; margin-bottom:8px;">Quick actions</div>
               <div class="row">
                 <button class="btn btn-primary" id="goEvents">View Upcoming Events</button>
                 <button class="btn btn-secondary" id="goContent">Open Content</button>
+                <button class="btn btn-secondary" id="goCert">Certificate</button>
+                <button class="btn btn-secondary" id="goLive">LiveScore</button>
+                <button class="btn btn-secondary" id="goRecruit">Recruitments</button>
                 <button class="btn btn-secondary" id="goChangePass">Change Password</button>
               </div>
             </div>
           </div>
 
+          <!-- ✅ UPDATED: Profile with OTP Edit -->
           <div class="user-tab hidden" id="userTab_PROFILE">
             <div class="section-title">My Profile</div>
-            <p class="sub">Loaded from <b>user_details</b>.</p>
+            <p class="sub">Loaded from backend. To edit, verify OTP first.</p>
 
             <div class="card-soft">
               <pre id="profileText" style="margin:0; white-space:pre-wrap; font-family:var(--font); font-size:14px; line-height:1.7;">Loading profile...</pre>
+
               <div class="hr"></div>
-              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+
+              <div class="row" style="align-items:center;">
                 <button class="btn btn-secondary" id="btnRefreshProfile">Refresh</button>
+                <button class="btn btn-primary" id="btnProfileSendOtp">Send OTP to Edit</button>
+                <button class="btn btn-secondary hidden" id="btnProfileVerifyOtpOpen">Verify OTP</button>
+                <span class="status" id="profileStatus"></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <!-- Edit form (hidden until OTP verified) -->
+              <div id="profileEditBox" class="hidden">
+                <div style="font-weight:1100;margin-bottom:10px;">Edit Profile</div>
+
+                <div class="row">
+                  <div class="grow">
+                    <div class="label-dark">Name</div>
+                    <input id="peName" class="field" type="text" />
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">Phone</div>
+                    <input id="pePhone" class="field" type="text" />
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:12px;">
+                  <div class="grow">
+                    <div class="label-dark">Email</div>
+                    <input id="peEmail" class="field" type="email" />
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">Branch</div>
+                    <input id="peBranch" class="field" type="text" />
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:12px;">
+                  <div class="grow">
+                    <div class="label-dark">Gender</div>
+                    <select id="peGender" class="field">
+                      <option value="">Select</option>
+                      <option>Male</option>
+                      <option>Female</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">DOB</div>
+                    <input id="peDob" class="field" type="date" />
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:12px;">
+                  <div class="grow">
+                    <div class="label-dark">Address</div>
+                    <textarea id="peAddress" class="field"></textarea>
+                  </div>
+                </div>
+
+                <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end;">
+                  <button class="btn btn-secondary" id="btnCancelProfileEdit">Cancel</button>
+                  <button class="btn btn-primary" id="btnSaveMyProfileEdit">Save</button>
+                  <span class="status" id="profileEditStatus"></span>
+                </div>
               </div>
             </div>
           </div>
 
+          <!-- USER EVENTS -->
           <div class="user-tab hidden" id="userTab_EVENTS">
             <div class="section-title">Upcoming Events</div>
-            <p class="sub">Expired events are automatically disabled (based on event_date).</p>
+            <p class="sub">First select a club. Then events will show. ✅ Shows UPCOMING only.</p>
 
             <div class="card-soft">
-              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px;">
-                <button class="btn btn-primary" id="btnRefreshEvents">Refresh Events</button>
-                <span class="status" id="eventsStatus"></span>
+              <div id="ueClubPicker">
+                <div style="font-weight:1100;margin-bottom:10px;">Select Club</div>
+                <div id="ueClubTiles" class="tile-grid"></div>
               </div>
 
-              <div style="overflow:auto;">
-                <table id="eventsTable">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                      <th>Photo</th>
-                      <th>Register</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
+              <div id="ueEventsView" class="hidden">
+                <div class="row" style="align-items:center; justify-content:space-between;">
+                  <div>
+                    <div style="font-weight:1100;" id="ueSelectedClubTitle">Club: -</div>
+                    <div class="hint-dark">Click “Back to Clubs” to change club.</div>
+                  </div>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+                    <button class="btn btn-secondary" id="ueBackToClubs">Back to Clubs</button>
+                    <button class="btn btn-primary" id="btnRefreshEvents">Refresh</button>
+                  </div>
+                  <span class="status" id="eventsStatus"></span>
+                </div>
 
-              <div class="hint-dark" style="margin-top:10px;">
-                Note: Photo/Register links open in new tab if provided by backend.
+                <div class="hr"></div>
+
+                <div style="overflow:auto;">
+                  <table id="eventsTable">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Photo</th>
+                        <th>Register</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
 
+          <!-- USER CONTENT -->
           <div class="user-tab hidden" id="userTab_CONTENT">
             <div class="section-title">Event Content</div>
-            <p class="sub">Select Event + Date → Load → then you can open report, photos, and videos.</p>
+            <p class="sub">First select a club. Then choose event/date.</p>
 
             <div class="card-soft">
-              <div class="row" style="align-items:flex-end;">
-                <div class="grow">
-                  <div class="label-dark">Event</div>
-                  <select id="cEventTitle" class="field"></select>
-                </div>
-                <div class="grow">
-                  <div class="label-dark">Date</div>
-                  <select id="cEventDate" class="field"></select>
-                </div>
-                <div>
-                  <button class="btn btn-primary" id="btnLoadContent">Load</button>
-                </div>
-                <span class="status" id="contentStatus"></span>
+              <div id="ucClubPicker">
+                <div style="font-weight:1100;margin-bottom:10px;">Select Club</div>
+                <div id="ucClubTiles" class="tile-grid"></div>
               </div>
 
-              <div id="contentDetails" class="hidden" style="margin-top:14px;">
-                <div class="card-soft" style="background:#fff; margin-bottom:10px;">
-                  <div class="row" style="align-items:center; justify-content:space-between;">
-                    <div class="grow">
-                      <div style="font-weight:900;" id="selEventName">Event Name: -</div>
-                      <div class="muted" style="font-weight:800;" id="selEventDate">Event Date: -</div>
-                    </div>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+              <div id="ucContentView" class="hidden">
+                <div class="row" style="align-items:flex-end;">
+                  <div class="grow">
+                    <div class="label-dark">Selected Club</div>
+                    <input id="ucSelectedClub" class="field" type="text" disabled />
+                  </div>
+                  <div>
+                    <button class="btn btn-secondary" id="ucBackToClubs">Back to Clubs</button>
+                  </div>
+                </div>
+
+                <div class="hr"></div>
+
+                <div class="row" style="align-items:flex-end;">
+                  <div class="grow">
+                    <div class="label-dark">Event</div>
+                    <select id="cEventTitle" class="field"></select>
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">Date</div>
+                    <select id="cEventDate" class="field"></select>
+                  </div>
+                  <div>
+                    <button class="btn btn-primary" id="btnLoadContent">Load</button>
+                  </div>
+                  <span class="status" id="contentStatus"></span>
+                </div>
+
+                <div id="contentDetails" class="hidden" style="margin-top:14px;">
+                  <div class="card-soft" style="background:#fff; margin-bottom:10px;">
+                    <div class="row" style="align-items:center; justify-content:space-between;">
+                      <div class="grow">
+                        <div style="font-weight:1100;" id="selEventName">Event Name: -</div>
+                        <div class="muted" style="font-weight:1000;" id="selEventDate">Event Date: -</div>
+                        <div class="muted" style="font-weight:1000;" id="selEventClub">Club: -</div>
+                      </div>
                       <button class="btn btn-secondary" id="btnOpenReport" disabled>Open Report</button>
                     </div>
+                    <div class="hint-dark" id="reportHint" style="margin-top:8px;"></div>
                   </div>
-                </div>
 
-                <div class="card-soft" style="background:#fff; margin-bottom:10px;">
-                  <div class="row" style="align-items:center;">
-                    <div style="font-weight:900;">Photos</div>
-                    <div class="grow"></div>
-                    <button class="btn btn-secondary" id="btnWatchPhotos" disabled>Watch Photos</button>
+                  <div class="card-soft" style="background:#fff; margin-bottom:10px;">
+                    <div class="row" style="align-items:center;">
+                      <div style="font-weight:1100;">Photos</div>
+                      <div class="grow"></div>
+                      <button class="btn btn-secondary" id="btnWatchPhotos" disabled>Watch Photos</button>
+                    </div>
+                    <div class="hint-dark">Photos open in viewer (modal).</div>
                   </div>
-                  <div class="hint-dark">Photos will open in a viewer (modal) if URLs exist.</div>
-                </div>
 
-                <div class="card-soft" style="background:#fff; margin-bottom:10px;">
-                  <div style="font-weight:900; margin-bottom:8px;">Videos</div>
-                  <div class="row" id="videosPanel"></div>
-                  <div class="hint-dark">YouTube links open in new tab.</div>
-                </div>
+                  <div class="card-soft" style="background:#fff; margin-bottom:10px;">
+                    <div style="font-weight:1100; margin-bottom:8px;">Videos</div>
+                    <div class="row" id="videosPanel"></div>
+                    <div class="hint-dark">YouTube links open in new tab.</div>
+                  </div>
 
-                <div class="card-soft" style="background:#fff;">
-                  <div style="font-weight:900; margin-bottom:8px;">Description</div>
-                  <div id="descBox" style="white-space:pre-wrap; font-size:14px; line-height:1.7; color:#0f172a;">
-                    (No description)
+                  <div class="card-soft" style="background:#fff;">
+                    <div style="font-weight:1100; margin-bottom:8px;">Description</div>
+                    <div id="descBox" style="white-space:pre-wrap; font-size:14px; line-height:1.7; color:#0f172a;">
+                      (No description)
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
+            </div>
           </div>
 
-          <!-- ✅ USER: CHANGE PASSWORD -->
+          <!-- USER: CERTIFICATE (NEW) -->
+<div class="user-tab hidden" id="userTab_CERTIFICATE">
+  <div class="section-title">Certificate</div>
+  <p class="sub">Club → past event → RegNo → view/download.</p>
+
+  <div class="card-soft">
+
+    <!-- CLUB PICKER -->
+    <div id="ucertClubPicker">
+      <div style="font-weight:1100;margin-bottom:10px;">Select Club</div>
+      <div id="ucertClubTiles" class="tile-grid"></div>
+    </div>
+
+    <!-- EVENT PICKER -->
+    <div id="ucertEventPicker" class="hidden">
+      <div class="row" style="align-items:flex-end;">
+        <div class="grow">
+          <div class="label-dark">Selected Club</div>
+          <input id="ucertSelectedClub" class="field" type="text" disabled />
+        </div>
+        <div>
+          <button class="btn btn-secondary" id="ucertBackToClubs">Back</button>
+        </div>
+        <span class="status" id="ucertStatus"></span>
+      </div>
+
+      <div class="hr"></div>
+
+      <div style="font-weight:1100;margin-bottom:10px;">Select Past Event</div>
+      <div id="ucertEvents" class="tile-grid"></div>
+
+      <!-- RegNo + Result -->
+      <div id="ucertRegBox" class="hidden" style="margin-top:14px;">
+        <div class="card-soft" style="background:#fff;">
+          <div style="font-weight:1100;margin-bottom:8px;" id="ucertSelectedEventText">Selected Event: -</div>
+
+          <div class="row" style="align-items:flex-end;">
+            <div class="grow">
+              <div class="label-dark">Enter RegNo</div>
+              <input id="ucertRegNo" class="field" type="text" placeholder="e.g., 9922001234" />
+            </div>
+            <div>
+              <button class="btn btn-primary" id="btnUcertFetch">OK</button>
+            </div>
+            <span class="status" id="ucertFetchStatus"></span>
+          </div>
+
+          <div class="hr"></div>
+
+          <div style="overflow:auto;">
+            <table id="ucertResultTable">
+              <thead>
+                <tr><th>RegNo</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="2" class="muted">Select a PAST event → enter RegNo → OK</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+          <!-- USER: LIVESCORE (NEW) -->
+          <div class="user-tab hidden" id="userTab_LIVESCORE_USER">
+            <div class="section-title">LiveScore</div>
+            <p class="sub">Club → Present events (today) → view team scores (read-only).</p>
+
+            <div class="card-soft">
+              <div id="ulsClubPicker">
+                <div style="font-weight:1100;margin-bottom:10px;">Select Club</div>
+                <div id="ulsClubTiles" class="tile-grid"></div>
+              </div>
+
+              <div id="ulsEventPicker" class="hidden">
+                <div class="row" style="align-items:flex-end;">
+                  <div class="grow">
+                    <div class="label-dark">Selected Club</div>
+                    <input id="ulsSelectedClub" class="field" type="text" disabled />
+                  </div>
+                  <div>
+                    <button class="btn btn-secondary" id="ulsBackToClubs">Back</button>
+                  </div>
+                  <span class="status" id="ulsStatus"></span>
+                </div>
+
+                <div class="hr"></div>
+
+                <div style="font-weight:1100;margin-bottom:10px;">Present Events (Today only)</div>
+                <div id="ulsPresentEvents" class="tile-grid"></div>
+
+                <div class="hr"></div>
+
+                <div id="ulsScoreView" class="hidden"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- USER RECRUITMENT -->
+          <div class="user-tab hidden" id="userTab_RECRUITMENT">
+            <div class="section-title">Club Recruitment</div>
+            <p class="sub">Only clubs with recruitment <b>OPEN</b> will show here.</p>
+
+            <div class="card-soft">
+              <div class="row" style="align-items:center;">
+                <button class="btn btn-primary" id="btnLoadUserRecruit">Refresh</button>
+                <span class="status" id="recUserStatus"></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <div id="recUserBox" style="overflow:auto;">
+                <div class="muted" style="font-weight:1000;">Click “Refresh”</div>
+              </div>
+            </div>
+          </div>
+
           <div class="user-tab hidden" id="userTab_CHANGE_PASS">
             <div class="section-title">Change Password</div>
-            <p class="sub">Enter your old password, then new password and confirm.</p>
+            <p class="sub">Updates password in backend.</p>
 
             <div class="card-soft">
               <div class="row">
@@ -929,43 +1229,12 @@
                 </div>
               </div>
 
-              <div class="mini-actions">
+              <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
                 <button class="btn btn-primary" id="btnChangePass">Change</button>
                 <span class="status" id="cpStatus"></span>
               </div>
             </div>
           </div>
-
-          <!-- =========================
-               ✅ USER: BOOK TOKEN TAB (ADDED ONLY)
-               ========================= -->
-          <div class="user-tab hidden" id="userTab_TOKEN">
-            <div class="section-title">Book Token</div>
-            <p class="sub">If you filled wrong details in first login, submit a token request to admin.</p>
-
-            <div class="card-soft">
-              <div class="row">
-                <div class="grow">
-                  <div class="label-dark">Username</div>
-                  <input id="utUsername" class="field" type="text" placeholder="username" />
-                  <div class="hint-dark">Auto filled from login (you can edit if needed).</div>
-                </div>
-              </div>
-
-              <div class="row" style="margin-top:12px;">
-                <div class="grow">
-                  <div class="label-dark">Problem / Description</div>
-                  <textarea id="utProblem" class="field" placeholder="Explain what detail is wrong and what it should be..."></textarea>
-                </div>
-              </div>
-
-              <div class="mini-actions" style="justify-content:flex-end;">
-                <button class="btn btn-primary" id="btnSubmitToken">Submit Token</button>
-                <span class="status" id="utStatus"></span>
-              </div>
-            </div>
-          </div>
-          <!-- ========================= /USER TOKEN ========================= -->
 
         </div>
       </div>
@@ -975,7 +1244,7 @@
     <div id="photoModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
       <div class="modal">
         <div class="modal-head">
-          <div style="font-weight:900;">Photos Viewer</div>
+          <div style="font-weight:1100;">Photos Viewer</div>
           <button class="btn btn-ghost" id="btnCloseModal">Close</button>
         </div>
         <div class="modal-body">
@@ -984,7 +1253,7 @@
           </div>
           <div style="margin-top:12px; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;">
             <button class="btn btn-secondary" id="btnPrevPhoto">Previous</button>
-            <div class="muted" id="photoCounter" style="font-weight:800;"></div>
+            <div class="muted" id="photoCounter" style="font-weight:1000;"></div>
             <button class="btn btn-secondary" id="btnNextPhoto">Next</button>
           </div>
           <div class="hint-dark" id="photoHint" style="text-align:center;"></div>
@@ -992,18 +1261,130 @@
       </div>
     </div>
 
-  </div>
+    <!-- ========================= FORGOT PASSWORD OTP MODAL (NEW) ========================= -->
+    <div id="forgotModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+      <div class="modal" style="width:min(720px, 96vw);">
+        <div class="modal-head">
+          <div style="font-weight:1100;">Forgot Password (OTP)</div>
+          <button class="btn btn-ghost" id="btnForgotClose">Close</button>
+        </div>
+        <div class="modal-body">
+          <!-- Step 1 -->
+          <div id="fpStep1">
+            <div class="label-dark">Username / Register Number</div>
+            <input id="fpUsername" class="field" type="text" placeholder="Enter username" />
+            <div class="hint-dark">We will send OTP to the contact mapped for this account (email/phone).</div>
+
+            <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <button class="btn btn-primary" id="btnFpSendOtp">Send OTP</button>
+              <span class="status" id="fpStatus"></span>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div id="fpStep2" class="hidden">
+            <div style="font-weight:1100;margin-bottom:8px;">Enter OTP</div>
+            <div class="row">
+              <div class="grow">
+                <div class="label-dark">OTP</div>
+                <input id="fpOtp" class="field" type="text" inputmode="numeric" placeholder="6-digit OTP" />
+              </div>
+            </div>
+
+            <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <button class="btn btn-primary" id="btnFpVerifyOtp">Verify OTP</button>
+              <button class="btn btn-secondary" id="btnFpResend">Resend OTP</button>
+              <button class="btn btn-secondary" id="btnFpBack1">Back</button>
+              <span class="status" id="fpStatus2"></span>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div id="fpStep3" class="hidden">
+            <div style="font-weight:1100;margin-bottom:8px;">Reset Password</div>
+            <div class="row">
+              <div class="grow">
+                <div class="label-dark">New Password</div>
+                <input id="fpNewPass" class="field" type="password" placeholder="New password" />
+              </div>
+              <div class="grow">
+                <div class="label-dark">Confirm Password</div>
+                <input id="fpConPass" class="field" type="password" placeholder="Confirm password" />
+              </div>
+            </div>
+
+            <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <button class="btn btn-primary" id="btnFpReset">Reset</button>
+              <button class="btn btn-secondary" id="btnFpBack2">Back</button>
+              <span class="status" id="fpStatus3"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+        <!-- ========================= PROFILE OTP VERIFY MODAL (NEW) ========================= -->
+    <div id="profileOtpModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+      <div class="modal" style="width:min(640px, 96vw);">
+        <div class="modal-head">
+          <div style="font-weight:1100;">Verify OTP (Edit Profile)</div>
+          <button class="btn btn-ghost" id="btnProfileOtpClose">Close</button>
+        </div>
+        <div class="modal-body">
+          <div class="hint-dark" style="margin-bottom:10px;">
+            OTP sent to your registered contact (email/phone). Enter it to unlock profile edit.
+          </div>
+
+          <div class="row">
+            <div class="grow">
+              <div class="label-dark">OTP</div>
+              <input id="profileOtpInput" class="field" type="text" inputmode="numeric" placeholder="6-digit OTP" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <button class="btn btn-primary" id="btnProfileVerifyOtp">Verify</button>
+            <button class="btn btn-secondary" id="btnProfileResendOtp">Resend OTP</button>
+            <span class="status" id="profileOtpStatus"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- end #app -->
 
   <script>
-    const API_BASE = ""; // example: "http://127.0.0.1:8080"
     const $ = (id) => document.getElementById(id);
 
+    // ===================== API CONFIG =====================
+    const API_BASE = "http://localhost:8080/api"; // change later for deploy
+
+    // ===================== SESSION (TOKEN) =====================
+    const KEY_SESSION = "cms_session_backend";
+    function saveSession(s){ localStorage.setItem(KEY_SESSION, JSON.stringify(s)); }
+    function loadSession(){ try{ return JSON.parse(localStorage.getItem(KEY_SESSION) || "null"); }catch{ return null; } }
+    function clearSession(){ localStorage.removeItem(KEY_SESSION); }
+
+    // ===================== CLUB PASSWORDS (OFFLINE DEMO) =====================
+    const KEY_CLUB_PASSWORDS = "cms_club_passwords";
+    function loadClubPasswords(){ try{ return JSON.parse(localStorage.getItem(KEY_CLUB_PASSWORDS) || "{}"); }catch{ return {}; } }
+    function saveClubPasswords(map){ localStorage.setItem(KEY_CLUB_PASSWORDS, JSON.stringify(map || {})); }
+    function setClubPassword(club, password){ const map = loadClubPasswords(); map[club]=password; saveClubPasswords(map); }
+    function removeClubPassword(club){ const map = loadClubPasswords(); delete map[club]; saveClubPasswords(map); }
+    function checkClubPassword(club, entered){
+      const map = loadClubPasswords();
+      const saved = map[club];
+      if(!saved) return { ok:false, reason:"NOT_SET" };
+      if(String(entered||"") !== String(saved)) return { ok:false, reason:"WRONG" };
+      return { ok:true };
+    }
+
+    // ===================== UTILS =====================
     function setStatus(el, msg, type=""){
+      if(!el) return;
       el.textContent = msg || "";
       el.classList.remove("ok","err","warn");
       if(type) el.classList.add(type);
     }
-
     function showScreen(name){
       $("bgPhoto").style.display = (name === "login") ? "block" : "none";
       $("screen-login").classList.toggle("hidden", name !== "login");
@@ -1011,34 +1392,237 @@
       $("screen-details").classList.toggle("hidden", name !== "details");
       $("screen-user").classList.toggle("hidden", name !== "user");
     }
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    }
+    function escapeHtmlAttr(str){ return escapeHtml(str).replaceAll("`","&#096;"); }
 
-    function saveSession(data){ localStorage.setItem("cms_session", JSON.stringify(data)); }
-    function loadSession(){ try{ return JSON.parse(localStorage.getItem("cms_session") || "null"); }catch{ return null; } }
-    function clearSession(){ localStorage.removeItem("cms_session"); }
+    // ✅ DATE LOGIC: UPCOMING / PRESENT / PAST
+    function dateOnly(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
+    function classifyEventDate(yyyy_mm_dd){
+      try{
+        const d = dateOnly(new Date(yyyy_mm_dd + "T00:00:00"));
+        const t = dateOnly(new Date());
+        if(d.getTime() > t.getTime()) return "UPCOMING";
+        if(d.getTime() === t.getTime()) return "PRESENT";
+        return "PAST";
+      }catch{ return "PAST"; }
+    }
 
-    function authHeaders(extra={}){
-      const s = loadSession();
-      const h = { ...extra };
-      if(s?.token){
-        h["Authorization"] = "Bearer " + s.token;
-        h["X-Auth-Token"] = s.token;
+    // ===================== API HELPERS =====================
+    async function apiFetch(path, { method="GET", token=null, headers={}, body=null } = {}){
+      const h = { ...headers };
+      if(token) h["X-Auth-Token"] = token;
+
+      const res = await fetch(`${API_BASE}${path}`, { method, headers: h, body });
+      const data = await res.json().catch(() => ({}));
+
+      if(!res.ok){
+        const msg = data.message || data.error || `HTTP ${res.status}`;
+        throw new Error(msg);
       }
-      return h;
+      if(data && data.ok === false){
+        throw new Error(data.message || data.error || "Request failed");
+      }
+      return data;
     }
 
-    async function api(path, options={}){
-      const res = await fetch(API_BASE + path, options);
-      const txt = await res.text();
-      let json = null;
-      try{ json = txt ? JSON.parse(txt) : null; }catch{}
-      if(!res.ok) throw new Error(json?.message || json?.error || txt || ("HTTP " + res.status));
-      return json;
+    // ===================== API WRAPPERS =====================
+    const api = {
+      login: (username, password) =>
+        apiFetch("/login", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ username, password })
+        }),
+
+      // clubs
+clubs: () => apiFetch("/clubs"),
+
+addClub: (token, name, password) =>
+  apiFetch("/clubs", {
+    method: "POST",
+    token,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, password })   // ✅ include password
+  }),
+
+delClub: (token, club) =>
+  apiFetch(`/clubs/${encodeURIComponent(club)}`, { method:"DELETE", token }),
+
+      // events
+      listEvents: (club=null) => {
+        const q = club ? `?club=${encodeURIComponent(club)}` : "";
+        return apiFetch(`/events${q}`);
+      },
+      addEvent: (token, { club, title, date, regLink, photoFile }) => {
+        const fd = new FormData();
+        fd.append("club", club);
+        fd.append("title", title);
+        fd.append("date", date);
+        if(regLink) fd.append("regLink", regLink);
+        if(photoFile) fd.append("photo", photoFile);
+        return apiFetch("/admin/event", { method:"POST", token, body: fd });
+      },
+      delEvent: (token, id) => apiFetch(`/events/${id}`, { method:"DELETE", token }),
+
+      // content
+      listContents: (club=null) => {
+        const q = club ? `?club=${encodeURIComponent(club)}` : "";
+        return apiFetch(`/contents${q}`);
+      },
+      addContent: (token, { club, title, date, desc, youtubeLinks, photoFiles, reportFile }) => {
+        const fd = new FormData();
+        fd.append("club", club);
+        fd.append("title", title);
+        fd.append("date", date);
+        if(desc) fd.append("desc", desc);
+        if(youtubeLinks) fd.append("youtubeLinks", youtubeLinks);
+        if(Array.isArray(photoFiles)) photoFiles.forEach(f => fd.append("photos", f));
+        if(reportFile) fd.append("report", reportFile);
+        return apiFetch("/admin/content", { method:"POST", token, body: fd });
+      },
+      contentDetails: (club, title, date) =>
+        apiFetch(`/content/details?club=${encodeURIComponent(club)}&title=${encodeURIComponent(title)}&date=${encodeURIComponent(date)}`),
+      delContent: (token, id) => apiFetch(`/contents/${id}`, { method:"DELETE", token }),
+
+      // admin users
+      createUser: (token, username, password, role) =>
+        apiFetch("/admin/users", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ username, password, role })
+        }),
+      getUserDetails: (token, username) => apiFetch(`/admin/users/${encodeURIComponent(username)}`, { token }),
+      updateUserDetails: (token, username, payload) =>
+        apiFetch(`/admin/users/${encodeURIComponent(username)}`, {
+          method:"PUT", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify(payload)
+        }),
+
+      // profile + password
+      myProfile: (token) => apiFetch("/me/profile", { token }),
+      saveMyProfile: (token, profile) =>
+        apiFetch("/me/profile", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify(profile)
+        }),
+      changePassword: (token, oldPassword, newPassword) =>
+        apiFetch("/me/change-password", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ oldPassword, newPassword })
+        }),
+
+      // recruitment
+      adminRecruitments: (token) => apiFetch("/recruitments", { token }),
+      openRecruit: (token, club, link) =>
+        apiFetch("/recruitments/open", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ club, link })
+        }),
+      closeRecruit: (token, club) =>
+        apiFetch("/recruitments/close", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ club })
+        }),
+      openRecruitmentsPublic: () => apiFetch("/recruitments/open"),
+
+      // certificates
+      uploadCertificate: (token, { club, eventId, regNo, file }) => {
+        const fd = new FormData();
+        fd.append("club", club);
+        fd.append("eventId", String(eventId));
+        fd.append("regNo", regNo);
+        fd.append("file", file);
+        return apiFetch("/admin/certificates/upload", { method:"POST", token, body: fd });
+      },
+      getCertificate: (club, eventId, regNo) =>
+        apiFetch(`/certificates/get?club=${encodeURIComponent(club)}&eventId=${encodeURIComponent(eventId)}&regNo=${encodeURIComponent(regNo)}`),
+
+      // livescore
+      saveLiveScore: (token, { club, eventId, teamScores }) =>
+        apiFetch("/admin/livescore/save", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ club, eventId, teamScores })
+        }),
+      getLiveScore: (club, eventId) =>
+        apiFetch(`/livescore/get?club=${encodeURIComponent(club)}&eventId=${encodeURIComponent(eventId)}`),
+
+      // ✅ OTP (NEW)
+      forgotSendOtp: (username) =>
+        apiFetch("/auth/forgot/send-otp", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ username })
+        }),
+      forgotVerifyOtp: (username, otp) =>
+        apiFetch("/auth/forgot/verify-otp", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ username, otp })
+        }),
+      forgotReset: (username, otp, newPassword) =>
+        apiFetch("/auth/forgot/reset", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ username, otp, newPassword })
+        }),
+
+      profileSendOtp: (token) =>
+        apiFetch("/me/profile/send-otp", { method:"POST", token }),
+
+      profileVerifyOtp: (token, otp) =>
+        apiFetch("/me/profile/verify-otp", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ otp })
+        }),
+    };
+
+    // ===================== UI HELPERS =====================
+    function renderNames(){
+      const s = loadSession();
+      const uname = (s?.username || "").trim() || ((s?.role||"").toLowerCase()==="admin" ? "Admin" : "User");
+      if($("adminName")) $("adminName").textContent = uname;
+      if($("userName")) $("userName").textContent = uname;
     }
 
+    // ===================== TABS (ADMIN/USER) =====================
     function openAdminTab(name){
       document.querySelectorAll(".admin-tab").forEach(t => t.classList.add("hidden"));
       const el = $("adminTab_" + name);
       if(el) el.classList.remove("hidden");
+
+      if(name === "CLUBS") renderAdminClubs();
+      if(name === "ADD_EVENT") fillClubSelect($("aeClub"));
+      if(name === "ADD_CONTENT") fillClubSelect($("acClub"));
+      if(name === "USER_DETAILS") clearUserDetailsUI();
+      if(name === "RECRUITMENT") {
+        $("recAdminBox").innerHTML = `<div class="muted" style="font-weight:1000;">Click “Load Clubs”</div>`;
+        setStatus($("recAdminStatus"),"");
+      }
+      if(name === "UPLOAD_CERT"){
+        $("certClubPicker").classList.remove("hidden");
+        $("certEventPicker").classList.add("hidden");
+        setStatus($("certAdminStatus"), "");
+        setStatus($("certUploadStatus"), "");
+        renderClubTiles($("certClubTiles"), (club)=>selectCertClub(club));
+      }
+      if(name === "LIVESCORE_ADMIN"){
+        $("lsClubPicker").classList.remove("hidden");
+        $("lsEventPicker").classList.add("hidden");
+        setStatus($("lsAdminStatus"), "");
+        setStatus($("lsSaveStatus"), "");
+        renderClubTiles($("lsClubTiles"), (club)=>selectLiveScoreClub(club));
+      }
     }
     document.querySelectorAll("[data-admin-tab]").forEach(btn => {
       btn.addEventListener("click", () => openAdminTab(btn.dataset.adminTab));
@@ -1049,50 +1633,123 @@
       const el = $("userTab_" + name);
       if(el) el.classList.remove("hidden");
 
-      // ✅ TOKEN: auto-fill username from session when opening Book Token tab
-      if(name === "TOKEN"){
-        const s = loadSession();
-        $("utUsername").value = s?.username || "";
-        setStatus($("utStatus"), "");
+      if(name === "PROFILE") refreshProfile();
+
+      if(name === "EVENTS"){
+        $("ueClubPicker").classList.remove("hidden");
+        $("ueEventsView").classList.add("hidden");
+        setStatus($("eventsStatus"), "");
+        renderClubTiles($("ueClubTiles"), (club)=>selectEventsClub(club));
+      }
+
+      if(name === "CONTENT"){
+        $("ucClubPicker").classList.remove("hidden");
+        $("ucContentView").classList.add("hidden");
+        setStatus($("contentStatus"), "");
+        $("contentDetails").classList.add("hidden");
+        renderClubTiles($("ucClubTiles"), (club)=>selectContentClub(club));
+      }
+
+      if(name === "RECRUITMENT"){
+        setStatus($("recUserStatus"), "");
+        $("recUserBox").innerHTML = `<div class="muted" style="font-weight:1000;">Click “Refresh”</div>`;
+      }
+
+      if(name === "CERTIFICATE"){
+        $("ucertClubPicker").classList.remove("hidden");
+        $("ucertEventPicker").classList.add("hidden");
+        setStatus($("ucertStatus"), "");
+        renderClubTiles($("ucertClubTiles"), (club)=>selectUserCertClub(club));
+      }
+
+      if(name === "LIVESCORE_USER"){
+        $("ulsClubPicker").classList.remove("hidden");
+        $("ulsEventPicker").classList.add("hidden");
+        $("ulsScoreView").classList.add("hidden");
+        setStatus($("ulsStatus"), "");
+        renderClubTiles($("ulsClubTiles"), (club)=>selectUserLiveScoreClub(club));
       }
     }
     document.querySelectorAll("[data-user-tab]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const tab = btn.dataset.userTab;
-        openUserTab(tab);
-        if(tab === "PROFILE") refreshProfile();
-        if(tab === "EVENTS") refreshEvents();
-        if(tab === "CONTENT") refreshContentDropdowns();
-      });
+      btn.addEventListener("click", () => openUserTab(btn.dataset.userTab));
     });
 
-    function renderNames(){
-      const s = loadSession();
-      const uname = (s?.username || "").trim() || ((s?.role||"").toLowerCase()==="admin" ? "Admin" : "User");
-      if($("adminName")) $("adminName").textContent = uname;
-      if($("userName")) $("userName").textContent = uname;
-    }
+    // ===================== CLUB HELPERS (BACKEND) =====================
+    
+      async function getClubs(){
+  const res = await api.clubs();
 
-    function routeAfterLogin(s){
-      renderNames();
-      if((s.role||"").toLowerCase() === "admin"){
-        showScreen("admin");
-        openAdminTab("HOME");
-      }else{
-        if(s.firstLogin){
-          showScreen("details");
-          setStatus($("udStatus"), "");
-        }else{
-          showScreen("user");
-          openUserTab("HOME");
-          refreshProfile();
-          refreshEvents();
-          refreshContentDropdowns();
-        }
+  // supports: {items:[...]} OR {clubs:[...]} OR {data:[...]} OR direct [...]
+  if(Array.isArray(res)) return res;
+  if(Array.isArray(res.items)) return res.items;
+  if(Array.isArray(res.clubs)) return res.clubs;
+  if(Array.isArray(res.data)) return res.data;
+
+  return [];
+}
+
+    async function fillClubSelect(selectEl){
+      if(!selectEl) return;
+      selectEl.innerHTML = `<option value="">Loading...</option>`;
+      try{
+        const clubs = await getClubs();
+        selectEl.innerHTML = clubs.length ? "" : `<option value="">(no clubs)</option>`;
+        clubs.forEach(c=>{
+          const opt = document.createElement("option");
+          opt.value = c; opt.textContent = c;
+          selectEl.appendChild(opt);
+        });
+        if(clubs.length) selectEl.selectedIndex = 0;
+      }catch(e){
+        selectEl.innerHTML = `<option value="">(failed to load)</option>`;
       }
     }
 
-    // ---------------- LOGIN ----------------
+    async function renderClubTiles(containerEl, onClick){
+      containerEl.innerHTML = `<div class="muted" style="font-weight:1000;">Loading...</div>`;
+      try{
+        const clubs = await getClubs();
+        containerEl.innerHTML = "";
+        if(!clubs.length){
+          containerEl.innerHTML = `<div class="muted" style="font-weight:1000;">No clubs. Ask admin to add clubs.</div>`;
+          return;
+        }
+
+        clubs.forEach(c=>{
+          const div = document.createElement("div");
+          div.className = "tile";
+          div.innerHTML = `
+            <div class="t-title">${escapeHtml(c)}</div>
+            <div class="t-sub">Click to open</div>
+          `;
+          div.addEventListener("click", ()=>onClick(c));
+          containerEl.appendChild(div);
+        });
+      }catch(e){
+        containerEl.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load clubs.</div>`;
+      }
+    }
+
+    // ===================== OTP: WRONG LOGIN COUNT (NEW) =====================
+    const KEY_FAILS = "cms_login_fails";
+    function getFailCount(){
+      try{ return Number(localStorage.getItem(KEY_FAILS) || "0") || 0; }catch{ return 0; }
+    }
+    function setFailCount(n){
+      localStorage.setItem(KEY_FAILS, String(Math.max(0, Number(n)||0)));
+      updateForgotVisibility();
+    }
+    function incFailCount(){ setFailCount(getFailCount() + 1); }
+    function resetFailCount(){ setFailCount(0); }
+    function updateForgotVisibility(){
+      const fails = getFailCount();
+      const btn = $("btnForgotOpen");
+      if(!btn) return;
+      btn.classList.toggle("hidden", fails < 3);
+      $("forgotHint").textContent = (fails >= 3) ? "Too many failed attempts. Use OTP to reset password." : "";
+    }
+
+    // ===================== LOGIN =====================
     $("showPass").addEventListener("change", () => {
       $("loginPass").type = $("showPass").checked ? "text" : "password";
     });
@@ -1101,313 +1758,170 @@
       const u = $("loginUser").value.trim();
       const p = $("loginPass").value;
       if(!u || !p){ setStatus($("loginStatus"), "Enter username and password.", "warn"); return; }
-
       setStatus($("loginStatus"), "Signing in...");
+
       try{
-        const data = await api("/api/login", {
-          method:"POST",
-          headers:{ "Content-Type":"application/json" },
-          body: JSON.stringify({ username:u, password:p })
+        const data = await api.login(u,p);
+
+        // ✅ success => reset fail counter + hide forgot button
+        resetFailCount();
+
+        saveSession({
+          token: data.token,
+          username: data.username,
+          role: data.role,
+          profileComplete: !!data.profileComplete
         });
 
-        const session = {
-          token: data.token || data.authToken || "",
-          role: (data.role || "").toLowerCase(),
-          userId: data.userId ?? null,
-          firstLogin: data.firstLogin ?? false,
-          username: data.username || u   // ✅ show name
-        };
+        setStatus($("loginStatus"), "", "ok");
+        renderNames();
 
-        saveSession(session);
-        setStatus($("loginStatus"), "");
-        routeAfterLogin(session);
-
-      }catch(e){
-        setStatus($("loginStatus"), "Login failed: " + e.message, "err");
+        if((data.role||"").toLowerCase() === "admin"){
+          showScreen("admin");
+          openAdminTab("HOME");
+        }else{
+          if(!data.profileComplete){
+            showScreen("details");
+            setStatus($("udStatus"), "");
+          }else{
+            showScreen("user");
+            openUserTab("HOME");
+            refreshProfile();
+          }
+        }
+      }catch(err){
+        // ✅ fail => increment counter
+        incFailCount();
+        const fails = getFailCount();
+        setStatus($("loginStatus"), `Login failed (${fails}/3): ` + (err?.message || "Error"), "err");
       }
     }
-
     $("btnLogin").addEventListener("click", doLogin);
 
-    // ---------------- LOGOUTS ----------------
+    // ===================== LOGOUT =====================
     $("btnAdminLogout").addEventListener("click", () => { clearSession(); showScreen("login"); });
     $("btnUserLogout").addEventListener("click", () => { clearSession(); showScreen("login"); });
     $("btnDetailsLogout").addEventListener("click", () => { clearSession(); showScreen("login"); });
     $("btnBackToLogin").addEventListener("click", () => { clearSession(); showScreen("login"); });
 
-    // ---------------- ADMIN FILE CHIPS ----------------
-    function showChip(el, text){ el.textContent = text; el.classList.remove("hidden"); }
-    function hideChip(el){ el.textContent = ""; el.classList.add("hidden"); }
+    // ===================== OTP: FORGOT PASSWORD MODAL (NEW) =====================
+    let fpUsername = "";
+    let fpOtpVerified = false;
 
-    $("aePhotoFile").addEventListener("change", () => {
-      const f = $("aePhotoFile").files?.[0];
-      if(!f) return hideChip($("aePhotoChip"));
-      showChip($("aePhotoChip"), "Selected: " + f.name);
-    });
+    function openForgotModal(){
+      fpUsername = ($("loginUser").value || "").trim();
+      $("fpUsername").value = fpUsername;
 
-    // ✅ Multiple photos FIX: accumulate selections
-    let acSelectedPhotos = [];
+      fpOtpVerified = false;
+      $("fpOtp").value = "";
+      $("fpNewPass").value = "";
+      $("fpConPass").value = "";
 
-    $("acPhotoFiles").addEventListener("change", () => {
-      const files = Array.from($("acPhotoFiles").files || []);
-      if(files.length === 0) return;
+      $("fpStep1").classList.remove("hidden");
+      $("fpStep2").classList.add("hidden");
+      $("fpStep3").classList.add("hidden");
 
-      // Add (do not replace)
-      acSelectedPhotos = acSelectedPhotos.concat(files);
+      setStatus($("fpStatus"), "");
+      setStatus($("fpStatus2"), "");
+      setStatus($("fpStatus3"), "");
 
-      showChip($("acPhotosChip"), `Selected: ${acSelectedPhotos.length} photo(s)`);
-      // optional: clear input so selecting same file again triggers change
-      $("acPhotoFiles").value = "";
-    });
-
-    $("btnClearPhotos").addEventListener("click", () => {
-      acSelectedPhotos = [];
-      hideChip($("acPhotosChip"));
-      $("acPhotoFiles").value = "";
-    });
-
-    $("acReportFile").addEventListener("change", () => {
-      const f = $("acReportFile").files?.[0];
-      if(!f) return hideChip($("acReportChip"));
-      showChip($("acReportChip"), "Selected: " + f.name);
-    });
-
-    // ---------------- ADMIN: SAVE EVENT (multipart) ----------------
-    $("btnSaveEvent").addEventListener("click", async () => {
-      const title = $("aeTitle").value.trim();
-      const date  = $("aeDate").value;
-      const reg   = $("aeRegLink").value.trim();
-      const photo = $("aePhotoFile").files?.[0] || null;
-
-      if(!title || !date){ setStatus($("aeStatus"), "Enter title and date.", "warn"); return; }
-      if(!photo){ setStatus($("aeStatus"), "Choose event photo.", "warn"); return; }
-
-      setStatus($("aeStatus"), "Uploading...");
-      try{
-        const fd = new FormData();
-        fd.append("title", title);
-        fd.append("event_date", date);
-        fd.append("registration_link", reg);
-        fd.append("photo", photo);
-
-        await api("/api/admin/event", {
-          method:"POST",
-          headers: authHeaders(), // NOTE: do NOT set Content-Type for FormData
-          body: fd
-        });
-
-        setStatus($("aeStatus"), "✅ Event saved.", "ok");
-        $("aeTitle").value=""; $("aeDate").value=""; $("aeRegLink").value=""; $("aePhotoFile").value="";
-        hideChip($("aePhotoChip"));
-
-      }catch(e){
-        setStatus($("aeStatus"), "❌ " + e.message, "err");
-      }
-    });
-
-    // ---------------- ADMIN: SAVE CONTENT (multipart) ----------------
-    $("btnSaveContent").addEventListener("click", async () => {
-      const title = $("acTitle").value.trim();
-      const date  = $("acDate").value;
-      const desc  = $("acDesc").value.trim();
-      const yt    = $("acYoutube").value.trim();
-      const photos = acSelectedPhotos; // ✅ use accumulated
-      const report = $("acReportFile").files?.[0] || null;
-
-      if(!title || !date){ setStatus($("acStatus"), "Enter event title and date.", "warn"); return; }
-      if(photos.length === 0){ setStatus($("acStatus"), "Choose at least 1 photo.", "warn"); return; }
-      if(!report){ setStatus($("acStatus"), "Choose report file.", "warn"); return; }
-
-      setStatus($("acStatus"), "Uploading...");
-      try{
-        const fd = new FormData();
-        fd.append("event_title", title);
-        fd.append("event_date", date);
-        fd.append("description", desc);
-        fd.append("youtube_links", yt);
-        photos.forEach(f => fd.append("photos", f));
-        fd.append("report", report);
-
-        await api("/api/admin/content", {
-          method:"POST",
-          headers: authHeaders(),
-          body: fd
-        });
-
-        setStatus($("acStatus"), "✅ Content saved.", "ok");
-        $("acTitle").value=""; $("acDate").value=""; $("acDesc").value=""; $("acYoutube").value="";
-        $("acPhotoFiles").value=""; $("acReportFile").value="";
-        acSelectedPhotos = [];
-        hideChip($("acPhotosChip")); hideChip($("acReportChip"));
-
-      }catch(e){
-        setStatus($("acStatus"), "❌ " + e.message, "err");
-      }
-    });
-
-    // ---------------- ADMIN: CREATE USER (json) ----------------
-    $("btnCreateUser").addEventListener("click", async () => {
-      const u = $("auUser").value.trim();
-      const p = $("auPass").value;
-      const r = $("auRole").value;
-      if(!u || !p){ setStatus($("auStatus"), "Enter username and password.", "warn"); return; }
-
-      setStatus($("auStatus"), "Creating...");
-      try{
-        await api("/api/admin/user", {
-          method:"POST",
-          headers: authHeaders({ "Content-Type":"application/json" }),
-          body: JSON.stringify({ username:u, password:p, role:r })
-        });
-
-        setStatus($("auStatus"), "✅ User created.", "ok");
-        $("auUser").value=""; $("auPass").value=""; $("auRole").value="user";
-      }catch(e){
-        setStatus($("auStatus"), "❌ " + e.message, "err");
-      }
-    });
-
-    // ---------------- ADMIN: MANAGE (LIST + DELETE) ----------------
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+      $("forgotModal").classList.remove("hidden");
     }
-    function escapeHtmlAttr(str){ return escapeHtml(str).replaceAll("`","&#096;"); }
-    function normalizeUrl(u){
-      u = String(u || "").trim();
-      if(!u) return u;
-      if(u.startsWith("http://") || u.startsWith("https://")) return u;
-      if(u.startsWith("/")) return API_BASE + u;
-      return API_BASE + "/" + u;
+    function closeForgotModal(){
+      $("forgotModal").classList.add("hidden");
     }
 
-    $("btnManageUpcoming").addEventListener("click", loadAdminUpcoming);
-    $("btnManageContent").addEventListener("click", loadAdminContents);
+    $("btnForgotOpen")?.addEventListener("click", openForgotModal);
+    $("btnForgotClose")?.addEventListener("click", closeForgotModal);
+    $("forgotModal")?.addEventListener("click", (e)=>{ if(e.target === $("forgotModal")) closeForgotModal(); });
 
-    async function loadAdminUpcoming(){
-      setStatus($("amStatus"), "Loading...");
-      const box = $("adminManageBox");
-      box.innerHTML = "";
+    $("btnFpSendOtp")?.addEventListener("click", async ()=>{
+      const u = ($("fpUsername").value || "").trim();
+      if(!u){ setStatus($("fpStatus"), "Enter username.", "warn"); return; }
+      fpUsername = u;
+
+      setStatus($("fpStatus"), "Sending OTP...");
       try{
-        const list = await api("/api/admin/events", { method:"GET", headers: authHeaders() });
-
-        if(!Array.isArray(list) || list.length === 0){
-          box.innerHTML = `<div class="muted" style="font-weight:800;">No upcoming events found.</div>`;
-          setStatus($("amStatus"), "");
-          return;
-        }
-
-        box.innerHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Title</th><th>Date</th><th>Photo</th><th>Register</th><th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${list.map(e => {
-                const photo = e.photo_url ? `<a href="${escapeHtmlAttr(normalizeUrl(e.photo_url))}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
-                const reg = e.registration_link ? `<a href="${escapeHtmlAttr(e.registration_link)}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
-                return `
-                  <tr>
-                    <td>${escapeHtml(e.title)}</td>
-                    <td>${escapeHtml(e.event_date)}</td>
-                    <td>${photo}</td>
-                    <td>${reg}</td>
-                    <td><button class="btn btn-danger" onclick="adminDeleteEvent(${Number(e.id)})">Delete</button></td>
-                  </tr>
-                `;
-              }).join("")}
-            </tbody>
-          </table>
-        `;
-        setStatus($("amStatus"), "✅ Loaded.", "ok");
+        await api.forgotSendOtp(fpUsername);
+        setStatus($("fpStatus"), "✅ OTP sent.", "ok");
+        $("fpStep1").classList.add("hidden");
+        $("fpStep2").classList.remove("hidden");
       }catch(e){
-        box.innerHTML = `<div style="color:#991b1b;font-weight:800;">Failed: ${escapeHtml(e.message)}</div>`;
-        setStatus($("amStatus"), "❌ Error.", "err");
+        setStatus($("fpStatus"), "❌ " + (e?.message || "Failed"), "err");
       }
-    }
+    });
 
-    async function loadAdminContents(){
-      setStatus($("amStatus"), "Loading...");
-      const box = $("adminManageBox");
-      box.innerHTML = "";
+    $("btnFpResend")?.addEventListener("click", async ()=>{
+      if(!fpUsername){ setStatus($("fpStatus2"), "Enter username first.", "warn"); return; }
+      setStatus($("fpStatus2"), "Resending...");
       try{
-        const list = await api("/api/admin/contents", { method:"GET", headers: authHeaders() });
-
-        if(!Array.isArray(list) || list.length === 0){
-          box.innerHTML = `<div class="muted" style="font-weight:800;">No contents found.</div>`;
-          setStatus($("amStatus"), "");
-          return;
-        }
-
-        box.innerHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Event</th><th>Date</th><th>Report</th><th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${list.map(c => {
-                const rep = c.report ? `<a href="${escapeHtmlAttr(normalizeUrl(c.report))}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
-                return `
-                  <tr>
-                    <td>${escapeHtml(c.event_title)}</td>
-                    <td>${escapeHtml(c.event_date)}</td>
-                    <td>${rep}</td>
-                    <td><button class="btn btn-danger" onclick="adminDeleteContent(${Number(c.id)})">Delete</button></td>
-                  </tr>
-                `;
-              }).join("")}
-            </tbody>
-          </table>
-        `;
-        setStatus($("amStatus"), "✅ Loaded.", "ok");
+        await api.forgotSendOtp(fpUsername);
+        setStatus($("fpStatus2"), "✅ OTP resent.", "ok");
       }catch(e){
-        box.innerHTML = `<div style="color:#991b1b;font-weight:800;">Failed: ${escapeHtml(e.message)}</div>`;
-        setStatus($("amStatus"), "❌ Error.", "err");
+        setStatus($("fpStatus2"), "❌ " + (e?.message || "Failed"), "err");
       }
-    }
+    });
 
-    // expose delete functions for inline onclick
-    window.adminDeleteEvent = async (id) => {
-      if(!confirm("Delete this upcoming event?")) return;
+    $("btnFpBack1")?.addEventListener("click", ()=>{
+      $("fpStep2").classList.add("hidden");
+      $("fpStep1").classList.remove("hidden");
+      setStatus($("fpStatus2"), "");
+    });
+
+    $("btnFpVerifyOtp")?.addEventListener("click", async ()=>{
+      const otp = ($("fpOtp").value || "").trim();
+      if(!fpUsername){ setStatus($("fpStatus2"), "Username missing.", "err"); return; }
+      if(!otp){ setStatus($("fpStatus2"), "Enter OTP.", "warn"); return; }
+
+      setStatus($("fpStatus2"), "Verifying...");
       try{
-        await api("/api/admin/events/" + encodeURIComponent(id), {
-          method:"DELETE",
-          headers: authHeaders()
-        });
-        setStatus($("amStatus"), "✅ Deleted.", "ok");
-        loadAdminUpcoming();
+        await api.forgotVerifyOtp(fpUsername, otp);
+        fpOtpVerified = true;
+        setStatus($("fpStatus2"), "✅ OTP verified.", "ok");
+        $("fpStep2").classList.add("hidden");
+        $("fpStep3").classList.remove("hidden");
       }catch(e){
-        setStatus($("amStatus"), "❌ " + e.message, "err");
+        fpOtpVerified = false;
+        setStatus($("fpStatus2"), "❌ Invalid OTP.", "err");
       }
-    };
+    });
 
-    window.adminDeleteContent = async (id) => {
-      if(!confirm("Delete this content?")) return;
+    $("btnFpBack2")?.addEventListener("click", ()=>{
+      $("fpStep3").classList.add("hidden");
+      $("fpStep2").classList.remove("hidden");
+      setStatus($("fpStatus3"), "");
+    });
+
+    $("btnFpReset")?.addEventListener("click", async ()=>{
+      const otp = ($("fpOtp").value || "").trim();
+      const n1 = $("fpNewPass").value || "";
+      const n2 = $("fpConPass").value || "";
+      if(!fpUsername){ setStatus($("fpStatus3"), "Username missing.", "err"); return; }
+      if(!otp){ setStatus($("fpStatus3"), "OTP missing. Go back.", "warn"); return; }
+      if(!n1 || !n2){ setStatus($("fpStatus3"), "Enter new password + confirm.", "warn"); return; }
+      if(n1 !== n2){ setStatus($("fpStatus3"), "Passwords do not match.", "warn"); return; }
+
+      setStatus($("fpStatus3"), "Resetting...");
       try{
-        await api("/api/admin/contents/" + encodeURIComponent(id), {
-          method:"DELETE",
-          headers: authHeaders()
-        });
-        setStatus($("amStatus"), "✅ Deleted.", "ok");
-        loadAdminContents();
-      }catch(e){
-        setStatus($("amStatus"), "❌ " + e.message, "err");
-      }
-    };
+        await api.forgotReset(fpUsername, otp, n1);
+        setStatus($("fpStatus3"), "✅ Password reset. Now login.", "ok");
 
-    // ---------------- USER DETAILS ----------------
+        // optional: clear fail count so user can login
+        resetFailCount();
+
+        // close after short UI update
+        setTimeout(()=>{ closeForgotModal(); }, 600);
+      }catch(e){
+        setStatus($("fpStatus3"), "❌ " + (e?.message || "Failed"), "err");
+      }
+    });
+
+    // ===================== USER DETAILS (SAVE PROFILE) =====================
     $("btnSubmitDetails").addEventListener("click", async () => {
       const s = loadSession();
+      if(!s?.token){ setStatus($("udStatus"), "Login again.", "err"); return; }
+
       const payload = {
-        user_id: s?.userId,
         name: $("udName").value.trim(),
         address: $("udAddress").value.trim(),
         phone: $("udPhone").value.trim(),
@@ -1416,134 +1930,227 @@
         gender: $("udGender").value,
         dob: $("udDob").value
       };
-      if(!payload.user_id){ setStatus($("udStatus"), "Login again.", "err"); return; }
+
       if(!payload.name || !payload.address || !payload.phone || !payload.email || !payload.branch || !payload.gender || !payload.dob){
-        setStatus($("udStatus"), "Fill all fields.", "warn"); return;
+        setStatus($("udStatus"), "Fill all fields.", "warn");
+        return;
       }
 
       setStatus($("udStatus"), "Saving...");
       try{
-        await api("/api/user/details", {
-          method:"POST",
-          headers: authHeaders({ "Content-Type":"application/json" }),
-          body: JSON.stringify(payload)
-        });
-
-        s.firstLogin = false;
-        saveSession(s);
+        await api.saveMyProfile(s.token, payload);
         setStatus($("udStatus"), "✅ Saved.", "ok");
+
+        const ns = { ...s, profileComplete: true };
+        saveSession(ns);
 
         showScreen("user");
         openUserTab("HOME");
         renderNames();
         refreshProfile();
-        refreshEvents();
-        refreshContentDropdowns();
       }catch(e){
-        setStatus($("udStatus"), "❌ " + e.message, "err");
+        setStatus($("udStatus"), "❌ " + (e?.message || "Failed"), "err");
       }
     });
 
-    // ---------------- USER: Change Password ----------------
-    $("btnChangePass").addEventListener("click", async () => {
-      const oldP = $("cpOld").value;
-      const newP = $("cpNew").value;
-      const conP = $("cpCon").value;
-
-      if(!oldP || !newP || !conP){
-        setStatus($("cpStatus"), "Fill all fields.", "warn");
-        return;
-      }
-      if(newP !== conP){
-        setStatus($("cpStatus"), "New password and confirm must match.", "warn");
-        return;
-      }
-      if(newP.length < 3){
-        setStatus($("cpStatus"), "New password is too short.", "warn");
-        return;
-      }
-
-      setStatus($("cpStatus"), "Changing...");
-      try{
-        const res = await api("/api/user/change-password", {
-          method:"POST",
-          headers: authHeaders({ "Content-Type":"application/json" }),
-          body: JSON.stringify({ oldPassword: oldP, newPassword: newP })
-        });
-        setStatus($("cpStatus"), res?.message || "✅ Password changed.", "ok");
-        $("cpOld").value = ""; $("cpNew").value = ""; $("cpCon").value = "";
-      }catch(e){
-        setStatus($("cpStatus"), "❌ " + e.message, "err");
-      }
-    });
-
-    // ---------------- USER: data load ----------------
-    function parseMultiLines(raw){
-      if(!raw) return [];
-      return String(raw).split(/\n|;|,/g).map(s => s.trim()).filter(Boolean);
-    }
-    function isExpiredISO(yyyy_mm_dd){
-      try{
-        const d = new Date(yyyy_mm_dd + "T00:00:00");
-        const today = new Date(); today.setHours(0,0,0,0);
-        return d < today;
-      }catch{ return false; }
-    }
-
-    $("goEvents")?.addEventListener("click", () => { openUserTab("EVENTS"); refreshEvents(); });
-    $("goContent")?.addEventListener("click", () => { openUserTab("CONTENT"); refreshContentDropdowns(); });
-    $("goChangePass")?.addEventListener("click", () => { openUserTab("CHANGE_PASS"); setStatus($("cpStatus"), ""); });
-
+    // ===================== USER PROFILE =====================
     $("btnRefreshProfile")?.addEventListener("click", refreshProfile);
-    $("btnRefreshEvents")?.addEventListener("click", refreshEvents);
 
     async function refreshProfile(){
       const s = loadSession();
-      if(!s?.userId) return;
-      $("profileText").textContent = "Loading profile...";
+      if(!s?.token) return;
+
+      setStatus($("profileStatus"), "Loading...");
       try{
-        const data = await api("/api/user/profile?userId=" + encodeURIComponent(s.userId), {
-          method:"GET", headers: authHeaders()
-        });
+        const res = await api.myProfile(s.token);
+        const p = res.profile;
+        if(!p){
+          $("profileText").textContent = "No profile found.\n(Please complete profile first.)";
+          setStatus($("profileStatus"), "", "");
+          return;
+        }
+
         $("profileText").textContent =
-          "Name: " + (data.name||"") + "\n" +
-          "Address: " + (data.address||"") + "\n" +
-          "Phone: " + (data.phone||"") + "\n" +
-          "Email: " + (data.email||"") + "\n" +
-          "Branch: " + (data.branch||"") + "\n" +
-          "Gender: " + (data.gender||"") + "\n" +
-          "DOB: " + (data.dob||"");
+          "Name: " + (p.name||"") + "\n" +
+          "Address: " + (p.address||"") + "\n" +
+          "Phone: " + (p.phone||"") + "\n" +
+          "Email: " + (p.email||"") + "\n" +
+          "Branch: " + (p.branch||"") + "\n" +
+          "Gender: " + (p.gender||"") + "\n" +
+          "DOB: " + (p.dob||"");
+
+        // also prefill edit form fields (but keep edit hidden until OTP verified)
+        $("peName") && ($("peName").value = p.name || "");
+        $("peAddress") && ($("peAddress").value = p.address || "");
+        $("pePhone") && ($("pePhone").value = p.phone || "");
+        $("peEmail") && ($("peEmail").value = p.email || "");
+        $("peBranch") && ($("peBranch").value = p.branch || "");
+        $("peGender") && ($("peGender").value = p.gender || "");
+        $("peDob") && ($("peDob").value = p.dob || "");
+
+        setStatus($("profileStatus"), "✅ Loaded.", "ok");
       }catch(e){
-        $("profileText").textContent = "Failed: " + e.message;
+        $("profileText").textContent = "Failed to load profile.";
+        setStatus($("profileStatus"), "❌ " + (e?.message || "Error"), "err");
       }
     }
 
-    async function refreshEvents(){
+    // ===================== OTP: PROFILE EDIT FLOW (NEW) =====================
+    function openProfileOtpModal(){
+      $("profileOtpInput").value = "";
+      setStatus($("profileOtpStatus"), "");
+      $("profileOtpModal").classList.remove("hidden");
+    }
+    function closeProfileOtpModal(){
+      $("profileOtpModal").classList.add("hidden");
+    }
+
+    $("btnProfileOtpClose")?.addEventListener("click", closeProfileOtpModal);
+    $("profileOtpModal")?.addEventListener("click", (e)=>{ if(e.target === $("profileOtpModal")) closeProfileOtpModal(); });
+
+    $("btnProfileSendOtp")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("profileStatus"), "Login again.", "err"); return; }
+
+      setStatus($("profileStatus"), "Sending OTP...");
+      try{
+        await api.profileSendOtp(s.token);
+        setStatus($("profileStatus"), "✅ OTP sent. Click Verify OTP.", "ok");
+        $("btnProfileVerifyOtpOpen")?.classList.remove("hidden");
+        openProfileOtpModal();
+      }catch(e){
+        setStatus($("profileStatus"), "❌ " + (e?.message || "Failed"), "err");
+      }
+    });
+
+    $("btnProfileVerifyOtpOpen")?.addEventListener("click", openProfileOtpModal);
+
+    $("btnProfileResendOtp")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("profileOtpStatus"), "Login again.", "err"); return; }
+      setStatus($("profileOtpStatus"), "Resending...");
+      try{
+        await api.profileSendOtp(s.token);
+        setStatus($("profileOtpStatus"), "✅ OTP resent.", "ok");
+      }catch(e){
+        setStatus($("profileOtpStatus"), "❌ " + (e?.message || "Failed"), "err");
+      }
+    });
+
+    $("btnProfileVerifyOtp")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("profileOtpStatus"), "Login again.", "err"); return; }
+
+      const otp = ($("profileOtpInput").value || "").trim();
+      if(!otp){ setStatus($("profileOtpStatus"), "Enter OTP.", "warn"); return; }
+
+      setStatus($("profileOtpStatus"), "Verifying...");
+      try{
+        await api.profileVerifyOtp(s.token, otp);
+        setStatus($("profileOtpStatus"), "✅ Verified. Edit unlocked.", "ok");
+
+        // show edit form
+        $("profileEditBox")?.classList.remove("hidden");
+        $("profileEditStatus") && setStatus($("profileEditStatus"), "");
+        closeProfileOtpModal();
+      }catch(e){
+        setStatus($("profileOtpStatus"), "❌ Invalid OTP.", "err");
+      }
+    });
+
+    $("btnCancelProfileEdit")?.addEventListener("click", ()=>{
+      $("profileEditBox")?.classList.add("hidden");
+      setStatus($("profileEditStatus"), "");
+    });
+
+    $("btnSaveMyProfileEdit")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("profileEditStatus"), "Login again.", "err"); return; }
+
+      const payload = {
+        name: $("peName").value.trim(),
+        address: $("peAddress").value.trim(),
+        phone: $("pePhone").value.trim(),
+        email: $("peEmail").value.trim(),
+        branch: $("peBranch").value.trim(),
+        gender: $("peGender").value,
+        dob: $("peDob").value
+      };
+
+      if(!payload.name || !payload.address || !payload.phone || !payload.email || !payload.branch || !payload.gender || !payload.dob){
+        setStatus($("profileEditStatus"), "Fill all fields.", "warn");
+        return;
+      }
+
+      setStatus($("profileEditStatus"), "Saving...");
+      try{
+        await api.saveMyProfile(s.token, payload);
+        setStatus($("profileEditStatus"), "✅ Profile updated.", "ok");
+        $("profileEditBox")?.classList.add("hidden");
+        refreshProfile();
+      }catch(e){
+        setStatus($("profileEditStatus"), "❌ " + (e?.message || "Failed"), "err");
+      }
+    });
+
+    // ===================== USER QUICK ACTIONS =====================
+    $("goEvents")?.addEventListener("click", () => openUserTab("EVENTS"));
+    $("goContent")?.addEventListener("click", () => openUserTab("CONTENT"));
+    $("goCert")?.addEventListener("click", () => openUserTab("CERTIFICATE"));
+    $("goLive")?.addEventListener("click", () => openUserTab("LIVESCORE_USER"));
+    $("goRecruit")?.addEventListener("click", () => openUserTab("RECRUITMENT"));
+    $("goChangePass")?.addEventListener("click", () => { openUserTab("CHANGE_PASS"); setStatus($("cpStatus"), ""); });
+
+    // ===================== USER EVENTS (CLUB FIRST) =====================
+    let selectedEventsClub = "";
+    function selectEventsClub(club){
+      selectedEventsClub = club;
+      $("ueSelectedClubTitle").textContent = "Club: " + club;
+      $("ueClubPicker").classList.add("hidden");
+      $("ueEventsView").classList.remove("hidden");
+      refreshEventsForSelectedClub();
+    }
+    $("ueBackToClubs")?.addEventListener("click", () => {
+      selectedEventsClub = "";
+      $("ueEventsView").classList.add("hidden");
+      $("ueClubPicker").classList.remove("hidden");
+      setStatus($("eventsStatus"), "");
+      renderClubTiles($("ueClubTiles"), (club)=>selectEventsClub(club));
+    });
+    $("btnRefreshEvents")?.addEventListener("click", refreshEventsForSelectedClub);
+
+    async function refreshEventsForSelectedClub(){
       const tbody = $("eventsTable").querySelector("tbody");
       tbody.innerHTML = "";
       setStatus($("eventsStatus"), "Loading...");
+
       try{
-        const rows = await api("/api/events", { method:"GET", headers: authHeaders() });
-        if(!Array.isArray(rows) || rows.length === 0){
-          tbody.innerHTML = `<tr><td colspan="5" class="muted">No events found.</td></tr>`;
+        const res = await api.listEvents(selectedEventsClub);
+        const items = Array.isArray(res.items) ? res.items : [];
+
+        if(!items.length){
+          tbody.innerHTML = `<tr><td colspan="5" class="muted">No events found for this club.</td></tr>`;
           setStatus($("eventsStatus"), "");
           return;
         }
-        rows.forEach(r => {
+
+        let shown = 0;
+        items.forEach(r => {
           const title = r.title ?? "";
-          const date  = r.event_date ?? r.eventDate ?? "";
-          const photo = r.photo_url ?? r.photoUrl ?? "";
-          const reg   = r.registration_link ?? r.regLink ?? "";
-          const expired = date ? isExpiredISO(date) : false;
+          const date  = r.date ?? "";
+          const photo = r.photoUrl ?? "";
+          const reg   = r.regLink ?? "";
 
-          const statusHtml = expired
-            ? `<span class="status-pill pill-expired">● Expired</span>`
-            : `<span class="status-pill pill-active">● Active</span>`;
+          const st = date ? classifyEventDate(date) : "PAST";
 
+          // ✅ ONLY UPCOMING events for user upcoming page
+          if(st !== "UPCOMING") return;
+
+          shown++;
+          const statusHtml = `<span class="status-pill pill-upcoming">● Upcoming</span>`;
           const photoHtml = photo
-            ? `<a href="${escapeHtmlAttr(normalizeUrl(photo))}" target="_blank" rel="noopener">Open</a>`
+            ? `<a href="${escapeHtmlAttr(photo)}" target="_blank" rel="noopener">Open</a>`
             : `<span class="muted">-</span>`;
-
           const regHtml = reg
             ? `<a href="${escapeHtmlAttr(reg)}" target="_blank" rel="noopener">Register</a>`
             : `<span class="muted">-</span>`;
@@ -1559,58 +2166,100 @@
           tbody.appendChild(tr);
         });
 
+        if(shown === 0){
+          tbody.innerHTML = `<tr><td colspan="5" class="muted">No upcoming events.</td></tr>`;
+          setStatus($("eventsStatus"), "");
+          return;
+        }
+
         setStatus($("eventsStatus"), "✅ Loaded.", "ok");
       }catch(e){
-        tbody.innerHTML = `<tr><td colspan="5" style="color:#991b1b;font-weight:700;">Failed: ${escapeHtml(e.message)}</td></tr>`;
-        setStatus($("eventsStatus"), "❌ Error.", "err");
+        tbody.innerHTML = `<tr><td colspan="5" class="muted">Failed to load events.</td></tr>`;
+        setStatus($("eventsStatus"), "❌ " + (e?.message || "Error"), "err");
       }
     }
 
-    // Content
+    // ===================== USER CONTENT =====================
+    let selectedContentClub = "";
     let currentReportUrl = "";
     let currentPhotos = [];
     let currentVideos = [];
 
-    $("cEventTitle")?.addEventListener("change", refreshDatesForSelectedTitle);
+    function selectContentClub(club){
+      selectedContentClub = club;
+      $("ucSelectedClub").value = club;
 
-    async function refreshContentDropdowns(){
+      $("ucClubPicker").classList.add("hidden");
+      $("ucContentView").classList.remove("hidden");
+
       $("contentDetails").classList.add("hidden");
       setStatus($("contentStatus"), "");
+      buildContentDropdownsForClub();
+    }
+
+    $("ucBackToClubs")?.addEventListener("click", () => {
+      selectedContentClub = "";
+      $("ucContentView").classList.add("hidden");
+      $("ucClubPicker").classList.remove("hidden");
+      $("contentDetails").classList.add("hidden");
+      setStatus($("contentStatus"), "");
+      renderClubTiles($("ucClubTiles"), (club)=>selectContentClub(club));
+    });
+
+    $("cEventTitle")?.addEventListener("change", refreshDatesForSelectedTitle);
+
+    async function buildContentDropdownsForClub(){
       $("cEventTitle").innerHTML = "";
       $("cEventDate").innerHTML = "";
+      $("contentDetails").classList.add("hidden");
 
       try{
-        const titles = await api("/api/content/titles", { method:"GET", headers: authHeaders() });
-        if(!Array.isArray(titles) || titles.length === 0){
+        const res = await api.listContents(selectedContentClub);
+        const items = Array.isArray(res.items) ? res.items : [];
+        const titles = [...new Set(items.map(x => x.title).filter(Boolean))];
+
+        if(!titles.length){
           $("cEventTitle").innerHTML = `<option value="">(no content)</option>`;
           $("cEventDate").innerHTML = `<option value="">-</option>`;
           return;
         }
+
         titles.forEach(t => {
           const opt = document.createElement("option");
           opt.value = t;
           opt.textContent = t;
           $("cEventTitle").appendChild(opt);
         });
+
         $("cEventTitle").selectedIndex = 0;
         await refreshDatesForSelectedTitle();
       }catch(e){
-        setStatus($("contentStatus"), "Failed to load: " + e.message, "err");
+        $("cEventTitle").innerHTML = `<option value="">(failed)</option>`;
+        $("cEventDate").innerHTML = `<option value="">-</option>`;
       }
     }
 
     async function refreshDatesForSelectedTitle(){
-      $("contentDetails").classList.add("hidden");
-      const title = $("cEventTitle").value;
       $("cEventDate").innerHTML = "";
-      if(!title){ $("cEventDate").innerHTML = `<option value="">-</option>`; return; }
+      $("contentDetails").classList.add("hidden");
+      setStatus($("contentStatus"), "");
+
+      const title = $("cEventTitle").value;
+      if(!title){
+        $("cEventDate").innerHTML = `<option value="">-</option>`;
+        return;
+      }
 
       try{
-        const dates = await api("/api/content/dates?title=" + encodeURIComponent(title), { method:"GET", headers: authHeaders() });
-        if(!Array.isArray(dates) || dates.length === 0){
+        const res = await api.listContents(selectedContentClub);
+        const items = Array.isArray(res.items) ? res.items : [];
+        const dates = items.filter(x => x.title === title).map(x => x.date).filter(Boolean);
+
+        if(!dates.length){
           $("cEventDate").innerHTML = `<option value="">(no dates)</option>`;
           return;
         }
+
         dates.forEach(d => {
           const opt = document.createElement("option");
           opt.value = d;
@@ -1619,48 +2268,57 @@
         });
         $("cEventDate").selectedIndex = 0;
       }catch(e){
-        setStatus($("contentStatus"), "Failed: " + e.message, "err");
+        $("cEventDate").innerHTML = `<option value="">(failed)</option>`;
       }
     }
 
     $("btnLoadContent")?.addEventListener("click", async () => {
       const title = $("cEventTitle").value;
       const date  = $("cEventDate").value;
-      if(!title || !date){ setStatus($("contentStatus"), "Select event and date.", "warn"); return; }
+
+      if(!selectedContentClub){
+        setStatus($("contentStatus"), "Select club first.", "warn");
+        return;
+      }
+      if(!title || !date){
+        setStatus($("contentStatus"), "Select event and date.", "warn");
+        return;
+      }
 
       setStatus($("contentStatus"), "Loading...");
       $("contentDetails").classList.remove("hidden");
       $("selEventName").textContent = "Event Name: " + title;
       $("selEventDate").textContent = "Event Date: " + date;
+      $("selEventClub").textContent = "Club: " + selectedContentClub;
 
       $("descBox").textContent = "Loading...";
       $("videosPanel").innerHTML = "";
       $("btnOpenReport").disabled = true;
       $("btnWatchPhotos").disabled = true;
+      $("reportHint").textContent = "";
 
       currentReportUrl = "";
       currentPhotos = [];
       currentVideos = [];
 
       try{
-        const data = await api("/api/content?title=" + encodeURIComponent(title) + "&date=" + encodeURIComponent(date), {
-          method:"GET", headers: authHeaders()
-        });
+        const res = await api.contentDetails(selectedContentClub, title, date);
+        const item = res.item;
 
-        currentReportUrl = data.report || "";
-        currentPhotos = parseMultiLines(data.photos || "");
-        currentVideos = parseMultiLines(data.youtube_links || "");
+        currentReportUrl = item.reportUrl || "";
+        currentPhotos = Array.isArray(item.photoUrls) ? item.photoUrls : [];
+        currentVideos = Array.isArray(item.youtubeLinks) ? item.youtubeLinks : [];
 
-        $("descBox").textContent = data.description || "(No description)";
-
+        $("descBox").textContent = item.desc || "(No description)";
         $("btnOpenReport").disabled = !currentReportUrl;
         $("btnWatchPhotos").disabled = currentPhotos.length === 0;
+        $("reportHint").textContent = currentReportUrl ? ("Report: PDF") : "Report: (not uploaded)";
 
         buildVideoButtons();
         setStatus($("contentStatus"), "✅ Loaded.", "ok");
       }catch(e){
-        $("descBox").textContent = "Failed: " + e.message;
-        setStatus($("contentStatus"), "❌ Error.", "err");
+        $("descBox").textContent = "No content found.";
+        setStatus($("contentStatus"), "❌ " + (e?.message || "Error"), "err");
       }
     });
 
@@ -1670,7 +2328,7 @@
       if(currentVideos.length === 0){
         const x = document.createElement("div");
         x.className = "muted";
-        x.style.fontWeight = "800";
+        x.style.fontWeight = "1000";
         x.textContent = "(no videos)";
         panel.appendChild(x);
         return;
@@ -1686,7 +2344,7 @@
 
     $("btnOpenReport")?.addEventListener("click", () => {
       if(!currentReportUrl) return;
-      window.open(normalizeUrl(currentReportUrl), "_blank", "noopener");
+      window.open(currentReportUrl, "_blank", "noopener");
     });
 
     $("btnWatchPhotos")?.addEventListener("click", () => {
@@ -1694,12 +2352,12 @@
       openPhotoModal(currentPhotos);
     });
 
-    // Modal
+    // ===================== PHOTO MODAL =====================
     let modalPhotos = [];
     let modalIdx = 0;
 
     function openPhotoModal(photos){
-      modalPhotos = photos.map(normalizeUrl);
+      modalPhotos = photos.slice();
       modalIdx = 0;
       $("photoModal").classList.remove("hidden");
       renderModalPhoto();
@@ -1714,167 +2372,1045 @@
       const url = modalPhotos[modalIdx];
       $("modalImg").src = url;
       $("photoCounter").textContent = (modalIdx + 1) + " / " + total;
-      $("photoHint").textContent = url;
+      $("photoHint").textContent = (url || "").slice(0,80) + (url && url.length > 80 ? "..." : "");
     }
     $("btnCloseModal")?.addEventListener("click", closePhotoModal);
     $("photoModal")?.addEventListener("click", (e) => { if(e.target === $("photoModal")) closePhotoModal(); });
     $("btnPrevPhoto")?.addEventListener("click", () => { if(modalIdx>0){ modalIdx--; renderModalPhoto(); } });
     $("btnNextPhoto")?.addEventListener("click", () => { if(modalIdx<modalPhotos.length-1){ modalIdx++; renderModalPhoto(); } });
 
-    /* ==========================================================
-       ✅ TOKEN FEATURE (ADDED ONLY)
-       Expected backend endpoints (change paths if needed):
-       - POST /api/user/token                 { username, problem }
-       - GET  /api/admin/tokens               -> [{ id, username, problem, created_at }]
-       - GET  /api/admin/profile?username=... -> { name, phone, email, branch, gender, dob, address }
-       - POST /api/admin/profile/update       { username, name, phone, email, branch, gender, dob, address }
-       ========================================================== */
+    // ===================== USER CHANGE PASSWORD =====================
+    $("btnChangePass")?.addEventListener("click", async () => {
+      const s = loadSession();
+      if(!s?.token){ setStatus($("cpStatus"), "Login again.", "err"); return; }
 
-    // USER: submit token
-    $("btnSubmitToken")?.addEventListener("click", async () => {
-      const username = $("utUsername").value.trim();
-      const problem  = $("utProblem").value.trim();
-      if(!username || !problem){
-        setStatus($("utStatus"), "Enter username and problem.", "warn");
+      const oldP = $("cpOld").value;
+      const newP = $("cpNew").value;
+      const conP = $("cpCon").value;
+
+      if(!oldP || !newP || !conP){
+        setStatus($("cpStatus"), "Fill all fields.", "warn");
         return;
       }
-      setStatus($("utStatus"), "Submitting...");
+      if(newP !== conP){
+        setStatus($("cpStatus"), "New password and confirm must match.", "warn");
+        return;
+      }
+
+      setStatus($("cpStatus"), "Updating...");
       try{
-        await api("/api/user/token", {
-          method:"POST",
-          headers: authHeaders({ "Content-Type":"application/json" }),
-          body: JSON.stringify({ username, problem })
-        });
-        setStatus($("utStatus"), "✅ Token submitted.", "ok");
-        $("utProblem").value = "";
+        await api.changePassword(s.token, oldP, newP);
+        setStatus($("cpStatus"), "✅ Password changed.", "ok");
+        $("cpOld").value = ""; $("cpNew").value = ""; $("cpCon").value = "";
       }catch(e){
-        setStatus($("utStatus"), "❌ " + e.message, "err");
+        setStatus($("cpStatus"), "❌ " + (e?.message || "Error"), "err");
       }
     });
 
-    // ADMIN: tokens list + search + click to load profile
-    let adminTokensCache = [];
-    let adminSelectedUsername = "";
+    // ===================== ADMIN: CLUBS =====================
+    async function renderAdminClubs(){
+      const box = $("clubListBox");
+      box.innerHTML = `<div class="muted" style="font-weight:1000;">Loading...</div>`;
+      setStatus($("clubStatus"), "");
 
-    function renderTokenList(filterText=""){
-      const listEl = $("tokenUserList");
-      const q = (filterText||"").trim().toLowerCase();
+      try{
+        const res = await api.clubs();
+        const clubs = Array.isArray(res.items) ? res.items : [];
 
-      const rows = adminTokensCache.filter(t => {
-        const u = String(t.username || "").toLowerCase();
-        return !q || u.includes(q);
-      });
+        if(!clubs.length){
+          box.innerHTML = `<div class="muted" style="font-weight:1000;">No clubs yet.</div>`;
+          return;
+        }
 
-      if(!rows.length){
-        listEl.innerHTML = `<div class="item"><span class="muted">No tokens found.</span></div>`;
+        box.innerHTML = `
+          <table>
+            <thead><tr><th>Club Name</th><th>Action</th></tr></thead>
+            <tbody>
+              ${clubs.map(c=>`
+                <tr>
+                  <td>${escapeHtml(c)}</td>
+                  <td><button class="btn btn-danger" data-del-club="${escapeHtmlAttr(c)}">Delete</button></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `;
+
+        box.querySelectorAll("[data-del-club]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const club = btn.getAttribute("data-del-club") || "";
+            if(!confirm(`Delete club "${club}"?`)) return;
+
+            const s = loadSession();
+            try{
+              await api.delClub(s.token, club);
+              removeClubPassword(club);
+              setStatus($("clubStatus"), "✅ Club deleted.", "ok");
+              renderAdminClubs();
+              fillClubSelect($("aeClub"));
+              fillClubSelect($("acClub"));
+            }catch(e){
+              setStatus($("clubStatus"), "❌ " + (e?.message || "Error"), "err");
+            }
+          });
+        });
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load clubs.</div>`;
+        setStatus($("clubStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    }
+
+    $("btnAddClub")?.addEventListener("click", async ()=>{
+      const name = $("clubName").value.trim();
+      const pass = ($("clubPass")?.value || "").trim();
+
+      if(!name){ setStatus($("clubStatus"), "Enter club name.", "warn"); return; }
+      if(!pass){ setStatus($("clubStatus"), "Set club password.", "warn"); return; }
+
+      const s = loadSession();
+      setStatus($("clubStatus"), "Saving...");
+      try{
+  await api.addClub(s.token, name, pass);  // ✅ send to backend
+
+  setClubPassword(name, pass);            // ✅ also store locally for your UI checks
+
+  $("clubName").value = "";
+  if($("clubPass")) $("clubPass").value = "";
+
+  setStatus($("clubStatus"), "✅ Club + password saved.", "ok");
+  renderAdminClubs();
+  fillClubSelect($("aeClub"));
+  fillClubSelect($("acClub"));
+}catch(e){
+  setStatus($("clubStatus"), "❌ " + (e?.message || "Error"), "err");
+}
+    });
+
+    // ===================== ADMIN: ADD EVENT =====================
+    $("btnSaveEvent")?.addEventListener("click", async () => {
+      const club  = $("aeClub").value;
+      const title = $("aeTitle").value.trim();
+      const date  = $("aeDate").value;
+      const reg   = $("aeRegLink").value.trim();
+      const photoFile = $("aePhotoFile").files?.[0] || null;
+
+      if(!club){ setStatus($("aeStatus"), "Select club.", "warn"); return; }
+
+      const enteredPass = ($("aeClubPass")?.value || "").trim();
+      if(!enteredPass){ setStatus($("aeStatus"), "Enter club password.", "warn"); return; }
+      const chk = checkClubPassword(club, enteredPass);
+      if(!chk.ok){
+        setStatus($("aeStatus"), chk.reason==="NOT_SET" ? "No password set for this club. Set it in Add Club." : "Wrong club password. Event not saved.", "err");
         return;
       }
 
-      listEl.innerHTML = rows.map(t => {
-        const u = escapeHtml(t.username || "");
-        const prob = String(t.problem || "");
-        const pill = escapeHtml(prob ? (prob.length > 40 ? prob.slice(0,40) + "..." : prob) : "Open");
-        return `
-          <div class="item" data-u="${escapeHtmlAttr(String(t.username || ""))}">
-            <span>${u}</span>
-            <span class="mini-pill" title="${escapeHtmlAttr(prob)}">${pill}</span>
+      if(!title || !date){ setStatus($("aeStatus"), "Enter title and date.", "warn"); return; }
+      if(!photoFile){ setStatus($("aeStatus"), "Select an image photo.", "warn"); return; }
+
+      const s = loadSession();
+      const btn = $("btnSaveEvent");
+      btn.disabled = true;
+      setStatus($("aeStatus"), "Uploading...");
+
+      try{
+        await api.addEvent(s.token, { club, title, date, regLink: reg, photoFile });
+        setStatus($("aeStatus"), "✅ Event saved.", "ok");
+        $("aeTitle").value=""; $("aeDate").value=""; $("aeRegLink").value="";
+        $("aePhotoFile").value = "";
+        if($("aeClubPass")) $("aeClubPass").value = "";
+      }catch(e){
+        setStatus($("aeStatus"), "❌ " + (e?.message || "Failed"), "err");
+      }finally{
+        btn.disabled = false;
+      }
+    });
+
+    // ===================== ADMIN: ADD CONTENT =====================
+    $("btnSaveContent")?.addEventListener("click", async () => {
+      const club  = $("acClub").value;
+      const title = $("acTitle").value.trim();
+      const date  = $("acDate").value;
+      const desc  = $("acDesc").value.trim();
+      const photoFiles = Array.from($("acPhotoFiles").files || []);
+      const ytRaw = $("acYoutube").value;
+      const pdfFile = $("acReportFile").files?.[0] || null;
+
+      if(!club){ setStatus($("acStatus"), "Select club.", "warn"); return; }
+
+      const enteredPass = ($("acClubPass")?.value || "").trim();
+      if(!enteredPass){ setStatus($("acStatus"), "Enter club password.", "warn"); return; }
+      const chk = checkClubPassword(club, enteredPass);
+      if(!chk.ok){
+        setStatus($("acStatus"), chk.reason==="NOT_SET" ? "No password set for this club. Set it in Add Club." : "Wrong club password. Content not saved.", "err");
+        return;
+      }
+
+      if(!title || !date){ setStatus($("acStatus"), "Enter event title and date.", "warn"); return; }
+      if(photoFiles.length === 0){ setStatus($("acStatus"), "Select at least 1 photo.", "warn"); return; }
+
+      const s = loadSession();
+      const btn = $("btnSaveContent");
+      btn.disabled = true;
+      setStatus($("acStatus"), "Uploading...");
+
+      try{
+        await api.addContent(s.token, { club, title, date, desc, youtubeLinks: ytRaw, photoFiles, reportFile: pdfFile });
+        setStatus($("acStatus"), "✅ Content saved.", "ok");
+        $("acTitle").value=""; $("acDate").value=""; $("acDesc").value="";
+        $("acPhotoFiles").value = "";
+        $("acYoutube").value = "";
+        $("acReportFile").value = "";
+        if($("acClubPass")) $("acClubPass").value = "";
+      }catch(e){
+        setStatus($("acStatus"), "❌ " + (e?.message || "Failed"), "err");
+      }finally{
+        btn.disabled = false;
+      }
+    });
+
+    // ===================== ADMIN: ADD USER =====================
+    $("btnCreateUser")?.addEventListener("click", async () => {
+      const u = $("auUser").value.trim();
+      const p = $("auPass").value;
+      const r = $("auRole").value;
+
+      if(!u || !p){ setStatus($("auStatus"), "Enter username and password.", "warn"); return; }
+
+      const s = loadSession();
+      setStatus($("auStatus"), "Saving...");
+      try{
+        await api.createUser(s.token, u, p, r);
+        setStatus($("auStatus"), "✅ User created.", "ok");
+        $("auUser").value=""; $("auPass").value=""; $("auRole").value="user";
+      }catch(e){
+        setStatus($("auStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    });
+
+    // ===================== ADMIN: USER DETAILS =====================
+    function clearUserDetailsUI(){
+      $("udEditBox").classList.add("hidden");
+      setStatus($("udLookupStatus"), "");
+      setStatus($("udSaveStatus"), "");
+      $("udLookupUser").value = "";
+      $("udEUsername").value = "";
+      $("udERole").value = "user";
+      $("udEPassword").value = "";
+      $("udEName").value = "";
+      $("udEPhone").value = "";
+      $("udEEmail").value = "";
+      $("udEBranch").value = "";
+      $("udEGender").value = "";
+      $("udEDob").value = "";
+      $("udEAddress").value = "";
+    }
+    $("btnClearUserDetails")?.addEventListener("click", clearUserDetailsUI);
+
+    $("btnLookupUser")?.addEventListener("click", async () => {
+      const uname = $("udLookupUser").value.trim();
+      if(!uname){ setStatus($("udLookupStatus"), "Enter username.", "warn"); return; }
+
+      const s = loadSession();
+      setStatus($("udLookupStatus"), "Loading...");
+      try{
+        const res = await api.getUserDetails(s.token, uname);
+
+        $("udEditBox").classList.remove("hidden");
+        setStatus($("udLookupStatus"), "✅ Loaded.", "ok");
+        setStatus($("udSaveStatus"), "");
+
+        const u = res.user || {};
+        const p = res.profile || {};
+
+        $("udEUsername").value = u.username || uname;
+        $("udERole").value = u.role || "user";
+        $("udEPassword").value = u.password || "";
+
+        $("udEName").value = p.name || "";
+        $("udEPhone").value = p.phone || "";
+        $("udEEmail").value = p.email || "";
+        $("udEBranch").value = p.branch || "";
+        $("udEGender").value = p.gender || "";
+        $("udEDob").value = p.dob || "";
+        $("udEAddress").value = p.address || "";
+      }catch(e){
+        setStatus($("udLookupStatus"), "❌ " + (e?.message || "Not found"), "err");
+        $("udEditBox").classList.add("hidden");
+      }
+    });
+
+    $("btnSaveUserDetails")?.addEventListener("click", async () => {
+      const uname = $("udEUsername").value.trim();
+      if(!uname){ setStatus($("udSaveStatus"), "Load a user first.", "warn"); return; }
+
+      const newPass = $("udEPassword").value;
+      const newRole = $("udERole").value;
+
+      if(!newPass){ setStatus($("udSaveStatus"), "Password cannot be empty.", "warn"); return; }
+
+      const s = loadSession();
+      setStatus($("udSaveStatus"), "Saving...");
+
+      try{
+        await api.updateUserDetails(s.token, uname, {
+          user: { username: uname, password: newPass, role: newRole },
+          profile: {
+            name: $("udEName").value.trim(),
+            phone: $("udEPhone").value.trim(),
+            email: $("udEEmail").value.trim(),
+            branch: $("udEBranch").value.trim(),
+            gender: $("udEGender").value,
+            dob: $("udEDob").value,
+            address: $("udEAddress").value.trim()
+          }
+        });
+
+        setStatus($("udSaveStatus"), "✅ Saved changes.", "ok");
+      }catch(e){
+        setStatus($("udSaveStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    });
+
+    // ===================== ADMIN: MANAGE =====================
+    $("btnManageUpcoming")?.addEventListener("click", loadAdminUpcoming);
+    $("btnManageContent")?.addEventListener("click", loadAdminContents);
+
+    async function loadAdminUpcoming(){
+      const s = loadSession();
+      setStatus($("amStatus"), "Loading...");
+      const box = $("adminManageBox");
+      box.innerHTML = "";
+
+      try{
+        const res = await api.listEvents();
+        const list = Array.isArray(res.items) ? res.items : [];
+
+        if(!list.length){
+          box.innerHTML = `<div class="muted" style="font-weight:1000;">No events found.</div>`;
+          setStatus($("amStatus"), "");
+          return;
+        }
+
+        box.innerHTML = `
+          <table>
+            <thead>
+              <tr><th>Club</th><th>Title</th><th>Date</th><th>Status</th><th>Photo</th><th>Register</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              ${list.map(e => {
+                const photo = e.photoUrl ? `<a href="${escapeHtmlAttr(e.photoUrl)}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
+                const reg = e.regLink ? `<a href="${escapeHtmlAttr(e.regLink)}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
+                const st = e.date ? classifyEventDate(e.date) : "PAST";
+                const pill = (st==="UPCOMING")
+                  ? `<span class="status-pill pill-upcoming">● Upcoming</span>`
+                  : (st==="PRESENT")
+                    ? `<span class="status-pill pill-present">● Present</span>`
+                    : `<span class="status-pill pill-expired">● Past</span>`;
+                return `
+                  <tr>
+                    <td>${escapeHtml(e.club || "-")}</td>
+                    <td>${escapeHtml(e.title || "")}</td>
+                    <td>${escapeHtml(e.date || "")}</td>
+                    <td>${pill}</td>
+                    <td>${photo}</td>
+                    <td>${reg}</td>
+                    <td><button class="btn btn-danger" data-del-event="${Number(e.id)}">Delete</button></td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+
+        box.querySelectorAll("[data-del-event]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const id = Number(btn.getAttribute("data-del-event"));
+            if(!confirm("Delete this event?")) return;
+
+            try{
+              await api.delEvent(s.token, id);
+              setStatus($("amStatus"), "✅ Deleted.", "ok");
+              loadAdminUpcoming();
+            }catch(e){
+              setStatus($("amStatus"), "❌ " + (e?.message || "Error"), "err");
+            }
+          });
+        });
+
+        setStatus($("amStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load events.</div>`;
+        setStatus($("amStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    }
+
+    async function loadAdminContents(){
+      const s = loadSession();
+      setStatus($("amStatus"), "Loading...");
+      const box = $("adminManageBox");
+      box.innerHTML = "";
+
+      try{
+        const res = await api.listContents();
+        const list = Array.isArray(res.items) ? res.items : [];
+
+        if(!list.length){
+          box.innerHTML = `<div class="muted" style="font-weight:1000;">No contents found.</div>`;
+          setStatus($("amStatus"), "");
+          return;
+        }
+
+        box.innerHTML = `
+          <table>
+            <thead>
+              <tr><th>Club</th><th>Event</th><th>Date</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              ${list.map(c => `
+                <tr>
+                  <td>${escapeHtml(c.club || "-")}</td>
+                  <td>${escapeHtml(c.title || "")}</td>
+                  <td>${escapeHtml(c.date || "")}</td>
+                  <td><button class="btn btn-danger" data-del-content="${Number(c.id)}">Delete</button></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `;
+
+        box.querySelectorAll("[data-del-content]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const id = Number(btn.getAttribute("data-del-content"));
+            if(!confirm("Delete this content?")) return;
+
+            try{
+              await api.delContent(s.token, id);
+              setStatus($("amStatus"), "✅ Deleted.", "ok");
+              loadAdminContents();
+            }catch(e){
+              setStatus($("amStatus"), "❌ " + (e?.message || "Error"), "err");
+            }
+          });
+        });
+
+        setStatus($("amStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load contents.</div>`;
+        setStatus($("amStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    }
+
+    // ===================== ADMIN: RECRUITMENT =====================
+    $("btnLoadRecruitments")?.addEventListener("click", loadAdminRecruitments);
+
+    async function loadAdminRecruitments(){
+      const s = loadSession();
+      setStatus($("recAdminStatus"), "Loading...");
+      const box = $("recAdminBox");
+      box.innerHTML = "";
+
+      try{
+        const res = await api.adminRecruitments(s.token);
+        const list = Array.isArray(res.items) ? res.items : [];
+
+        if(!list.length){
+          box.innerHTML = `<div class="muted" style="font-weight:1000;">No clubs found.</div>`;
+          setStatus($("recAdminStatus"), "");
+          return;
+        }
+
+        box.innerHTML = `
+          <table>
+            <thead>
+              <tr><th>Club</th><th>Status</th><th>Link</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              ${list.map(r => {
+                const st = r.open ? `<span class="status-pill pill-active">● OPEN</span>` : `<span class="status-pill pill-expired">● CLOSED</span>`;
+                const link = r.link ? `<a href="${escapeHtmlAttr(r.link)}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
+                return `
+                  <tr>
+                    <td>${escapeHtml(r.club || "-")}</td>
+                    <td>${st}</td>
+                    <td>${link}</td>
+                    <td>
+                      <button class="btn btn-primary" data-open-rec="${escapeHtmlAttr(r.club)}">Open</button>
+                      <button class="btn btn-danger" data-close-rec="${escapeHtmlAttr(r.club)}">Close</button>
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+
+        box.querySelectorAll("[data-open-rec]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const club = btn.getAttribute("data-open-rec");
+            const link = prompt(`Enter registration link for "${club}"`);
+            if(link === null) return;
+            if(!link.trim()){ alert("Link cannot be empty"); return; }
+
+            try{
+              await api.openRecruit(s.token, club, link.trim());
+              setStatus($("recAdminStatus"), "✅ Opened.", "ok");
+              loadAdminRecruitments();
+            }catch(e){
+              setStatus($("recAdminStatus"), "❌ " + (e?.message || "Error"), "err");
+            }
+          });
+        });
+
+        box.querySelectorAll("[data-close-rec]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const club = btn.getAttribute("data-close-rec");
+            if(!confirm(`Close recruitment for "${club}"?`)) return;
+
+            try{
+              await api.closeRecruit(s.token, club);
+              setStatus($("recAdminStatus"), "✅ Closed.", "ok");
+              loadAdminRecruitments();
+            }catch(e){
+              setStatus($("recAdminStatus"), "❌ " + (e?.message || "Error"), "err");
+            }
+          });
+        });
+
+        setStatus($("recAdminStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load.</div>`;
+        setStatus($("recAdminStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    }
+
+    // ===================== USER: RECRUITMENT (OPEN ONLY) =====================
+    $("btnLoadUserRecruit")?.addEventListener("click", loadUserRecruitments);
+
+    async function loadUserRecruitments(){
+      setStatus($("recUserStatus"), "Loading...");
+      const box = $("recUserBox");
+      box.innerHTML = "";
+
+      try{
+        const res = await api.openRecruitmentsPublic();
+        const list = Array.isArray(res.items) ? res.items : [];
+
+        if(!list.length){
+          box.innerHTML = `<div class="muted" style="font-weight:1000;">No recruitments open now.</div>`;
+          setStatus($("recUserStatus"), "");
+          return;
+        }
+
+        box.innerHTML = `
+          <table>
+            <thead>
+              <tr><th>Club</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              ${list.map(r => `
+                <tr>
+                  <td>${escapeHtml(r.club || "-")}</td>
+                  <td>
+                    <button class="btn btn-primary" data-register-rec="${escapeHtmlAttr(r.link || "")}">Register</button>
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `;
+
+        box.querySelectorAll("[data-register-rec]").forEach(btn=>{
+          btn.addEventListener("click", ()=>{
+            const link = btn.getAttribute("data-register-rec") || "";
+            if(!link){ alert("Registration link not set"); return; }
+            window.open(link, "_blank", "noopener");
+          });
+        });
+
+        setStatus($("recUserStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load.</div>`;
+        setStatus($("recUserStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    }
+
+    // ===================== ADMIN: UPLOAD CERTIFICATE =====================
+    let certClub = "";
+    let certEventId = null;
+
+    function selectCertClub(club){
+      certClub = club;
+      certEventId = null;
+
+      $("certSelectedClub").value = club;
+      $("certClubPicker").classList.add("hidden");
+      $("certEventPicker").classList.remove("hidden");
+      $("certUploadForm").classList.add("hidden");
+
+      $("certPastEvents").innerHTML = "";
+      setStatus($("certAdminStatus"), "Load past events...", "");
+
+      loadPastEventsForCert();
+    }
+
+    $("certBackToClubs")?.addEventListener("click", ()=>{
+      certClub = "";
+      certEventId = null;
+      $("certEventPicker").classList.add("hidden");
+      $("certClubPicker").classList.remove("hidden");
+      renderClubTiles($("certClubTiles"), (club)=>selectCertClub(club));
+    });
+
+    async function loadPastEventsForCert(){
+      try{
+        const res = await api.listEvents(certClub);
+        const items = Array.isArray(res.items) ? res.items : [];
+
+        const past = items.filter(e => classifyEventDate(e.date) === "PAST");
+        if(!past.length){
+          $("certPastEvents").innerHTML = `<div class="muted" style="font-weight:1000;">No past events.</div>`;
+          setStatus($("certAdminStatus"), "", "");
+          return;
+        }
+
+        $("certPastEvents").innerHTML = "";
+        past.forEach(e=>{
+          const div = document.createElement("div");
+          div.className = "tile";
+          div.innerHTML = `
+            <div class="t-title">${escapeHtml(e.title || "")}</div>
+            <div class="t-sub">${escapeHtml(e.date || "")}</div>
+          `;
+          div.addEventListener("click", ()=>{
+            certEventId = e.id;
+            $("certUploadForm").classList.remove("hidden");
+            setStatus($("certAdminStatus"), `Selected: ${e.title} (${e.date})`, "ok");
+          });
+          $("certPastEvents").appendChild(div);
+        });
+
+        setStatus($("certAdminStatus"), "✅ Pick an event.", "ok");
+      }catch(e){
+        $("certPastEvents").innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load events.</div>`;
+        setStatus($("certAdminStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    }
+
+    $("btnUploadCert")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("certUploadStatus"), "Login again.", "err"); return; }
+      if(!certClub || !certEventId){ setStatus($("certUploadStatus"), "Select club and event.", "warn"); return; }
+
+      const pass = ($("certClubPass").value || "").trim();
+      if(!pass){ setStatus($("certUploadStatus"), "Enter club password.", "warn"); return; }
+      const chk = checkClubPassword(certClub, pass);
+      if(!chk.ok){ setStatus($("certUploadStatus"), "Wrong club password.", "err"); return; }
+
+      const regNo = ($("certRegNo").value || "").trim();
+      const file = $("certFile").files?.[0] || null;
+      if(!regNo || !file){ setStatus($("certUploadStatus"), "Enter RegNo and select file.", "warn"); return; }
+
+      setStatus($("certUploadStatus"), "Uploading...");
+      try{
+        await api.uploadCertificate(s.token, { club: certClub, eventId: certEventId, regNo, file });
+        setStatus($("certUploadStatus"), "✅ Uploaded (replaced if existed).", "ok");
+        $("certRegNo").value = "";
+        $("certFile").value = "";
+      }catch(e){
+        setStatus($("certUploadStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    });
+
+    // ===================== ADMIN: LIVESCORE =====================
+    let lsClub = "";
+    let lsEventId = null;
+    let lsTeams = [];
+
+    function selectLiveScoreClub(club){
+      lsClub = club;
+      lsEventId = null;
+      lsTeams = [];
+
+      $("lsSelectedClub").value = club;
+      $("lsClubPicker").classList.add("hidden");
+      $("lsEventPicker").classList.remove("hidden");
+      $("lsScoreForm").classList.add("hidden");
+      $("lsPresentEvents").innerHTML = "";
+      setStatus($("lsAdminStatus"), "Loading present events...", "");
+
+      loadPresentEventsForLiveScore();
+    }
+
+    $("lsBackToClubs")?.addEventListener("click", ()=>{
+      lsClub = "";
+      lsEventId = null;
+      $("lsEventPicker").classList.add("hidden");
+      $("lsClubPicker").classList.remove("hidden");
+      renderClubTiles($("lsClubTiles"), (club)=>selectLiveScoreClub(club));
+    });
+
+    async function loadPresentEventsForLiveScore(){
+      try{
+        const res = await api.listEvents(lsClub);
+        const items = Array.isArray(res.items) ? res.items : [];
+
+        const present = items.filter(e => classifyEventDate(e.date) === "PRESENT");
+        if(!present.length){
+          $("lsPresentEvents").innerHTML = `<div class="muted" style="font-weight:1000;">No present (today) events.</div>`;
+          setStatus($("lsAdminStatus"), "", "");
+          return;
+        }
+
+        $("lsPresentEvents").innerHTML = "";
+        present.forEach(e=>{
+          const div = document.createElement("div");
+          div.className = "tile";
+          div.innerHTML = `
+            <div class="t-title">${escapeHtml(e.title || "")}</div>
+            <div class="t-sub">${escapeHtml(e.date || "")}</div>
+          `;
+          div.addEventListener("click", async ()=>{
+            const pass = ($("lsClubPass").value || "").trim();
+            if(!pass){ setStatus($("lsAdminStatus"), "Enter club password first.", "warn"); return; }
+            const chk = checkClubPassword(lsClub, pass);
+            if(!chk.ok){ setStatus($("lsAdminStatus"), "Wrong club password.", "err"); return; }
+
+            lsEventId = e.id;
+            $("lsSelectedEventTitle").textContent = `Event: ${e.title} (${e.date})`;
+            $("lsScoreForm").classList.remove("hidden");
+
+            const n = Number(prompt("How many teams?", "5"));
+            if(!Number.isFinite(n) || n <= 0 || n > 50){
+              setStatus($("lsAdminStatus"), "Enter valid team count (1-50).", "warn");
+              $("lsScoreForm").classList.add("hidden");
+              return;
+            }
+
+            lsTeams = Array.from({length:n}, (_,i)=>({ teamNo:i+1, score:0 }));
+            renderLiveScoreInputs();
+
+            // prefill existing scores
+            try{
+              const cur = await api.getLiveScore(lsClub, lsEventId);
+              const scores = Array.isArray(cur.items) ? cur.items : (cur.teamScores || []);
+              if(scores.length){
+                scores.forEach(s=>{
+                  const t = lsTeams.find(x=>x.teamNo === Number(s.teamNo));
+                  if(t) t.score = Number(s.score) || 0;
+                });
+                renderLiveScoreInputs();
+              }
+            }catch{}
+          });
+          $("lsPresentEvents").appendChild(div);
+        });
+
+        setStatus($("lsAdminStatus"), "✅ Pick an event.", "ok");
+      }catch(e){
+        $("lsPresentEvents").innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load events.</div>`;
+        setStatus($("lsAdminStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    }
+
+    function renderLiveScoreInputs(){
+      const box = $("lsTeamsBox");
+      box.innerHTML = "";
+      lsTeams.forEach(t=>{
+        const row = document.createElement("div");
+        row.className = "row";
+        row.style.marginBottom = "10px";
+        row.innerHTML = `
+          <div class="grow">
+            <div class="label-dark">Team ${t.teamNo} score (0-100)</div>
+            <input class="field" type="number" min="0" max="100" value="${t.score}" data-team="${t.teamNo}" />
           </div>
         `;
-      }).join("");
+        box.appendChild(row);
+      });
 
-      listEl.querySelectorAll(".item[data-u]").forEach(item => {
-        item.addEventListener("click", () => {
-          const u = item.getAttribute("data-u") || "";
-          loadAdminProfile(u);
+      box.querySelectorAll("input[data-team]").forEach(inp=>{
+        inp.addEventListener("input", ()=>{
+          const teamNo = Number(inp.getAttribute("data-team"));
+          const v = Number(inp.value);
+          const t = lsTeams.find(x=>x.teamNo === teamNo);
+          if(t) t.score = Math.max(0, Math.min(100, Number.isFinite(v) ? v : 0));
         });
       });
     }
 
-    $("btnLoadTokens")?.addEventListener("click", loadAdminTokens);
-    $("atSearchUser")?.addEventListener("input", (e) => renderTokenList(e.target.value));
-
-    async function loadAdminTokens(){
-      setStatus($("atStatus"), "Loading...");
-      try{
-        const tokens = await api("/api/admin/tokens", { method:"GET", headers: authHeaders() });
-        adminTokensCache = Array.isArray(tokens) ? tokens : [];
-        renderTokenList($("atSearchUser").value);
-        setStatus($("atStatus"), "✅ Loaded.", "ok");
-      }catch(e){
-        adminTokensCache = [];
-        $("tokenUserList").innerHTML = `<div class="item"><span style="color:#991b1b;font-weight:900;">Failed: ${escapeHtml(e.message)}</span></div>`;
-        setStatus($("atStatus"), "❌ " + e.message, "err");
-      }
-    }
-
-    async function loadAdminProfile(username){
-      adminSelectedUsername = username;
-      $("atSelectedUser").textContent = "Selected: " + username;
-      setStatus($("apStatus"), "Loading...");
-      $("btnAdminProfileReload").disabled = false;
-      $("btnAdminProfileUpdate").disabled = false;
-
-      try{
-        const data = await api("/api/admin/profile?username=" + encodeURIComponent(username), {
-          method:"GET",
-          headers: authHeaders()
-        });
-
-        $("apName").value = data.name || "";
-        $("apPhone").value = data.phone || "";
-        $("apEmail").value = data.email || "";
-        $("apBranch").value = data.branch || "";
-        $("apGender").value = data.gender || "";
-        $("apDob").value = data.dob || "";
-        $("apAddress").value = data.address || "";
-
-        setStatus($("apStatus"), "✅ Profile loaded.", "ok");
-      }catch(e){
-        setStatus($("apStatus"), "❌ " + e.message, "err");
-      }
-    }
-
-    $("btnAdminProfileReload")?.addEventListener("click", () => {
-      if(adminSelectedUsername) loadAdminProfile(adminSelectedUsername);
-    });
-
-    $("btnAdminProfileUpdate")?.addEventListener("click", async () => {
-      if(!adminSelectedUsername){
-        setStatus($("apStatus"), "Select a user first.", "warn");
-        return;
-      }
-
-      const payload = {
-        username: adminSelectedUsername,
-        name: $("apName").value.trim(),
-        phone: $("apPhone").value.trim(),
-        email: $("apEmail").value.trim(),
-        branch: $("apBranch").value.trim(),
-        gender: $("apGender").value,
-        dob: $("apDob").value,
-        address: $("apAddress").value.trim()
-      };
-
-      setStatus($("apStatus"), "Updating...");
-      try{
-        await api("/api/admin/profile/update", {
-          method:"POST",
-          headers: authHeaders({ "Content-Type":"application/json" }),
-          body: JSON.stringify(payload)
-        });
-        setStatus($("apStatus"), "✅ Updated.", "ok");
-      }catch(e){
-        setStatus($("apStatus"), "❌ " + e.message, "err");
-      }
-    });
-
-    // Boot
-    (function boot(){
+    $("btnSaveLiveScore")?.addEventListener("click", async ()=>{
       const s = loadSession();
-      if(s?.role){
+      if(!s?.token){ setStatus($("lsSaveStatus"), "Login again.", "err"); return; }
+      if(!lsClub || !lsEventId){ setStatus($("lsSaveStatus"), "Select club and event.", "warn"); return; }
+
+      setStatus($("lsSaveStatus"), "Saving...");
+      try{
+        await api.saveLiveScore(s.token, { club: lsClub, eventId: lsEventId, teamScores: lsTeams });
+        setStatus($("lsSaveStatus"), "✅ Saved / Updated.", "ok");
+      }catch(e){
+        setStatus($("lsSaveStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    });
+
+    // ===================== USER: CERTIFICATE =====================
+let ucertClub = "";
+let ucertSelectedEvent = null;
+
+// helper download (force download)
+async function downloadFile(url, filename){
+  try{
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename || "certificate";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+  }catch(e){
+    window.open(url, "_blank", "noopener");
+  }
+}
+
+function selectUserCertClub(club){
+  ucertClub = club;
+  ucertSelectedEvent = null;
+
+ 
+  $("ucertClubPicker").classList.add("hidden");
+  $("ucertEventPicker").classList.remove("hidden");
+
+  // reset UI
+  $("ucertRegBox").classList.add("hidden");
+  $("ucertSelectedEventText").textContent = "Selected Event: -";
+  $("ucertRegNo").value = "";
+  setStatus($("ucertFetchStatus"), "");
+  const tbody = $("ucertResultTable")?.querySelector("tbody");
+  if(tbody) tbody.innerHTML = `<tr><td colspan="2" class="muted">Select a PAST event → enter RegNo → OK</td></tr>`;
+
+  setStatus($("ucertStatus"), "Loading past events...");
+  loadUserCertEvents();
+}
+
+$("ucertBackToClubs")?.addEventListener("click", ()=>{
+  ucertClub = "";
+  ucertSelectedEvent = null;
+
+  $("ucertEventPicker").classList.add("hidden");
+  $("ucertClubPicker").classList.remove("hidden");
+
+  // reset
+  $("ucertRegBox")?.classList.add("hidden");
+  setStatus($("ucertStatus"), "");
+  setStatus($("ucertFetchStatus"), "");
+
+  renderClubTiles($("ucertClubTiles"), (club)=>selectUserCertClub(club));
+});
+
+async function loadUserCertEvents(){
+  try{
+    const res = await api.listEvents(ucertClub);
+    const items = Array.isArray(res.items) ? res.items : [];
+
+    // ✅ ONLY PAST events
+    const past = items.filter(e => classifyEventDate(e.date) === "PAST");
+
+    if(!past.length){
+      $("ucertEvents").innerHTML = `<div class="muted" style="font-weight:1000;">No past events.</div>`;
+      setStatus($("ucertStatus"), "", "");
+      $("ucertRegBox").classList.add("hidden");
+      return;
+    }
+
+    // sort past latest first by date
+    past.sort((a,b)=> (String(b.date||"")).localeCompare(String(a.date||"")));
+
+    $("ucertEvents").innerHTML = "";
+    past.forEach(e=>{
+      const div = document.createElement("div");
+      div.className = "tile";
+      div.innerHTML = `
+        <div class="t-title">${escapeHtml(e.title || "")}</div>
+        <div class="t-sub">${escapeHtml(e.date || "")} &nbsp;
+          <span class="status-pill pill-expired">● Past</span>
+        </div>
+      `;
+
+      div.addEventListener("click", ()=>{
+        ucertSelectedEvent = e;
+
+        $("ucertRegBox").classList.remove("hidden");
+        $("ucertSelectedEventText").textContent = `Selected Event: ${e.title} (${e.date})`;
+        $("ucertRegNo").value = "";
+        setStatus($("ucertFetchStatus"), "");
+        const tbody = $("ucertResultTable").querySelector("tbody");
+        tbody.innerHTML = `<tr><td colspan="2" class="muted">Enter RegNo → OK</td></tr>`;
+        setStatus($("ucertStatus"), "✅ Enter RegNo and click OK.", "ok");
+      });
+
+      $("ucertEvents").appendChild(div);
+    });
+
+    setStatus($("ucertStatus"), "✅ Select a past event.", "ok");
+  }catch(e){
+    $("ucertEvents").innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load.</div>`;
+    setStatus($("ucertStatus"), "❌ " + (e?.message || "Error"), "err");
+  }
+}
+
+// ✅ OK button handler
+$("btnUcertFetch")?.addEventListener("click", async ()=>{
+  if(!ucertSelectedEvent){
+    setStatus($("ucertFetchStatus"), "Select a past event first.", "warn");
+    return;
+  }
+
+  const regNo = ($("ucertRegNo").value || "").trim();
+  if(!regNo){
+    setStatus($("ucertFetchStatus"), "Enter RegNo.", "warn");
+    return;
+  }
+
+  setStatus($("ucertFetchStatus"), "Searching...");
+  const tbody = $("ucertResultTable").querySelector("tbody");
+  tbody.innerHTML = `<tr><td colspan="2" class="muted">Searching...</td></tr>`;
+
+  try{
+    const out = await api.getCertificate(ucertClub, ucertSelectedEvent.id, regNo);
+    const url = out.fileUrl || out.url || "";
+
+    if(!url){
+      tbody.innerHTML = `<tr><td colspan="2" class="muted">No certificate found for ${escapeHtml(regNo)}.</td></tr>`;
+      setStatus($("ucertFetchStatus"), "Not found.", "warn");
+      return;
+    }
+
+    const safeName = `${ucertClub}_${ucertSelectedEvent.title}_${regNo}`.replaceAll(" ","_");
+
+    tbody.innerHTML = `
+      <tr>
+        <td style="font-weight:1000;">${escapeHtml(regNo)}</td>
+        <td style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-secondary" id="btnCertView">View</button>
+          <button class="btn btn-primary" id="btnCertDownload">Download</button>
+        </td>
+      </tr>
+    `;
+
+    $("btnCertView").addEventListener("click", ()=> window.open(url, "_blank", "noopener"));
+    $("btnCertDownload").addEventListener("click", ()=> downloadFile(url, safeName));
+
+    setStatus($("ucertFetchStatus"), "✅ Found.", "ok");
+  }catch(e){
+    tbody.innerHTML = `<tr><td colspan="2" class="muted">No certificate found for ${escapeHtml(regNo)}.</td></tr>`;
+    setStatus($("ucertFetchStatus"), "Not found.", "warn");
+  }
+});
+
+    // ===================== USER: LIVESCORE =====================
+    let ulsClub = "";
+    function selectUserLiveScoreClub(club){
+      ulsClub = club;
+      $("ulsSelectedClub").value = club;
+      $("ulsClubPicker").classList.add("hidden");
+      $("ulsEventPicker").classList.remove("hidden");
+      $("ulsScoreView").classList.add("hidden");
+      setStatus($("ulsStatus"), "Loading present events...");
+      loadUserPresentEvents();
+    }
+    $("ulsBackToClubs")?.addEventListener("click", ()=>{
+      ulsClub = "";
+      $("ulsEventPicker").classList.add("hidden");
+      $("ulsClubPicker").classList.remove("hidden");
+      renderClubTiles($("ulsClubTiles"), (club)=>selectUserLiveScoreClub(club));
+    });
+
+    async function loadUserPresentEvents(){
+      try{
+        const res = await api.listEvents(ulsClub);
+        const items = Array.isArray(res.items) ? res.items : [];
+
+        const present = items.filter(e => classifyEventDate(e.date) === "PRESENT");
+        if(!present.length){
+          $("ulsPresentEvents").innerHTML = `<div class="muted" style="font-weight:1000;">No live events today.</div>`;
+          setStatus($("ulsStatus"), "", "");
+          return;
+        }
+
+        $("ulsPresentEvents").innerHTML = "";
+        present.forEach(e=>{
+          const div = document.createElement("div");
+          div.className = "tile";
+          div.innerHTML = `
+            <div class="t-title">${escapeHtml(e.title || "")}</div>
+            <div class="t-sub">${escapeHtml(e.date || "")}</div>
+          `;
+          div.addEventListener("click", async ()=>{
+            setStatus($("ulsStatus"), "Loading scores...");
+            $("ulsScoreView").classList.remove("hidden");
+            $("ulsScoreView").innerHTML = "Loading...";
+
+            try{
+              const out = await api.getLiveScore(ulsClub, e.id);
+              const scores = Array.isArray(out.items) ? out.items : (out.teamScores || []);
+              if(!scores.length){
+                $("ulsScoreView").innerHTML = `<div class="muted" style="font-weight:1000;">No scores published yet.</div>`;
+                setStatus($("ulsStatus"), "", "");
+                return;
+              }
+
+              $("ulsScoreView").innerHTML = `
+                <div class="card-soft" style="background:#fff;">
+                  <div style="font-weight:1100;margin-bottom:10px;">${escapeHtml(e.title)} — Live Scores</div>
+                  <table>
+                    <thead><tr><th>Team</th><th>Score</th></tr></thead>
+                    <tbody>
+                      ${scores.map(s=>`
+                        <tr>
+                          <td>Team ${escapeHtml(String(s.teamNo ?? ""))}</td>
+                          <td>${escapeHtml(String(s.score ?? ""))}</td>
+                        </tr>
+                      `).join("")}
+                    </tbody>
+                  </table>
+                </div>
+              `;
+              setStatus($("ulsStatus"), "✅ Loaded.", "ok");
+            }catch(err){
+              $("ulsScoreView").innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load scores.</div>`;
+              setStatus($("ulsStatus"), "❌ " + (err?.message || "Error"), "err");
+            }
+          });
+          $("ulsPresentEvents").appendChild(div);
+        });
+
+        setStatus($("ulsStatus"), "✅ Select an event.", "ok");
+      }catch(e){
+        $("ulsPresentEvents").innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load.</div>`;
+        setStatus($("ulsStatus"), "❌ " + (e?.message || "Error"), "err");
+      }
+    }
+
+    // ===================== BOOT =====================
+    (function boot(){
+      updateForgotVisibility(); // ✅ show/hide forgot button based on failed logins
+      const s = loadSession();
+      if(s?.token && s?.role){
         renderNames();
-        routeAfterLogin(s);
-      } else {
+        if((s.role||"").toLowerCase() === "admin"){
+          showScreen("admin");
+          openAdminTab("HOME");
+        }else{
+          if(!s.profileComplete){
+            showScreen("details");
+          }else{
+            showScreen("user");
+            openUserTab("HOME");
+            refreshProfile();
+          }
+        }
+      }else{
         showScreen("login");
       }
     })();

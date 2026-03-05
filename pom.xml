@@ -32,6 +32,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- ✅ MAIL (Gmail SMTP) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- JDBC (you use JdbcTemplate) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -58,8 +64,13 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
 
     </dependencies>
+    
 
     <build>
         <plugins>
