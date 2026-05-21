@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CMS Portal - User</title>
+
+<style>
+  :root{
+    --muted:#94a3b8; --text:#e2e8f0; --text2:#0f172a;
+    --accent:#eab308; --accent2:#facc15; --danger:#ef4444;
+    --nav:#0f172a; --navbtn:#1e293b; --navhover:#334155;
+    --shadow: 0 18px 55px rgba(0,0,0,.35);
+    --shadow2: 0 16px 30px rgba(15,23,42,.16);
+    --radius: 18px; --font:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    --ok:#16a34a; --warn:#d97706; --info:#2563eb;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; font-family:var(--font); }
+  body{
+    background:
+      radial-gradient(1200px 700px at 20% 10%, rgba(56,189,248,.16), transparent 55%),
+      radial-gradient(900px 600px at 80% 30%, rgba(234,179,8,.14), transparent 55%),
+      linear-gradient(140deg, #0b1220, #0f172a 45%, #0b1220);
+    color:var(--text);
+    overflow-x:hidden;
+  }
+  .hidden{ display:none !important; }
+  .row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .grow{ flex:1; min-width:240px; }
+  .muted{ color:var(--muted); }
+  .hr{ height:1px; background:rgba(226,232,240,.16); margin:14px 0; }
+  .btn{
+    border:0; outline:0; padding:11px 14px; border-radius:12px; cursor:pointer;
+    font-weight:900; letter-spacing:.2px; font-family:var(--font);
+    transition: transform .12s ease, background .12s ease, opacity .12s ease; user-select:none;
+    white-space:nowrap;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-primary{ background:var(--accent); color:#0b1220; }
+  .btn-primary:hover{ background:var(--accent2); }
+  .btn-secondary{ background:#e2e8f0; color:#0f172a; }
+  .btn-danger{ background:var(--danger); color:#fff; }
+  .btn-ghost{ background:transparent; color:var(--text); border:1px solid rgba(226,232,240,.2); }
+  .btn:disabled{ opacity:.55; cursor:not-allowed; }
+  .field{
+    width:100%; padding:12px; border-radius:12px; border:1px solid rgba(148,163,184,.45);
+    background:rgba(255,255,255,.96); color:#0f172a; font-size:14px; outline:none;
+  }
+  .field:focus{
+    border-color: rgba(234,179,8,.85);
+    box-shadow: 0 0 0 4px rgba(234,179,8,.18);
+  }
+  .label{ font-size:13px; color: rgba(226,232,240,.92); margin:0 0 6px 2px; }
+  .label-dark{ font-size:13px; color:#0f172a; margin:0 0 6px 2px; font-weight:800; }
+  textarea.field{ min-height:92px; resize:vertical; }
+  select.field{ padding:11px 10px; }
+  .hint{ font-size:12px; color:rgba(226,232,240,.75); margin-top:6px; }
+  .hint-dark{ font-size:12px; color:#475569; margin-top:6px; }
+  .status{ font-size:13px; font-weight:1000; color:#334155; }
+  .status.ok{ color:#166534; } .status.err{ color:#991b1b; } .status.warn{ color:#92400e; }
+  .panel{
+    width:min(1180px,95vw); margin:18px auto; background:rgba(255,255,255,.92);
+    border:1px solid #e2e8f0; border-radius:var(--radius); box-shadow:var(--shadow2);
+    overflow:hidden; color:var(--text2);
+  }
+  .panel-inner{ padding:18px; }
+  .topbar{
+    background:var(--nav); color:white; padding:12px 16px; display:flex; align-items:center;
+    justify-content:space-between; gap:12px; border-bottom:1px solid rgba(226,232,240,.12);
+  }
+  .topbar .title{ display:flex; align-items:center; gap:10px; font-weight:1000; }
+  .badge{
+    font-size:12px; padding:4px 10px; border-radius:999px; background: rgba(234,179,8,.18);
+    color:#fde68a; border:1px solid rgba(234,179,8,.35); font-weight:1000;
+  }
+  .nav{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .nav .navbtn{
+    background: var(--navbtn); color:white; border:1px solid rgba(226,232,240,.12);
+    padding:10px 12px; border-radius:12px; font-weight:1000; cursor:pointer;
+    transition: background .12s ease, transform .12s ease;
+  }
+  .nav .navbtn:hover{ background:var(--navhover); }
+  .nav .navbtn:active{ transform: translateY(1px); }
+  .nav .navbtn.logout{ background:var(--accent); color:#0b1220; border-color: rgba(234,179,8,.55); }
+  .nav .navbtn.logout:hover{ background:var(--accent2); }
+  .section-title{ font-size:20px; font-weight:1100; margin:0 0 12px; }
+  .sub{ margin:0 0 14px; color:#475569; font-size:13px; line-height:1.45; }
+  .card-soft{ border:1px solid #e2e8f0; border-radius:16px; padding:14px; background:#fff; }
+  table{ width:100%; border-collapse:collapse; }
+  th,td{ padding:12px 10px; border-bottom:1px solid #e2e8f0; text-align:left; font-size:14px; vertical-align:top; }
+  th{ font-size:12px; color:#475569; text-transform:uppercase; letter-spacing:.5px; }
+  tr:hover td{ background:#f8fafc; }
+  .tile-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; }
+  .tile{
+    border:1px solid #e2e8f0; border-radius:16px; padding:14px; background:#fff;
+    box-shadow:0 10px 22px rgba(15,23,42,.07); cursor:pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .tile:hover{ transform: translateY(-1px); box-shadow:0 14px 28px rgba(15,23,42,.10); }
+  .tile .t-title{ font-weight:1100; color:#0f172a; }
+  .tile .t-sub{ margin-top:6px; font-size:12px; color:#64748b; font-weight:800; }
+  .status-pill{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:6px 10px; border-radius:999px; font-size:12px; font-weight:1000;
+    border:1px solid #e2e8f0;
+  }
+  .pill-active{ background: rgba(34,197,94,.12); color:#166534; border-color: rgba(34,197,94,.25); }
+  .pill-expired{ background: rgba(148,163,184,.16); color:#475569; border-color: rgba(148,163,184,.32); }
+  .pill-present{ background: rgba(59,130,246,.12); color:#1d4ed8; border-color: rgba(59,130,246,.25); }
+  .pill-upcoming{ background: rgba(34,197,94,.12); color:#166534; border-color: rgba(34,197,94,.25); }
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center;
+    padding:20px; z-index:50;
+  }
+  .modal{ width:min(760px,96vw); background:#fff; color:#0f172a; border-radius:18px; box-shadow:var(--shadow); overflow:hidden; }
+  .modal-head{ padding:12px 14px; background:#0f172a; color:#fff; display:flex; align-items:center; justify-content:space-between; }
+  .modal-body{ padding:14px; }
+  @media (max-width: 720px){
+    .topbar{ flex-direction:column; align-items:flex-start; }
+    .nav{ justify-content:flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="title"><span>User Dashboard</span><span class="badge">USER</span></div>
+  <div class="nav">
+    <button class="navbtn" data-tab="HOME">Home</button>
+    <button class="navbtn" data-tab="PROFILE">Profile</button>
+    <button class="navbtn" data-tab="EVENTS">Upcoming Events</button>
+    <button class="navbtn" data-tab="CONTENT">Content</button>
+    <button class="navbtn" data-tab="CERTIFICATE">Certificate</button>
+    <button class="navbtn" data-tab="LIVESCORE">LiveScore</button>
+    <button class="navbtn" data-tab="RECRUITMENT">Club Recruitment</button>
+    <button class="navbtn" data-tab="CHANGE_PASS">Change Password</button>
+    <button class="navbtn logout" id="btnLogout">Logout</button>
+  </div>
+</div>
+
+<div class="panel"><div class="panel-inner">
+  <div class="page" id="tab_HOME">
+    <div class="section-title">Welcome, <span id="userName">User</span> 👋</div>
+    <div class="card-soft">
+      <div class="row">
+        <button class="btn btn-primary" id="goEvents">Upcoming Events</button>
+        <button class="btn btn-secondary" id="goContent">Content</button>
+        <button class="btn btn-secondary" id="goCert">Certificate</button>
+        <button class="btn btn-secondary" id="goLive">LiveScore</button>
+        <button class="btn btn-secondary" id="goRecruit">Club Recruitment</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page hidden" id="tab_PROFILE">
+    <div class="section-title">My Profile</div>
+    <div class="card-soft">
+      <pre id="profileText" style="margin:0;white-space:pre-wrap;font-family:var(--font);font-size:14px;line-height:1.7;">Loading...</pre>
+      <div id="clubSection" class="hidden" style="margin-top:12px;">
+        <div class="hr"></div>
+        <div style="font-weight:1100;margin-bottom:8px;">Club Details</div>
+        <div><b>Club:</b> <span id="clubName"></span></div>
+        <div><b>Role:</b> <span id="clubRole"></span></div>
+        <div><b>Joined:</b> <span id="clubDate"></span></div>
+      </div>
+      <div class="hr"></div>
+      <div class="row">
+        <button class="btn btn-secondary" id="btnRefreshProfile">Refresh</button>
+        <button class="btn btn-primary" id="btnProfileSendOtp">Send OTP to Edit</button>
+        <button class="btn btn-secondary hidden" id="btnProfileVerifyOtpOpen">Verify OTP</button>
+        <span class="status" id="profileStatus"></span>
+      </div>
+      <div class="hr"></div>
+      <div id="profileEditBox" class="hidden">
+        <div class="row">
+          <div class="grow"><div class="label-dark">Name</div><input id="peName" class="field" /></div>
+          <div class="grow"><div class="label-dark">Phone</div><input id="pePhone" class="field" /></div>
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <div class="grow"><div class="label-dark">Email</div><input id="peEmail" class="field" /></div>
+          <div class="grow"><div class="label-dark">Branch</div><input id="peBranch" class="field" /></div>
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <div class="grow"><div class="label-dark">Gender</div><select id="peGender" class="field"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+          <div class="grow"><div class="label-dark">DOB</div><input id="peDob" class="field" type="date" /></div>
+        </div>
+        <div class="row" style="margin-top:12px;"><div class="grow"><div class="label-dark">Address</div><textarea id="peAddress" class="field"></textarea></div></div>
+        <div style="margin-top:14px;"><button class="btn btn-secondary" id="btnCancelProfileEdit">Cancel</button> <button class="btn btn-primary" id="btnSaveMyProfileEdit">Save</button> <span class="status" id="profileEditStatus"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page hidden" id="tab_EVENTS">
+    <div class="section-title">Upcoming Events</div>
+    <div class="card-soft">
+      <div id="ueClubPicker"><div style="font-weight:1100;margin-bottom:10px;">Select Club</div><div id="ueClubTiles" class="tile-grid"></div></div>
+      <div id="ueEventsView" class="hidden">
+        <div class="row" style="align-items:flex-end;"><div class="grow"><div style="font-weight:1100;" id="ueSelectedClubTitle">Club: -</div></div><div><button class="btn btn-secondary" id="ueBackToClubs">Back</button></div><span class="status" id="eventsStatus"></span></div>
+        <div class="hr"></div>
+        <table id="eventsTable"><thead><tr><th>Title</th><th>Date</th><th>Status</th><th>Photo</th><th>Register</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="page hidden" id="tab_CONTENT">
+    <div class="section-title">Event Content</div>
+    <div class="card-soft">
+      <div id="ucClubPicker"><div style="font-weight:1100;margin-bottom:10px;">Select Club</div><div id="ucClubTiles" class="tile-grid"></div></div>
+      <div id="ucContentView" class="hidden">
+        <div class="row" style="align-items:flex-end;"><div class="grow"><div class="label-dark">Selected Club</div><input id="ucSelectedClub" class="field" disabled /></div><div><button class="btn btn-secondary" id="ucBackToClubs">Back</button></div></div>
+        <div class="hr"></div>
+        <div class="row" style="align-items:flex-end;"><div class="grow"><div class="label-dark">Event</div><select id="cEventTitle" class="field"></select></div><div class="grow"><div class="label-dark">Date</div><select id="cEventDate" class="field"></select></div><div><button class="btn btn-primary" id="btnLoadContent">Load</button></div><span class="status" id="contentStatus"></span></div>
+        <div id="contentDetails" class="hidden" style="margin-top:14px;">
+          <div class="card-soft" style="margin-bottom:10px;"><div style="font-weight:1100;" id="selEventName">Event Name: -</div><div class="muted" id="selEventDate">Event Date: -</div><div class="muted" id="selEventClub">Club: -</div><div class="hr"></div><button class="btn btn-secondary" id="btnOpenReport" disabled>Open Report</button></div>
+          <div class="card-soft" style="margin-bottom:10px;"><div style="font-weight:1100;margin-bottom:8px;">Videos</div><div class="row" id="videosPanel"></div></div>
+          <div class="card-soft"><div style="font-weight:1100;margin-bottom:8px;">Description</div><div id="descBox">(No description)</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page hidden" id="tab_CERTIFICATE">
+    <div class="section-title">Certificate</div>
+    <div class="card-soft">
+      <div id="ucertClubPicker"><div style="font-weight:1100;margin-bottom:10px;">Select Club</div><div id="ucertClubTiles" class="tile-grid"></div></div>
+      <div id="ucertEventPicker" class="hidden">
+        <div class="row" style="align-items:flex-end;"><div class="grow"><div class="label-dark">Selected Club</div><input id="ucertSelectedClub" class="field" disabled /></div><div><button class="btn btn-secondary" id="ucertBackToClubs">Back</button></div><span class="status" id="ucertStatus"></span></div>
+        <div class="hr"></div>
+        <div id="ucertEvents" class="tile-grid"></div>
+        <div id="ucertRegBox" class="hidden" style="margin-top:14px;">
+          <div class="label-dark">Reg No</div><input id="ucertRegNo" class="field" />
+          <div style="margin-top:12px;"><button class="btn btn-primary" id="btnUcertFetch">OK</button> <span class="status" id="ucertFetchStatus"></span></div>
+          <div class="hr"></div>
+          <table id="ucertResultTable"><thead><tr><th>RegNo</th><th>Action</th></tr></thead><tbody><tr><td colspan="2" class="muted">Select a past event → enter RegNo → OK</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page hidden" id="tab_LIVESCORE">
+    <div class="section-title">LiveScore</div>
+    <div class="card-soft">
+      <div id="ulsClubPicker"><div style="font-weight:1100;margin-bottom:10px;">Select Club</div><div id="ulsClubTiles" class="tile-grid"></div></div>
+      <div id="ulsEventPicker" class="hidden">
+        <div class="row" style="align-items:flex-end;"><div class="grow"><div class="label-dark">Selected Club</div><input id="ulsSelectedClub" class="field" disabled /></div><div><button class="btn btn-secondary" id="ulsBackToClubs">Back</button></div><span class="status" id="ulsStatus"></span></div>
+        <div class="hr"></div>
+        <div id="ulsPresentEvents" class="tile-grid"></div>
+        <div class="hr"></div>
+        <div id="ulsScoreView" class="hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page hidden" id="tab_RECRUITMENT">
+    <div class="section-title">Club Recruitment</div>
+    <p class="sub">Club name + Register button only. Clicking Register opens the form you planned.</p>
+    <div class="card-soft"><div id="recUserBox"><div class="muted">Loading clubs…</div></div></div>
+  </div>
+
+  <div class="page hidden" id="tab_CHANGE_PASS">
+    <div class="section-title">Change Password</div>
+    <div class="card-soft">
+      <div class="row"><div class="grow"><div class="label-dark">Old Password</div><input id="cpOld" class="field" type="password" /></div><div class="grow"><div class="label-dark">New Password</div><input id="cpNew" class="field" type="password" /></div><div class="grow"><div class="label-dark">Confirm Password</div><input id="cpCon" class="field" type="password" /></div></div>
+      <div style="margin-top:12px;"><button class="btn btn-primary" id="btnChangePass">Change</button> <span class="status" id="cpStatus"></span></div>
+    </div>
+  </div>
+</div></div>
+
+<div id="profileOtpModal" class="modal-backdrop hidden">
+  <div class="modal" style="width:min(640px,96vw);">
+    <div class="modal-head"><div style="font-weight:1100;">Verify OTP (Edit Profile)</div><button class="btn btn-ghost" id="btnProfileOtpClose">Close</button></div>
+    <div class="modal-body">
+      <div class="label-dark">OTP</div><input id="profileOtpInput" class="field" />
+      <div style="margin-top:12px;"><button class="btn btn-primary" id="btnProfileVerifyOtp">Verify</button> <button class="btn btn-secondary" id="btnProfileResendOtp">Resend OTP</button> <span class="status" id="profileOtpStatus"></span></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="firstLoginModal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="modal-head">
+      <div style="font-weight:1100;">Complete Profile</div>
+      <div style="font-size:12px;opacity:.9;">First login details are required</div>
+    </div>
+    <div class="modal-body">
+      <div class="card-soft" style="background:#fff8db;border-color:#fde68a;margin-bottom:12px;">
+        Please fill all details before using the dashboard.
+      </div>
+      <div class="row">
+        <div class="grow"><div class="label-dark">Name</div><input id="flName" class="field" /></div>
+        <div class="grow"><div class="label-dark">Phone</div><input id="flPhone" class="field" /></div>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <div class="grow"><div class="label-dark">Email</div><input id="flEmail" class="field" type="email" /></div>
+        <div class="grow"><div class="label-dark">Branch</div><input id="flBranch" class="field" /></div>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <div class="grow"><div class="label-dark">Gender</div><select id="flGender" class="field"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="grow"><div class="label-dark">DOB</div><input id="flDob" class="field" type="date" /></div>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <div class="grow"><div class="label-dark">Address</div><textarea id="flAddress" class="field"></textarea></div>
+      </div>
+      <div style="margin-top:14px;">
+        <button class="btn btn-primary" id="btnFirstLoginSave">Save Details</button>
+        <span class="status" id="firstLoginStatus"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="applyModal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="modal-head"><div style="font-weight:1100;">Club Recruitment Application</div><button class="btn btn-ghost" id="btnApplyClose">Close</button></div>
+    <div class="modal-body">
+      <div class="row"><div class="grow"><div class="label-dark">Club</div><input id="appClub" class="field" disabled /></div><div class="grow"><div class="label-dark">Role in Club</div><input id="appRole" class="field" placeholder="Design Team / Technical Team" /></div></div>
+      <div class="row" style="margin-top:12px;"><div class="grow"><div class="label-dark">Name</div><input id="appName" class="field" /></div><div class="grow"><div class="label-dark">Register Number</div><input id="appRegNo" class="field" /></div></div>
+      <div class="row" style="margin-top:12px;"><div class="grow"><div class="label-dark">Email</div><input id="appEmail" class="field" /></div><div class="grow"><div class="label-dark">Phone</div><input id="appPhone" class="field" /></div></div>
+      <div class="row" style="margin-top:12px;"><div class="grow"><div class="label-dark">Branch</div><input id="appBranch" class="field" /></div><div class="grow"><div class="label-dark">Year</div><input id="appYear" class="field" /></div></div>
+      <div class="row" style="margin-top:12px;"><div class="grow"><div class="label-dark">Skills</div><textarea id="appSkills" class="field"></textarea></div></div>
+      <div class="row" style="margin-top:12px;"><div class="grow"><div class="label-dark">Why do you want to join?</div><textarea id="appWhy" class="field"></textarea></div></div>
+      <div style="margin-top:14px;"><button class="btn btn-primary" id="btnSubmitApplication">Submit</button> <span class="status" id="appStatus"></span></div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const API_BASE = window.CMS_API_BASE || (location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+  ? 'http://localhost:8080/api'
+  : `${location.origin}/api`);
+
+const KEY_SESSION = 'cms_session_backend';
+function saveSession(s){ localStorage.setItem(KEY_SESSION, JSON.stringify(s)); }
+function loadSession(){ try{ return JSON.parse(localStorage.getItem(KEY_SESSION) || 'null'); }catch{ return null; } }
+function clearSession(){ localStorage.removeItem(KEY_SESSION); }
+
+function setStatus(el, msg, type=''){
+  if(!el) return;
+  el.textContent = msg || '';
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+function esc(s){ return String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
+function dateOnly(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
+function classifyEventDate(v){
+  try{
+    const d = dateOnly(new Date(v + 'T00:00:00'));
+    const t = dateOnly(new Date());
+    if(d.getTime() > t.getTime()) return 'UPCOMING';
+    if(d.getTime() === t.getTime()) return 'PRESENT';
+    return 'PAST';
+  }catch{ return 'PAST'; }
+}
+async function apiFetch(path, { method='GET', token=null, headers={}, body=null } = {}){
+  const h = { ...headers };
+  if(token) h['X-Auth-Token'] = token;
+  const res = await fetch(`${API_BASE}${path}`, { method, headers:h, body });
+  const data = await res.json().catch(()=>({}));
+  if(res.status === 401){
+    clearSession();
+    location.href = 'login.html';
+    throw new Error('Session expired');
+  }
+  if(!res.ok) throw new Error(data.message || data.error || `HTTP ${res.status}`);
+  if(data && data.ok === false) throw new Error(data.message || data.error || 'Request failed');
+  return data;
+}
+function safeArray(res){
+  if(Array.isArray(res)) return res;
+  if(Array.isArray(res.items)) return res.items;
+  if(Array.isArray(res.data)) return res.data;
+  if(Array.isArray(res.clubs)) return res.clubs;
+  return [];
+}
+const api = {
+  myProfile: (token) => apiFetch('/me/profile', { token }),
+  saveMyProfile: (token, profile) => apiFetch('/me/profile', {
+    method:'POST', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify(profile)
+  }),
+  changePassword: (token, oldPassword, newPassword) => apiFetch('/me/change-password', {
+    method:'POST', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify({ oldPassword, newPassword })
+  }),
+  clubs: () => apiFetch('/clubs'),
+  listEvents: (club=null) => apiFetch(`/events${club ? `?club=${encodeURIComponent(club)}` : ''}`),
+  listContents: (club=null) => apiFetch(`/contents${club ? `?club=${encodeURIComponent(club)}` : ''}`),
+  contentDetails: (club, title, date) => apiFetch(`/content/details?club=${encodeURIComponent(club)}&title=${encodeURIComponent(title)}&date=${encodeURIComponent(date)}`),
+  getCertificate: (club, eventId, regNo) => apiFetch(`/certificates/get?club=${encodeURIComponent(club)}&eventId=${encodeURIComponent(eventId)}&regNo=${encodeURIComponent(regNo)}`),
+  getLiveScore: (club, eventId) => apiFetch(`/livescore/get?club=${encodeURIComponent(club)}&eventId=${encodeURIComponent(eventId)}`),
+  openRecruitmentsPublic: () => apiFetch('/recruitments/open'),
+  applyRecruitment: (token, payload) => apiFetch('/recruitments/apply', {
+    method:'POST', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+  }),
+  profileSendOtp: (token) => apiFetch('/me/profile/send-otp', { method:'POST', token }),
+  profileVerifyOtp: (token, otp) => apiFetch('/me/profile/verify-otp', {
+    method:'POST', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify({ otp })
+  })
+};
+async function getClubs(){ return safeArray(await api.clubs()); }
+async function renderClubTiles(container, onClick, onlyClub=null){
+  const clubs = await getClubs();
+  container.innerHTML = '';
+  const filtered = onlyClub ? clubs.filter(c => c === onlyClub) : clubs;
+  if(!filtered.length){ container.innerHTML = '<div class="muted">No clubs available.</div>'; return; }
+  filtered.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'tile';
+    div.innerHTML = `<div class="t-title">${esc(c)}</div><div class="t-sub">Click to open</div>`;
+    div.onclick = () => onClick(c);
+    container.appendChild(div);
+  });
+}
+function ensureRole(allowed){
+  const s = loadSession();
+  if(!s?.token || !allowed.includes((s.role || '').toLowerCase())){
+    location.href = 'login.html';
+    return null;
+  }
+  return s;
+}
+function logout(){ clearSession(); location.href = 'login.html'; }
+async function downloadFile(url, filename){
+  try{
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename || 'certificate';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+  }catch(e){
+    window.open(url, '_blank', 'noopener');
+  }
+}
+</script>
+
+<script>
+const s = ensureRole(['user']);
+if(!s) throw new Error('Unauthorized');
+let firstLoginLocked = false;
+$('userName').textContent = s.username || 'User';
+$('btnLogout').onclick = logout;
+document.querySelectorAll('[data-tab]').forEach(btn => btn.onclick = ()=> openTab(btn.dataset.tab));
+function openTab(name){
+  if(firstLoginLocked && name !== 'PROFILE') name = 'PROFILE';
+  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+  $('tab_' + name).classList.remove('hidden');
+  if(name === 'PROFILE') refreshProfile();
+  if(name === 'EVENTS') initEvents();
+  if(name === 'CONTENT') initContent();
+  if(name === 'CERTIFICATE') initCertificate();
+  if(name === 'LIVESCORE') initLiveScore();
+  if(name === 'RECRUITMENT') loadRecruitmentCards();
+}
+$('goEvents').onclick = ()=> openTab('EVENTS');
+$('goContent').onclick = ()=> openTab('CONTENT');
+$('goCert').onclick = ()=> openTab('CERTIFICATE');
+$('goLive').onclick = ()=> openTab('LIVESCORE');
+$('goRecruit').onclick = ()=> openTab('RECRUITMENT');
+
+function isProfileIncomplete(p={}){
+  const required = ['name','phone','email','branch','gender','dob','address'];
+  return required.some(k => !String(p[k] ?? '').trim());
+}
+function fillFirstLoginForm(p={}){
+  $('flName').value = p.name || '';
+  $('flPhone').value = p.phone || '';
+  $('flEmail').value = p.email || '';
+  $('flBranch').value = p.branch || '';
+  $('flGender').value = p.gender || '';
+  $('flDob').value = p.dob || '';
+  $('flAddress').value = p.address || '';
+}
+function lockFirstLoginUI(){
+  firstLoginLocked = true;
+  document.querySelectorAll('[data-tab], #goEvents, #goContent, #goCert, #goLive, #goRecruit, #btnLogout').forEach(el => {
+    if(el) el.disabled = true;
+  });
+}
+function unlockFirstLoginUI(){
+  firstLoginLocked = false;
+  document.querySelectorAll('[data-tab], #goEvents, #goContent, #goCert, #goLive, #goRecruit, #btnLogout').forEach(el => {
+    if(el) el.disabled = false;
+  });
+}
+async function checkFirstLoginAndForceProfile(){
+  try{
+    const res = await api.myProfile(s.token);
+    const p = res.profile || {};
+    const needsProfile = (s.profileComplete === false) || isProfileIncomplete(p);
+    if(needsProfile){
+      lockFirstLoginUI();
+      fillFirstLoginForm(p);
+      openTab('PROFILE');
+      $('profileEditBox').classList.add('hidden');
+      $('firstLoginModal').classList.remove('hidden');
+      setStatus($('profileStatus'), '⚠️ First login: complete your profile.', 'warn');
+    }else{
+      unlockFirstLoginUI();
+      $('firstLoginModal').classList.add('hidden');
+    }
+  }catch(e){
+    lockFirstLoginUI();
+    $('firstLoginModal').classList.remove('hidden');
+    setStatus($('firstLoginStatus'), '❌ Failed to load profile. ' + e.message, 'err');
+  }
+}
+$('btnFirstLoginSave').onclick = async ()=>{
+  const payload = {
+    name: $('flName').value.trim(),
+    phone: $('flPhone').value.trim(),
+    email: $('flEmail').value.trim(),
+    branch: $('flBranch').value.trim(),
+    gender: $('flGender').value,
+    dob: $('flDob').value,
+    address: $('flAddress').value.trim()
+  };
+  if(isProfileIncomplete(payload)){
+    setStatus($('firstLoginStatus'), '❌ Fill all fields.', 'err');
+    return;
+  }
+  try{
+    await api.saveMyProfile(s.token, payload);
+    s.profileComplete = true;
+    saveSession(s);
+    $('firstLoginModal').classList.add('hidden');
+    unlockFirstLoginUI();
+    setStatus($('firstLoginStatus'), '✅ Profile saved.', 'ok');
+    setStatus($('profileStatus'), '✅ Profile saved successfully.', 'ok');
+    await refreshProfile();
+    openTab('HOME');
+  }catch(e){
+    setStatus($('firstLoginStatus'), '❌ ' + e.message, 'err');
+  }
+};
+
+async function refreshProfile(){
+  try{
+    const res = await api.myProfile(s.token);
+    const p = res.profile || {};
+    $('profileText').textContent =
+      'Name: ' + (p.name||'') + '\n' +
+      'Address: ' + (p.address||'') + '\n' +
+      'Phone: ' + (p.phone||'') + '\n' +
+      'Email: ' + (p.email||'') + '\n' +
+      'Branch: ' + (p.branch||'') + '\n' +
+      'Gender: ' + (p.gender||'') + '\n' +
+      'DOB: ' + (p.dob||'');
+
+    const clubName = p.clubName || p.club_name || '';
+    const clubRole = p.clubRole || p.club_role || '';
+    const clubDate = p.clubJoinedAt || p.club_joined_at || '';
+
+    if(clubName){
+      $('clubSection').classList.remove('hidden');
+      $('clubName').textContent = clubName;
+      $('clubRole').textContent = clubRole || '-';
+      $('clubDate').textContent = clubDate || '-';
+    }else{
+      $('clubSection').classList.add('hidden');
+    }
+
+    $('peName').value = p.name || '';
+    $('pePhone').value = p.phone || '';
+    $('peEmail').value = p.email || '';
+    $('peBranch').value = p.branch || '';
+    $('peGender').value = p.gender || '';
+    $('peDob').value = p.dob || '';
+    $('peAddress').value = p.address || '';
+    setStatus($('profileStatus'), '✅ Loaded.', 'ok');
+  }catch(e){
+    $('profileText').textContent = 'Failed to load profile.';
+    setStatus($('profileStatus'), '❌ ' + e.message, 'err');
+  }
+}
+$('btnRefreshProfile').onclick = refreshProfile;
+
+$('btnProfileSendOtp').onclick = async ()=>{
+  try{
+    await api.profileSendOtp(s.token);
+    setStatus($('profileStatus'), '✅ OTP sent.', 'ok');
+    $('btnProfileVerifyOtpOpen').classList.remove('hidden');
+    $('profileOtpModal').classList.remove('hidden');
+  }catch(e){ setStatus($('profileStatus'), '❌ ' + e.message, 'err'); }
+};
+$('btnProfileVerifyOtpOpen').onclick = ()=> $('profileOtpModal').classList.remove('hidden');
+$('btnProfileOtpClose').onclick = ()=> $('profileOtpModal').classList.add('hidden');
+$('btnProfileResendOtp').onclick = async ()=>{
+  try{ await api.profileSendOtp(s.token); setStatus($('profileOtpStatus'), '✅ OTP resent.', 'ok'); }
+  catch(e){ setStatus($('profileOtpStatus'), '❌ ' + e.message, 'err'); }
+};
+$('btnProfileVerifyOtp').onclick = async ()=>{
+  try{
+    await api.profileVerifyOtp(s.token, $('profileOtpInput').value.trim());
+    setStatus($('profileOtpStatus'), '✅ Verified.', 'ok');
+    $('profileOtpModal').classList.add('hidden');
+    $('profileEditBox').classList.remove('hidden');
+  }catch(e){ setStatus($('profileOtpStatus'), '❌ ' + e.message, 'err'); }
+};
+$('btnCancelProfileEdit').onclick = ()=> $('profileEditBox').classList.add('hidden');
+$('btnSaveMyProfileEdit').onclick = async ()=>{
+  try{
+    await api.saveMyProfile(s.token, {
+      name: $('peName').value.trim(),
+      phone: $('pePhone').value.trim(),
+      email: $('peEmail').value.trim(),
+      branch: $('peBranch').value.trim(),
+      gender: $('peGender').value,
+      dob: $('peDob').value,
+      address: $('peAddress').value.trim()
+    });
+    setStatus($('profileEditStatus'), '✅ Saved.', 'ok');
+    $('profileEditBox').classList.add('hidden');
+    refreshProfile();
+  }catch(e){ setStatus($('profileEditStatus'), '❌ ' + e.message, 'err'); }
+};
+
+$('btnChangePass').onclick = async ()=>{
+  try{
+    const oldPassword = $('cpOld').value;
+    const newPassword = $('cpNew').value;
+    const confirmPassword = $('cpCon').value;
+    if(newPassword !== confirmPassword){ setStatus($('cpStatus'), 'Passwords do not match.', 'warn'); return; }
+    await api.changePassword(s.token, oldPassword, newPassword);
+    setStatus($('cpStatus'), '✅ Password changed.', 'ok');
+    $('cpOld').value = ''; $('cpNew').value = ''; $('cpCon').value = '';
+  }catch(e){ setStatus($('cpStatus'), '❌ ' + e.message, 'err'); }
+};
+
+let selectedEventsClub = '';
+function initEvents(){ renderClubTiles($('ueClubTiles'), selectEventsClub); }
+function selectEventsClub(club){
+  selectedEventsClub = club;
+  $('ueSelectedClubTitle').textContent = 'Club: ' + club;
+  $('ueClubPicker').classList.add('hidden');
+  $('ueEventsView').classList.remove('hidden');
+  refreshEventsForSelectedClub();
+}
+$('ueBackToClubs').onclick = ()=>{
+  selectedEventsClub = '';
+  $('ueEventsView').classList.add('hidden');
+  $('ueClubPicker').classList.remove('hidden');
+  initEvents();
+};
+async function refreshEventsForSelectedClub(){
+  const tbody = $('eventsTable').querySelector('tbody');
+  tbody.innerHTML = '';
+  try{
+    const items = safeArray(await api.listEvents(selectedEventsClub));
+    const upcoming = items.filter(r => (r.date ? classifyEventDate(r.date) : 'PAST') === 'UPCOMING');
+    if(!upcoming.length){ tbody.innerHTML = `<tr><td colspan="5" class="muted">No upcoming events.</td></tr>`; return; }
+    upcoming.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${esc(r.title||'')}</td>
+        <td>${esc(r.date||'')}</td>
+        <td><span class="status-pill pill-upcoming">● Upcoming</span></td>
+        <td>${r.photoUrl ? `<a href="${r.photoUrl}" target="_blank">Open</a>` : '<span class="muted">-</span>'}</td>
+        <td>${r.regLink ? `<a href="${r.regLink}" target="_blank">Register</a>` : '<span class="muted">-</span>'}</td>`;
+      tbody.appendChild(tr);
+    });
+    setStatus($('eventsStatus'), '✅ Loaded.', 'ok');
+  }catch(e){
+    tbody.innerHTML = `<tr><td colspan="5" class="muted">Failed to load events.</td></tr>`;
+    setStatus($('eventsStatus'), '❌ ' + e.message, 'err');
+  }
+}
+
+let selectedContentClub = '';
+let currentReportUrl = '';
+let currentVideos = [];
+function initContent(){ renderClubTiles($('ucClubTiles'), selectContentClub); }
+function selectContentClub(club){
+  selectedContentClub = club;
+  $('ucSelectedClub').value = club;
+  $('ucClubPicker').classList.add('hidden');
+  $('ucContentView').classList.remove('hidden');
+  buildContentDropdownsForClub();
+}
+$('ucBackToClubs').onclick = ()=>{
+  selectedContentClub = '';
+  $('ucContentView').classList.add('hidden');
+  $('ucClubPicker').classList.remove('hidden');
+  $('contentDetails').classList.add('hidden');
+  initContent();
+};
+$('cEventTitle').addEventListener('change', refreshDatesForSelectedTitle);
+async function buildContentDropdownsForClub(){
+  $('cEventTitle').innerHTML = '';
+  $('cEventDate').innerHTML = '';
+  $('contentDetails').classList.add('hidden');
+  try{
+    const items = safeArray(await api.listContents(selectedContentClub));
+    const titles = [...new Set(items.map(x => x.title).filter(Boolean))];
+    if(!titles.length){ $('cEventTitle').innerHTML = `<option value="">(no content)</option>`; return; }
+    titles.forEach(t => {
+      const o = document.createElement('option');
+      o.value = t; o.textContent = t; $('cEventTitle').appendChild(o);
+    });
+    await refreshDatesForSelectedTitle();
+  }catch(e){ $('cEventTitle').innerHTML = `<option value="">(failed)</option>`; }
+}
+async function refreshDatesForSelectedTitle(){
+  $('cEventDate').innerHTML = '';
+  const title = $('cEventTitle').value;
+  if(!title) return;
+  try{
+    const items = safeArray(await api.listContents(selectedContentClub));
+    const dates = items.filter(x => x.title === title).map(x => x.date).filter(Boolean);
+    dates.forEach(d => {
+      const o = document.createElement('option');
+      o.value = d; o.textContent = d; $('cEventDate').appendChild(o);
+    });
+  }catch(e){ $('cEventDate').innerHTML = `<option value="">(failed)</option>`; }
+}
+$('btnLoadContent').onclick = async ()=>{
+  const title = $('cEventTitle').value;
+  const date = $('cEventDate').value;
+  if(!title || !date) return;
+  try{
+    const res = await api.contentDetails(selectedContentClub, title, date);
+    const item = res.item || {};
+    $('contentDetails').classList.remove('hidden');
+    $('selEventName').textContent = 'Event Name: ' + title;
+    $('selEventDate').textContent = 'Event Date: ' + date;
+    $('selEventClub').textContent = 'Club: ' + selectedContentClub;
+    $('descBox').textContent = item.desc || '(No description)';
+    currentReportUrl = item.reportUrl || '';
+    currentVideos = Array.isArray(item.youtubeLinks) ? item.youtubeLinks : [];
+    $('btnOpenReport').disabled = !currentReportUrl;
+    const panel = $('videosPanel');
+    panel.innerHTML = '';
+    if(!currentVideos.length){ panel.innerHTML = '<div class="muted">(no videos)</div>'; }
+    currentVideos.forEach((link, idx) => {
+      const b = document.createElement('button');
+      b.className = 'btn btn-secondary';
+      b.textContent = 'Video ' + (idx+1);
+      b.onclick = ()=> window.open(link, '_blank', 'noopener');
+      panel.appendChild(b);
+    });
+    setStatus($('contentStatus'), '✅ Loaded.', 'ok');
+  }catch(e){ setStatus($('contentStatus'), '❌ ' + e.message, 'err'); }
+};
+$('btnOpenReport').onclick = ()=>{ if(currentReportUrl) window.open(currentReportUrl, '_blank', 'noopener'); };
+
+let ucertClub = '';
+let ucertSelectedEvent = null;
+function initCertificate(){ renderClubTiles($('ucertClubTiles'), selectUserCertClub); }
+function selectUserCertClub(club){
+  ucertClub = club;
+  ucertSelectedEvent = null;
+  $('ucertSelectedClub').value = club;
+  $('ucertClubPicker').classList.add('hidden');
+  $('ucertEventPicker').classList.remove('hidden');
+  loadUserCertEvents();
+}
+$('ucertBackToClubs').onclick = ()=>{
+  ucertClub = '';
+  ucertSelectedEvent = null;
+  $('ucertEventPicker').classList.add('hidden');
+  $('ucertClubPicker').classList.remove('hidden');
+  $('ucertRegBox').classList.add('hidden');
+  initCertificate();
+};
+async function loadUserCertEvents(){
+  try{
+    const items = safeArray(await api.listEvents(ucertClub));
+    const past = items.filter(e => classifyEventDate(e.date) === 'PAST');
+    $('ucertEvents').innerHTML = '';
+    if(!past.length){ $('ucertEvents').innerHTML = '<div class="muted">No past events.</div>'; return; }
+    past.forEach(e => {
+      const div = document.createElement('div');
+      div.className = 'tile';
+      div.innerHTML = `<div class="t-title">${esc(e.title||'')}</div><div class="t-sub">${esc(e.date||'')}</div>`;
+      div.onclick = ()=>{
+        ucertSelectedEvent = e;
+        $('ucertRegBox').classList.remove('hidden');
+      };
+      $('ucertEvents').appendChild(div);
+    });
+  }catch(e){ $('ucertEvents').innerHTML = '<div class="muted">Failed to load.</div>'; }
+}
+$('btnUcertFetch').onclick = async ()=>{
+  const regNo = $('ucertRegNo').value.trim();
+  if(!ucertSelectedEvent || !regNo) return;
+  const tbody = $('ucertResultTable').querySelector('tbody');
+  tbody.innerHTML = '<tr><td colspan="2" class="muted">Searching...</td></tr>';
+  try{
+    const out = await api.getCertificate(ucertClub, ucertSelectedEvent.id, regNo);
+    const url = out.fileUrl || out.url || '';
+    const safeName = `${ucertClub}_${ucertSelectedEvent.title}_${regNo}`.replaceAll(' ','_');
+    tbody.innerHTML = `
+      <tr>
+        <td>${esc(regNo)}</td>
+        <td><button class="btn btn-secondary" id="btnCertView">View</button> <button class="btn btn-primary" id="btnCertDownload">Download</button></td>
+      </tr>`;
+    $('btnCertView').onclick = ()=> window.open(url, '_blank', 'noopener');
+    $('btnCertDownload').onclick = ()=> downloadFile(url, safeName);
+    setStatus($('ucertFetchStatus'), '✅ Found.', 'ok');
+  }catch(e){
+    tbody.innerHTML = `<tr><td colspan="2" class="muted">No certificate found.</td></tr>`;
+    setStatus($('ucertFetchStatus'), 'Not found.', 'warn');
+  }
+};
+
+let ulsClub = '';
+function initLiveScore(){ renderClubTiles($('ulsClubTiles'), selectUserLiveScoreClub); }
+function selectUserLiveScoreClub(club){
+  ulsClub = club;
+  $('ulsSelectedClub').value = club;
+  $('ulsClubPicker').classList.add('hidden');
+  $('ulsEventPicker').classList.remove('hidden');
+  loadUserPresentEvents();
+}
+$('ulsBackToClubs').onclick = ()=>{
+  ulsClub = '';
+  $('ulsEventPicker').classList.add('hidden');
+  $('ulsClubPicker').classList.remove('hidden');
+  initLiveScore();
+};
+async function loadUserPresentEvents(){
+  try{
+    const items = safeArray(await api.listEvents(ulsClub));
+    const present = items.filter(e => classifyEventDate(e.date) === 'PRESENT');
+    $('ulsPresentEvents').innerHTML = '';
+    if(!present.length){ $('ulsPresentEvents').innerHTML = '<div class="muted">No live events today.</div>'; return; }
+    present.forEach(e=>{
+      const div = document.createElement('div');
+      div.className = 'tile';
+      div.innerHTML = `<div class="t-title">${esc(e.title||'')}</div><div class="t-sub">${esc(e.date||'')}</div>`;
+      div.onclick = async ()=>{
+        $('ulsScoreView').classList.remove('hidden');
+        $('ulsScoreView').innerHTML = 'Loading...';
+        try{
+          const out = await api.getLiveScore(ulsClub, e.id);
+          const scores = Array.isArray(out.items) ? out.items : (out.teamScores || []);
+          if(!scores.length){ $('ulsScoreView').innerHTML = '<div class="muted">No scores published yet.</div>'; return; }
+          $('ulsScoreView').innerHTML = `
+            <div class="card-soft" style="background:#fff;">
+              <div style="font-weight:1100;margin-bottom:10px;">${esc(e.title)} — Live Scores</div>
+              <table><thead><tr><th>Team</th><th>Score</th></tr></thead><tbody>
+                ${scores.map(s=>`<tr><td>Team ${esc(String(s.teamNo ?? ''))}</td><td>${esc(String(s.score ?? ''))}</td></tr>`).join('')}
+              </tbody></table>
+            </div>`;
+          setStatus($('ulsStatus'), '✅ Loaded.', 'ok');
+        }catch(err){
+          $('ulsScoreView').innerHTML = '<div class="muted">Failed to load scores.</div>';
+          setStatus($('ulsStatus'), '❌ ' + (err?.message || 'Error'), 'err');
+        }
+      };
+      $('ulsPresentEvents').appendChild(div);
+    });
+    setStatus($('ulsStatus'), '✅ Select an event.', 'ok');
+  }catch(e){
+    $('ulsPresentEvents').innerHTML = '<div class="muted">Failed to load.</div>';
+    setStatus($('ulsStatus'), '❌ ' + e.message, 'err');
+  }
+}
+
+async function loadRecruitmentCards(){
+  try{
+    const items = safeArray(await api.openRecruitmentsPublic());
+    if(!items.length){ $('recUserBox').innerHTML = '<div class="muted">No recruitments now.</div>'; return; }
+    $('recUserBox').innerHTML = `
+      <table>
+        <thead><tr><th>Club</th><th>Action</th></tr></thead>
+        <tbody>
+          ${items.map(r=>`
+            <tr>
+              <td>${esc(r.club||'')}</td>
+              <td><button class="btn btn-primary" data-apply="${esc(r.club||'')}">Register</button></td>
+            </tr>`).join('')}
+        </tbody>
+      </table>`;
+    document.querySelectorAll('[data-apply]').forEach(btn=>{
+      btn.onclick = async ()=>{
+        const club = btn.getAttribute('data-apply');
+        $('applyModal').classList.remove('hidden');
+        $('appClub').value = club;
+        try{
+          const res = await api.myProfile(s.token);
+          const p = res.profile || {};
+          $('appName').value = p.name || '';
+          $('appRegNo').value = s.username || '';
+          $('appEmail').value = p.email || '';
+          $('appPhone').value = p.phone || '';
+          $('appBranch').value = p.branch || '';
+        }catch{}
+      };
+    });
+  }catch(e){ $('recUserBox').innerHTML = '<div class="muted">Failed to load recruitments.</div>'; }
+}
+$('btnApplyClose').onclick = ()=> $('applyModal').classList.add('hidden');
+$('btnSubmitApplication').onclick = async ()=>{
+  try{
+    setStatus($('appStatus'), 'Submitting...', 'warn');
+
+    const payload = {
+      club: $('appClub').value.trim(),
+      name: $('appName').value.trim(),
+      regNo: $('appRegNo').value.trim(),
+      email: $('appEmail').value.trim(),
+      phone: $('appPhone').value.trim(),
+      branch: $('appBranch').value.trim(),
+      year: $('appYear').value.trim(),
+      skills: $('appSkills').value.trim(),
+      whyJoin: $('appWhy').value.trim(),
+      roleInterested: $('appRole').value.trim()
+    };
+
+    if(!payload.club){
+      setStatus($('appStatus'), 'Club is required.', 'warn');
+      return;
+    }
+    if(!payload.regNo){
+      setStatus($('appStatus'), 'Register Number is required.', 'warn');
+      return;
+    }
+
+    const out = await api.applyRecruitment(s.token, payload);
+    setStatus($('appStatus'), out.message || '✅ Application submitted.', 'ok');
+
+    $('appRole').value = '';
+    $('appYear').value = '';
+    $('appSkills').value = '';
+    $('appWhy').value = '';
+
+    setTimeout(()=>{
+      $('applyModal').classList.add('hidden');
+      setStatus($('appStatus'), '');
+    }, 900);
+  }catch(e){
+    setStatus($('appStatus'), '❌ ' + e.message, 'err');
+  }
+};
+
+openTab('HOME');
+checkFirstLoginAndForceProfile();
+</script>
+</body>
+</html>

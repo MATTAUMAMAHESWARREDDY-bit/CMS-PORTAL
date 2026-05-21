@@ -1,0 +1,1887 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kalasalingam University - Coordinator Dashboard</title>
+
+  <style>
+    :root{
+      --muted:#94a3b8; --text:#e2e8f0; --text2:#0f172a;
+      --accent:#eab308; --accent2:#facc15; --danger:#ef4444;
+      --nav:#0f172a; --navbtn:#1e293b; --navhover:#334155;
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+      --shadow2: 0 16px 30px rgba(15,23,42,.16);
+      --radius: 18px; --font:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      --ok:#16a34a; --warn:#d97706; --info:#2563eb;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; margin:0; font-family:var(--font); }
+
+    body{
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(56,189,248,.16), transparent 55%),
+        radial-gradient(900px 600px at 80% 30%, rgba(234,179,8,.14), transparent 55%),
+        linear-gradient(140deg, #0b1220, #0f172a 45%, #0b1220);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    .hidden{ display:none !important; }
+    .row{ display:flex; gap:14px; flex-wrap:wrap; }
+    .grow{ flex:1; min-width:240px; }
+    .muted{ color:var(--muted); }
+    .hr{ height:1px; background:rgba(226,232,240,.16); margin:14px 0; }
+
+    .btn{
+      border:0; outline:0;
+      padding:11px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:900;
+      letter-spacing:.2px;
+      font-family:var(--font);
+      transition: transform .12s ease, background .12s ease, opacity .12s ease;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:active{ transform:translateY(1px); }
+    .btn-primary{ background:var(--accent); color:#0b1220; }
+    .btn-primary:hover{ background:var(--accent2); }
+    .btn-secondary{ background:#e2e8f0; color:#0f172a; }
+    .btn-ghost{ background:transparent; color:var(--text); border:1px solid rgba(226,232,240,.2); }
+    .btn-danger{ background:var(--danger); color:white; }
+    .btn-danger:hover{ opacity:.92; }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; }
+
+    .field{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.45);
+      background: rgba(255,255,255,.96);
+      color:#0f172a;
+      font-size:14px;
+      outline:none;
+    }
+    .field:focus{
+      border-color: rgba(234,179,8,.85);
+      box-shadow: 0 0 0 4px rgba(234,179,8,.18);
+    }
+
+    .label-dark{ font-size:13px; color:#0f172a; margin:0 0 6px 2px; font-weight:800; }
+    textarea.field{ min-height:92px; resize:vertical; }
+    select.field{ padding:11px 10px; }
+    .hint-dark{ font-size:12px; color:#475569; margin-top:6px; }
+
+    .panel{
+      width: min(1160px, 95vw);
+      margin: 18px auto;
+      background: rgba(255,255,255,.92);
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      color:var(--text2);
+    }
+    .panel-inner{ padding:18px; }
+
+    .topbar{
+      background: var(--nav);
+      color:white;
+      padding: 12px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid rgba(226,232,240,.12);
+    }
+
+    .topbar .title{
+      display:flex; align-items:center; gap:10px;
+      font-weight:1000;
+      letter-spacing:.2px;
+    }
+
+    .badge{
+      font-size:12px;
+      padding:4px 10px;
+      border-radius:999px;
+      background: rgba(234,179,8,.18);
+      color: #fde68a;
+      border: 1px solid rgba(234,179,8,.35);
+      font-weight:1000;
+    }
+
+    .nav{
+      display:flex; flex-wrap:wrap;
+      gap:10px;
+      justify-content:flex-end;
+      align-items:center;
+    }
+
+    .nav .navbtn{
+      background: var(--navbtn);
+      color:white;
+      border:1px solid rgba(226,232,240,.12);
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:1000;
+      cursor:pointer;
+      transition: background .12s ease, transform .12s ease;
+      user-select:none;
+    }
+    .nav .navbtn:hover{ background: var(--navhover); }
+    .nav .navbtn:active{ transform: translateY(1px); }
+    .nav .navbtn.logout{
+      background: var(--accent);
+      color:#0b1220;
+      border-color: rgba(234,179,8,.55);
+    }
+    .nav .navbtn.logout:hover{ background: var(--accent2); }
+
+    .section-title{ font-size:20px; font-weight:1100; margin:0 0 12px; }
+    .sub{ margin:0 0 14px; color:#475569; font-size:13px; line-height:1.45; }
+
+    .card-soft{
+      border:1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px;
+      background:white;
+    }
+
+    table{ width:100%; border-collapse:collapse; }
+    th,td{
+      padding:12px 10px;
+      border-bottom:1px solid #e2e8f0;
+      text-align:left;
+      font-size:14px;
+      vertical-align:top;
+    }
+    th{ font-size:12px; color:#475569; text-transform:uppercase; letter-spacing:.5px; }
+    tr:hover td{ background:#f8fafc; }
+
+    .status-pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:1000;
+      border:1px solid #e2e8f0;
+    }
+    .pill-active{ background: rgba(34,197,94,.12); color:#166534; border-color: rgba(34,197,94,.25); }
+    .pill-expired{ background: rgba(148,163,184,.16); color:#475569; border-color: rgba(148,163,184,.32); }
+    .pill-present{ background: rgba(59,130,246,.12); color:#1d4ed8; border-color: rgba(59,130,246,.25); }
+    .pill-upcoming{ background: rgba(34,197,94,.12); color:#166534; border-color: rgba(34,197,94,.25); }
+
+    .status{
+      font-size:13px;
+      font-weight:1000;
+      color:#334155;
+      padding-left:8px;
+    }
+    .status.ok{ color:#166534; }
+    .status.err{ color:#991b1b; }
+    .status.warn{ color:#92400e; }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap:12px;
+      margin-top:8px;
+    }
+
+    .stat-box{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:16px;
+      padding:14px;
+      box-shadow: 0 10px 22px rgba(15,23,42,.06);
+    }
+    .stat-num{ font-size:28px; font-weight:1100; color:#0f172a; }
+    .stat-lab{ font-size:12px; color:#64748b; font-weight:900; margin-top:4px; text-transform:uppercase; }
+
+    .tile-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap:12px;
+    }
+
+    .tile{
+      border:1px solid #e2e8f0;
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(15,23,42,.07);
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .tile:hover{ transform: translateY(-1px); box-shadow: 0 14px 28px rgba(15,23,42,.10); }
+    .tile .t-title{ font-weight:1100; color:#0f172a; }
+    .tile .t-sub{ margin-top:6px; font-size:12px; color:#64748b; font-weight:800; }
+
+    .overlay{
+      position:fixed; inset:0;
+      background:rgba(15,23,42,.45);
+      display:flex; align-items:center; justify-content:center;
+      z-index:90;
+    }
+    .overlay-card{
+      min-width:260px;
+      background:white;
+      color:#0f172a;
+      padding:18px;
+      border-radius:16px;
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+    .spinner{
+      width:36px; height:36px;
+      border:4px solid #e2e8f0;
+      border-top-color:#eab308;
+      border-radius:50%;
+      margin:0 auto 10px;
+      animation:spin .9s linear infinite;
+    }
+    @keyframes spin{ to{ transform:rotate(360deg);} }
+
+    @media (max-width: 720px){
+      .topbar{ flex-direction:column; align-items:flex-start; }
+      .nav{ justify-content:flex-start; }
+      .stats-grid{ grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="globalOverlay" class="overlay hidden">
+    <div class="overlay-card">
+      <div class="spinner"></div>
+      <div style="font-weight:1100;" id="globalOverlayText">Loading...</div>
+    </div>
+  </div>
+
+  <section id="screen-admin">
+    <div class="topbar">
+      <div class="title">
+        <span>Coordinator Dashboard</span>
+        <span class="badge">COORDINATOR</span>
+      </div>
+      <div class="nav">
+        <button class="navbtn" data-admin-tab="HOME">Home</button>
+        <button class="navbtn" data-admin-tab="ADD_EVENT">Add Upcoming Event</button>
+        <button class="navbtn" data-admin-tab="ADD_CONTENT">Add Content</button>
+        <button class="navbtn" data-admin-tab="UPLOAD_CERT">Upload Certificate</button>
+        <button class="navbtn" data-admin-tab="LIVESCORE_ADMIN">LiveScore</button>
+        <button class="navbtn" data-admin-tab="USER_DETAILS">User Details</button>
+        <button class="navbtn" data-admin-tab="RECRUITMENT">Club Recruitment</button>
+        <button class="navbtn" data-admin-tab="CLUB_STUDENTS">Club Students</button>
+        <button class="navbtn" data-admin-tab="MANAGE">Manage</button>
+        <button class="navbtn logout" id="btnCoordLogout">Logout</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-inner">
+
+        <div class="admin-tab" id="adminTab_HOME">
+          <div class="section-title">Welcome, <span id="adminName">Coordinator</span> 👋</div>
+          <p class="sub">Same logic as admin page, but coordinator can access only the assigned club.</p>
+
+          <div class="stats-grid">
+            <div class="stat-box"><div class="stat-num" id="aStatClubs">-</div><div class="stat-lab">My Club</div></div>
+            <div class="stat-box"><div class="stat-num" id="aStatUpcoming">-</div><div class="stat-lab">Upcoming Events</div></div>
+            <div class="stat-box"><div class="stat-num" id="aStatToday">-</div><div class="stat-lab">Today Events</div></div>
+            <div class="stat-box"><div class="stat-num" id="aStatContents">-</div><div class="stat-lab">Contents</div></div>
+          </div>
+        </div>
+
+
+        <div class="admin-tab hidden" id="adminTab_ADD_EVENT">
+          <div class="section-title">Add Upcoming Event</div>
+          <p class="sub">Select club first, then add event name, date, brochure, registration link, description. Also send mail to all registered users.</p>
+
+          <div class="card-soft">
+            <div id="aeClubPicker">
+              <div style="font-weight:1100;margin-bottom:10px;">Select Club</div>
+              <div id="aeClubTiles" class="tile-grid"></div>
+            </div>
+
+            <div id="aeFormBox" class="hidden">
+              <div class="row" style="align-items:flex-end;">
+                <div class="grow">
+                  <div class="label-dark">Selected Club</div>
+                  <input id="aeSelectedClub" class="field" type="text" disabled />
+                </div>
+                <div>
+                  <button class="btn btn-secondary" id="aeBackToClubs">Back</button>
+                </div>
+              </div>
+
+              <div class="hr"></div>
+
+              <div class="row">
+                <div class="grow">
+                  <div class="label-dark">Event Title</div>
+                  <input id="aeTitle" class="field" type="text" placeholder="e.g., Hackathon 2026" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Event Date</div>
+                  <input id="aeDate" class="field" type="date" />
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Brochure / Photo</div>
+                  <input id="aePhotoFile" class="field" type="file" accept="image/*" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Registration Link</div>
+                  <input id="aeRegLink" class="field" type="url" placeholder="https://..." />
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Description</div>
+                  <textarea id="aeDesc" class="field" placeholder="Write event description..."></textarea>
+                </div>
+              </div>
+
+              <div style="margin-top:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-primary" id="btnSaveEvent">Submit</button>
+                <button class="btn btn-secondary" id="btnSendEventMail">Send Mail</button>
+                <span class="status" id="aeStatus"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-tab hidden" id="adminTab_ADD_CONTENT">
+          <div class="section-title">Add Content</div>
+          <p class="sub">Uploads multiple photos + optional PDF report to backend.</p>
+
+          <div class="card-soft">
+            <div class="row">
+              <div class="grow">
+                <div class="label-dark">Club</div>
+                <select id="acClub" class="field"></select>
+              </div>
+              <div class="grow">
+                <div class="label-dark">Event Title</div>
+                <input id="acTitle" class="field" type="text" placeholder="Same title as event" />
+              </div>
+              <div class="grow">
+                <div class="label-dark">Event Date</div>
+                <input id="acDate" class="field" type="date" />
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px;">
+              <div class="grow">
+                <div class="label-dark">Description</div>
+                <textarea id="acDesc" class="field" placeholder="Write event description..."></textarea>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px;">
+              <div class="grow">
+                <div class="label-dark">Photos (Select Multiple)</div>
+                <input id="acPhotoFiles" class="field" type="file" accept="image/*" multiple />
+              </div>
+              <div class="grow">
+                <div class="label-dark">YouTube Links (one per line)</div>
+                <textarea id="acYoutube" class="field" placeholder="https://youtu.be/...&#10;https://www.youtube.com/watch?v=..."></textarea>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px;">
+              <div class="grow">
+                <div class="label-dark">Event Report (PDF File)</div>
+                <input id="acReportFile" class="field" type="file" accept="application/pdf" />
+              </div>
+            </div>
+
+            <div style="margin-top:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <button class="btn btn-primary" id="btnSaveContent">Save Content</button>
+              <span class="status" id="acStatus"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-tab hidden" id="adminTab_UPLOAD_CERT">
+          <div class="section-title">Upload Certificate</div>
+          <p class="sub">Select club → past event → username → upload certificate.</p>
+
+          <div class="card-soft">
+            <div id="certClubPicker">
+              <div style="font-weight:1100;margin-bottom:10px;">Select Club</div>
+              <div id="certClubTiles" class="tile-grid"></div>
+            </div>
+
+            <div id="certEventPicker" class="hidden">
+              <div class="row" style="align-items:flex-end;">
+                <div class="grow">
+                  <div class="label-dark">Selected Club</div>
+                  <input id="certSelectedClub" class="field" type="text" disabled />
+                </div>
+                <div>
+                  <button class="btn btn-secondary" id="certBackToClubs">Back</button>
+                </div>
+                <span class="status" id="certAdminStatus"></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <div style="font-weight:1100;margin-bottom:10px;">Select Past Event</div>
+              <div id="certPastEvents" class="tile-grid"></div>
+
+              <div class="hr"></div>
+
+              <div id="certUploadForm" class="hidden">
+                <div class="row">
+                  <div class="grow">
+                    <div class="label-dark">Username</div>
+                    <input id="certUsername" class="field" type="text" placeholder="Enter username" />
+                  </div>
+                  <div class="grow">
+                    <div class="label-dark">Certificate File (PDF/Image)</div>
+                    <input id="certFile" class="field" type="file" accept="application/pdf,image/*" />
+                  </div>
+                </div>
+
+                <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                  <button class="btn btn-primary" id="btnUploadCert">Upload</button>
+                  <span class="status" id="certUploadStatus"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-tab hidden" id="adminTab_LIVESCORE_ADMIN">
+          <div class="section-title">LiveScore (Admin)</div>
+          <p class="sub">Select club → present event → round 1 / round 2 → enter team scores.</p>
+
+          <div class="card-soft">
+            <div id="lsClubPicker">
+              <div style="font-weight:1100;margin-bottom:10px;">Select Club</div>
+              <div id="lsClubTiles" class="tile-grid"></div>
+            </div>
+
+            <div id="lsEventPicker" class="hidden">
+              <div class="row" style="align-items:flex-end;">
+                <div class="grow">
+                  <div class="label-dark">Selected Club</div>
+                  <input id="lsSelectedClub" class="field" type="text" disabled />
+                </div>
+                <div>
+                  <button class="btn btn-secondary" id="lsBackToClubs">Back</button>
+                </div>
+                <span class="status" id="lsAdminStatus"></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <div style="font-weight:1100;margin-bottom:10px;">Present Events (Today only)</div>
+              <div id="lsPresentEvents" class="tile-grid"></div>
+
+              <div class="hr"></div>
+
+              <div id="lsScoreForm" class="hidden">
+                <div style="font-weight:1100;margin-bottom:10px;" id="lsSelectedEventTitle">Event: -</div>
+
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+                  <button class="btn btn-primary" id="btnRound1">Round 1</button>
+                  <button class="btn btn-secondary" id="btnRound2">Round 2</button>
+                </div>
+
+                <div id="lsTeamsBox"></div>
+
+                <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                  <button class="btn btn-primary" id="btnSaveLiveScore">Save / Update</button>
+                  <span class="status" id="lsSaveStatus"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-tab hidden" id="adminTab_USER_DETAILS">
+          <div class="section-title">User Details</div>
+          <p class="sub">Enter username → view + update password/role/profile.</p>
+
+          <div class="card-soft">
+            <div class="row" style="align-items:flex-end;">
+              <div class="grow">
+                <div class="label-dark">Register Number / Username</div>
+                <input id="udLookupUser" class="field" type="text" placeholder="e.g., mahi" />
+              </div>
+              <div>
+                <button class="btn btn-primary" id="btnLookupUser">OK</button>
+              </div>
+              <span class="status" id="udLookupStatus"></span>
+            </div>
+
+            <div class="hr"></div>
+
+            <div id="udEditBox" class="hidden">
+              <div style="font-weight:1100;margin-bottom:10px;">Edit User</div>
+
+              <div class="row">
+                <div class="grow">
+                  <div class="label-dark">Username</div>
+                  <input id="udEUsername" class="field" type="text" disabled />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Role</div>
+                  <select id="udERole" class="field">
+                    <option value="user">user</option>
+                    <option value="admin">admin</option>
+                    <option value="club_coordinator">club_coordinator</option>
+                  </select>
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Password</div>
+                  <input id="udEPassword" class="field" type="text" />
+                </div>
+              </div>
+
+              <div class="hr"></div>
+
+              <div style="font-weight:1100;margin-bottom:8px;">Profile Details</div>
+
+              <div class="row">
+                <div class="grow">
+                  <div class="label-dark">Name</div>
+                  <input id="udEName" class="field" type="text" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Phone</div>
+                  <input id="udEPhone" class="field" type="text" />
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Email</div>
+                  <input id="udEEmail" class="field" type="email" />
+                </div>
+                <div class="grow">
+                  <div class="label-dark">Branch</div>
+                  <input id="udEBranch" class="field" type="text" />
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Gender</div>
+                  <select id="udEGender" class="field">
+                    <option value="">Select</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="grow">
+                  <div class="label-dark">DOB</div>
+                  <input id="udEDob" class="field" type="date" />
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;">
+                <div class="grow">
+                  <div class="label-dark">Address</div>
+                  <textarea id="udEAddress" class="field"></textarea>
+                </div>
+              </div>
+
+              <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;">
+                <button class="btn btn-secondary" id="btnClearUserDetails">Clear</button>
+                <button class="btn btn-primary" id="btnSaveUserDetails">Save Changes</button>
+                <span class="status" id="udSaveStatus"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-tab hidden" id="adminTab_RECRUITMENT">
+          <div class="section-title">Club Recruitment</div>
+          <p class="sub">Internal recruitment only. Open or close recruitment by club, then view applications and approve or reject students. When you approve a student, this page will call the status update API. The congratulation mail must be sent by that backend API.</p>
+
+          <div class="card-soft">
+            <div class="row" style="align-items:center;">
+              <button class="btn btn-primary" id="btnLoadRecruitments">Load Clubs</button>
+              <button class="btn btn-secondary" id="btnLoadAllApplications">Load All Applications</button>
+              <span class="status" id="recAdminStatus"></span>
+            </div>
+
+            <div class="hint-dark" style="margin-top:8px;">Approve = set status SELECTED. Reject = set status REJECTED. Backend should send the congratulation mail when status becomes SELECTED.</div>
+
+            <div class="hr"></div>
+
+            <div id="recAdminBox" style="overflow:auto;">
+              <div class="muted" style="font-weight:1000;">Click “Load Clubs”</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-tab hidden" id="adminTab_CLUB_STUDENTS">
+          <div class="section-title">Club Students</div>
+          <p class="sub">Select a club to see approved students and their roles. Click Delete to remove the student from that club.</p>
+
+          <div class="card-soft">
+            <div id="clubStudentsClubPicker">
+              <div style="font-weight:1100;margin-bottom:10px;">Select Club</div>
+              <div id="clubStudentsClubTiles" class="tile-grid"></div>
+            </div>
+
+            <div id="clubStudentsView" class="hidden">
+              <div class="row" style="align-items:flex-end;">
+                <div class="grow">
+                  <div class="label-dark">Selected Club</div>
+                  <input id="clubStudentsSelectedClub" class="field" type="text" disabled />
+                </div>
+                <div>
+                  <button class="btn btn-secondary" id="clubStudentsBackToClubs">Back</button>
+                </div>
+                <span class="status" id="clubStudentsStatus"></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <div id="clubStudentsBox" style="overflow:auto;">
+                <div class="muted" style="font-weight:1000;">Select a club to view approved students.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-tab hidden" id="adminTab_MANAGE">
+          <div class="section-title">Manage</div>
+          <p class="sub">Manage upcoming events and content (view + delete).</p>
+
+          <div class="card-soft">
+            <div class="row" style="align-items:flex-end;">
+              <div>
+                <button class="btn btn-primary" id="btnManageUpcoming">Manage Upcoming Events</button>
+              </div>
+              <div>
+                <button class="btn btn-secondary" id="btnManageContent">Manage Content</button>
+              </div>
+              <div class="grow">
+                <div class="label-dark">Search</div>
+                <input id="manageSearch" class="field" type="text" placeholder="Search by club or title" />
+              </div>
+              <span class="status" id="amStatus"></span>
+            </div>
+
+            <div class="hr"></div>
+
+            <div id="adminManageBox" style="overflow:auto;">
+              <div class="muted" style="font-weight:1000;">Click a button to load list...</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const API_BASE =
+      window.CMS_API_BASE ||
+      (
+        location.hostname === "localhost" || location.hostname === "127.0.0.1"
+          ? "http://localhost:8080/api"
+          : `${location.origin}/api`
+      );
+
+    const KEY_SESSION = "cms_session_backend";
+
+    function saveSession(s){ localStorage.setItem(KEY_SESSION, JSON.stringify(s)); }
+    function loadSession(){ try{ return JSON.parse(localStorage.getItem(KEY_SESSION) || "null"); }catch{ return null; } }
+    function clearSession(){ localStorage.removeItem(KEY_SESSION); }
+
+    function showLoading(msg="Loading..."){
+      $("globalOverlayText").textContent = msg;
+      $("globalOverlay").classList.remove("hidden");
+    }
+    function hideLoading(){
+      $("globalOverlay").classList.add("hidden");
+    }
+
+    function setStatus(el, msg, type=""){
+      if(!el) return;
+      el.textContent = msg || "";
+      el.classList.remove("ok","err","warn");
+      if(type) el.classList.add(type);
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+    function escapeHtmlAttr(str){ return escapeHtml(str).replaceAll("`","&#096;"); }
+
+    function dateOnly(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
+    function classifyEventDate(yyyy_mm_dd){
+      try{
+        const d = dateOnly(new Date(yyyy_mm_dd + "T00:00:00"));
+        const t = dateOnly(new Date());
+        if(d.getTime() > t.getTime()) return "UPCOMING";
+        if(d.getTime() === t.getTime()) return "PRESENT";
+        return "PAST";
+      }catch{ return "PAST"; }
+    }
+
+    function safeArray(res){
+      if(Array.isArray(res)) return res;
+      if(Array.isArray(res.items)) return res.items;
+      if(Array.isArray(res.data)) return res.data;
+      return [];
+    }
+
+    async function apiFetch(path, { method="GET", token=null, headers={}, body=null } = {}){
+      const h = { ...headers };
+      if(token) h["X-Auth-Token"] = token;
+
+      const res = await fetch(`${API_BASE}${path}`, { method, headers: h, body });
+      const data = await res.json().catch(() => ({}));
+
+      if(res.status === 401){
+        clearSession();
+        location.href = "login.html";
+        throw new Error("Session expired");
+      }
+
+      if(!res.ok){
+        const msg = data.message || data.error || `HTTP ${res.status}`;
+        throw new Error(msg);
+      }
+      if(data && data.ok === false){
+        throw new Error(data.message || data.error || "Request failed");
+      }
+      return data;
+    }
+
+
+    const session = loadSession() || {};
+    const coordinatorClub = session.club || session.clubName || session.assignedClub || localStorage.getItem("coordinatorClub") || localStorage.getItem("club") || "";
+    function ensureCoordinatorClub(){
+      if(!coordinatorClub) throw new Error("Coordinator club missing in session/localStorage");
+      return coordinatorClub;
+    }
+
+    const api = {
+      clubs: () => apiFetch("/clubs"),
+      addClubFull: (token, payload) =>
+        apiFetch("/admin/clubs/full", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify(payload)
+        }),
+      delClub: (token, club) => apiFetch(`/clubs/${encodeURIComponent(club)}`, { method:"DELETE", token }),
+
+      listEvents: (club=null) => {
+        const q = club ? `?club=${encodeURIComponent(club)}` : "";
+        return apiFetch(`/events${q}`);
+      },
+      addEvent: (token, { club, title, date, regLink, desc, photoFile }) => {
+        const fd = new FormData();
+        fd.append("club", club);
+        fd.append("title", title);
+        fd.append("date", date);
+        if(regLink) fd.append("regLink", regLink);
+        if(desc) fd.append("desc", desc);
+        if(photoFile) fd.append("photo", photoFile);
+        return apiFetch("/admin/event", { method:"POST", token, body: fd });
+      },
+      sendEventMail: (token, { club, title, description, photoFile }) => {
+        const fd = new FormData();
+        fd.append("club", club);
+        fd.append("title", title);
+        fd.append("description", description);
+        if(photoFile) fd.append("photo", photoFile);
+        return apiFetch("/admin/event/send-mail", { method:"POST", token, body: fd });
+      },
+      delEvent: (token, id) => apiFetch(`/events/${id}`, { method:"DELETE", token }),
+
+      listContents: (club=null) => {
+        const q = club ? `?club=${encodeURIComponent(club)}` : "";
+        return apiFetch(`/contents${q}`);
+      },
+      addContent: (token, { club, title, date, desc, youtubeLinks, photoFiles, reportFile }) => {
+        const fd = new FormData();
+        fd.append("club", club);
+        fd.append("title", title);
+        fd.append("date", date);
+        if(desc) fd.append("desc", desc);
+        if(youtubeLinks) fd.append("youtubeLinks", youtubeLinks);
+        if(Array.isArray(photoFiles)) photoFiles.forEach(f => fd.append("photos", f));
+        if(reportFile) fd.append("report", reportFile);
+        return apiFetch("/admin/content", { method:"POST", token, body: fd });
+      },
+      delContent: (token, id) => apiFetch(`/contents/${id}`, { method:"DELETE", token }),
+
+      createUser: (token, username, password, role) =>
+        apiFetch("/admin/users", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ username, password, role })
+        }),
+      getUserDetails: (token, username) => apiFetch(`/admin/users/${encodeURIComponent(username)}`, { token }),
+      updateUserDetails: (token, username, payload) =>
+        apiFetch(`/admin/users/${encodeURIComponent(username)}`, {
+          method:"PUT", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify(payload)
+        }),
+
+      adminRecruitments: (token) => apiFetch("/recruitments", { token }),
+      openRecruit: (token, club) =>
+        apiFetch("/recruitments/open", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ club })
+        }),
+      closeRecruit: (token, club) =>
+        apiFetch("/recruitments/close", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ club })
+        }),
+      recruitmentApplications: (token, club=null) => {
+        const q = club ? `?club=${encodeURIComponent(club)}` : "";
+        return apiFetch(`/recruitments/applications${q}`, { token });
+      },
+      updateRecruitmentStatus: (token, payload) =>
+        apiFetch("/recruitments/update-status", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify(payload)
+        }),
+      listClubStudents: (token, club) =>
+        apiFetch(`/admin/club-students?club=${encodeURIComponent(club)}`, { token }),
+      deleteClubStudent: (token, payload) =>
+        apiFetch("/admin/club-students/delete", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify(payload)
+        }),
+
+      uploadCertificateByUsername: (token, { club, eventId, username, file }) => {
+        const fd = new FormData();
+        fd.append("club", club);
+        fd.append("eventId", String(eventId));
+        fd.append("username", username);
+        fd.append("file", file);
+        return apiFetch("/admin/certificates/upload-by-username", { method:"POST", token, body: fd });
+      },
+
+      saveLiveScoreRound: (token, payload) =>
+        apiFetch("/admin/livescore/save-round", {
+          method:"POST", token,
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify(payload)
+        })
+    };
+
+    async function getClubs(){
+      return coordinatorClub ? [coordinatorClub] : [];
+    }
+
+    async function fillClubSelect(selectEl){
+      if(!selectEl) return;
+      selectEl.innerHTML = `<option value="">Loading...</option>`;
+      try{
+        const clubs = await getClubs();
+        selectEl.innerHTML = clubs.length ? "" : `<option value="">(no clubs)</option>`;
+        clubs.forEach(c=>{
+          const opt = document.createElement("option");
+          opt.value = c; opt.textContent = c;
+          selectEl.appendChild(opt);
+        });
+        if(clubs.length) selectEl.selectedIndex = 0;
+      }catch(e){
+        selectEl.innerHTML = `<option value="">(failed to load)</option>`;
+      }
+    }
+
+    async function renderClubTiles(containerEl, onClick){
+      containerEl.innerHTML = `<div class="muted" style="font-weight:1000;">Loading...</div>`;
+      try{
+        const clubs = await getClubs();
+        containerEl.innerHTML = "";
+        if(!clubs.length){
+          containerEl.innerHTML = `<div class="muted" style="font-weight:1000;">No clubs.</div>`;
+          return;
+        }
+        clubs.forEach(c=>{
+          const div = document.createElement("div");
+          div.className = "tile";
+          div.innerHTML = `<div class="t-title">${escapeHtml(c)}</div><div class="t-sub">Click to open</div>`;
+          div.addEventListener("click", ()=>onClick(c));
+          containerEl.appendChild(div);
+        });
+      }catch(e){
+        containerEl.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load clubs.</div>`;
+      }
+    }
+
+    async function refreshAdminStats(){
+      try{
+        const clubs = await getClubs();
+        const events = safeArray(await api.listEvents());
+        const contents = safeArray(await api.listContents());
+        $("aStatClubs").textContent = clubs.length;
+        $("aStatUpcoming").textContent = events.filter(e => classifyEventDate(e.date) === "UPCOMING").length;
+        $("aStatToday").textContent = events.filter(e => classifyEventDate(e.date) === "PRESENT").length;
+        $("aStatContents").textContent = contents.length;
+      }catch{}
+    }
+
+    function openAdminTab(name){
+      document.querySelectorAll(".admin-tab").forEach(t => t.classList.add("hidden"));
+      const el = $("adminTab_" + name);
+      if(el) el.classList.remove("hidden");
+
+      if(name === "HOME") refreshAdminStats();
+      if(name === "CLUBS") renderAdminClubs();
+      if(name === "ADD_EVENT"){
+        $("aeClubPicker").classList.remove("hidden");
+        $("aeFormBox").classList.add("hidden");
+        renderClubTiles($("aeClubTiles"), (club)=>selectEventClub(club));
+      }
+      if(name === "ADD_CONTENT") fillClubSelect($("acClub"));
+      if(name === "UPLOAD_CERT"){
+        $("certClubPicker").classList.remove("hidden");
+        $("certEventPicker").classList.add("hidden");
+        $("certUploadForm").classList.add("hidden");
+        renderClubTiles($("certClubTiles"), (club)=>selectCertClub(club));
+      }
+      if(name === "LIVESCORE_ADMIN"){
+        $("lsClubPicker").classList.remove("hidden");
+        $("lsEventPicker").classList.add("hidden");
+        $("lsScoreForm").classList.add("hidden");
+        renderClubTiles($("lsClubTiles"), (club)=>selectLiveScoreClub(club));
+      }
+      if(name === "USER_DETAILS") clearUserDetailsUI();
+      if(name === "RECRUITMENT") {
+        $("recAdminBox").innerHTML = `<div class="muted" style="font-weight:1000;">Click “Load Clubs”</div>`;
+        setStatus($("recAdminStatus"),"");
+      }
+      if(name === "CLUB_STUDENTS"){
+        $("clubStudentsClubPicker").classList.remove("hidden");
+        $("clubStudentsView").classList.add("hidden");
+        $("clubStudentsBox").innerHTML = `<div class="muted" style="font-weight:1000;">Select a club to view approved students.</div>`;
+        setStatus($("clubStudentsStatus"),"");
+        renderClubTiles($("clubStudentsClubTiles"), (club)=>selectClubStudentsClub(club));
+      }
+      if(name === "MANAGE"){
+        $("adminManageBox").innerHTML = `<div class="muted" style="font-weight:1000;">Click a button to load list...</div>`;
+        setStatus($("amStatus"), "");
+      }
+    }
+    document.querySelectorAll("[data-admin-tab]").forEach(btn => {
+      btn.addEventListener("click", () => openAdminTab(btn.dataset.adminTab));
+    });
+
+    async function renderAdminClubs(){
+      const box = $("clubListBox");
+      box.innerHTML = `<div class="muted" style="font-weight:1000;">Loading...</div>`;
+      setStatus($("clubStatus"), "");
+      try{
+        const clubs = await getClubs();
+        if(!clubs.length){
+          box.innerHTML = `<div class="muted" style="font-weight:1000;">No clubs yet.</div>`;
+          return;
+        }
+        box.innerHTML = `
+          <table>
+            <thead><tr><th>Club Name</th><th>Action</th></tr></thead>
+            <tbody>
+              ${clubs.map(c=>`
+                <tr>
+                  <td>${escapeHtml(c)}</td>
+                  <td><button class="btn btn-danger" data-del-club="${escapeHtmlAttr(c)}">Delete</button></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `;
+
+        box.querySelectorAll("[data-del-club]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const club = btn.getAttribute("data-del-club") || "";
+            if(!confirm(`Delete club "${club}"?`)) return;
+            const s = loadSession();
+            try{
+              await api.delClub(s.token, club);
+              setStatus($("clubStatus"), "✅ Club deleted.", "ok");
+              renderAdminClubs();
+              refreshAdminStats();
+            }catch(e){
+              setStatus($("clubStatus"), "❌ " + e.message, "err");
+            }
+          });
+        });
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load clubs.</div>`;
+        setStatus($("clubStatus"), "❌ " + e.message, "err");
+      }
+    }
+
+    $("btnAddClub")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("clubStatus"), "Login again.", "err"); return; }
+
+      const clubName = $("clubName").value.trim();
+      const coordinators = [
+        { username: $("clubCoord1User").value.trim(), password: $("clubCoord1Pass").value.trim() },
+        { username: $("clubCoord2User").value.trim(), password: $("clubCoord2Pass").value.trim() },
+        { username: $("clubCoord3User").value.trim(), password: $("clubCoord3Pass").value.trim() },
+        { username: $("clubCoord4User").value.trim(), password: $("clubCoord4Pass").value.trim() }
+      ];
+
+      if(!clubName){ setStatus($("clubStatus"), "Enter club name.", "warn"); return; }
+      for(const c of coordinators){
+        if(!c.username || !c.password){
+          setStatus($("clubStatus"), "Fill all 4 coordinator usernames and passwords.", "warn");
+          return;
+        }
+      }
+
+      setStatus($("clubStatus"), "Saving...");
+      showLoading("Adding club...");
+      try{
+        await api.addClubFull(s.token, { clubName, coordinators });
+        setStatus($("clubStatus"), "✅ Club added.", "ok");
+        $("clubName").value = "";
+        $("clubCoord1User").value = ""; $("clubCoord1Pass").value = "";
+        $("clubCoord2User").value = ""; $("clubCoord2Pass").value = "";
+        $("clubCoord3User").value = ""; $("clubCoord3Pass").value = "";
+        $("clubCoord4User").value = ""; $("clubCoord4Pass").value = "";
+        renderAdminClubs();
+        refreshAdminStats();
+      }catch(e){
+        setStatus($("clubStatus"), "❌ " + e.message, "err");
+      }finally{ hideLoading(); }
+    });
+
+    let aeSelectedClubName = "";
+    function selectEventClub(club){
+      aeSelectedClubName = club;
+      $("aeSelectedClub").value = club;
+      $("aeClubPicker").classList.add("hidden");
+      $("aeFormBox").classList.remove("hidden");
+      setStatus($("aeStatus"), "");
+    }
+    $("aeBackToClubs")?.addEventListener("click", ()=>{
+      aeSelectedClubName = "";
+      $("aeFormBox").classList.add("hidden");
+      $("aeClubPicker").classList.remove("hidden");
+      renderClubTiles($("aeClubTiles"), (club)=>selectEventClub(club));
+    });
+
+    $("btnSaveEvent")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("aeStatus"), "Login again.", "err"); return; }
+      const title = $("aeTitle").value.trim();
+      const date = $("aeDate").value;
+      const regLink = $("aeRegLink").value.trim();
+      const desc = $("aeDesc").value.trim();
+      const photoFile = $("aePhotoFile").files?.[0] || null;
+
+      if(!aeSelectedClubName){ setStatus($("aeStatus"), "Select club first.", "warn"); return; }
+      if(!title || !date || !photoFile){ setStatus($("aeStatus"), "Fill title, date and brochure.", "warn"); return; }
+
+      setStatus($("aeStatus"), "Saving...");
+      showLoading("Saving event...");
+      try{
+        await api.addEvent(s.token, { club: aeSelectedClubName, title, date, regLink, desc, photoFile });
+        setStatus($("aeStatus"), "✅ Event saved.", "ok");
+        $("aeTitle").value = "";
+        $("aeDate").value = "";
+        $("aeRegLink").value = "";
+        $("aeDesc").value = "";
+        $("aePhotoFile").value = "";
+        refreshAdminStats();
+      }catch(e){
+        setStatus($("aeStatus"), "❌ " + e.message, "err");
+      }finally{ hideLoading(); }
+    });
+
+    $("btnSendEventMail")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("aeStatus"), "Login again.", "err"); return; }
+      const title = $("aeTitle").value.trim();
+      const description = $("aeDesc").value.trim();
+      const photoFile = $("aePhotoFile").files?.[0] || null;
+
+      if(!aeSelectedClubName){ setStatus($("aeStatus"), "Select club first.", "warn"); return; }
+      if(!description || !photoFile){ setStatus($("aeStatus"), "Description and one photo needed for mail.", "warn"); return; }
+
+      setStatus($("aeStatus"), "Sending mail...");
+      showLoading("Sending event mail...");
+      try{
+        await api.sendEventMail(s.token, { club: aeSelectedClubName, title, description, photoFile });
+        setStatus($("aeStatus"), "✅ Mail sent.", "ok");
+      }catch(e){
+        setStatus($("aeStatus"), "❌ " + e.message, "err");
+      }finally{ hideLoading(); }
+    });
+
+    $("btnSaveContent")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("acStatus"), "Login again.", "err"); return; }
+      const club  = $("acClub").value;
+      const title = $("acTitle").value.trim();
+      const date  = $("acDate").value;
+      const desc  = $("acDesc").value.trim();
+      const photoFiles = Array.from($("acPhotoFiles").files || []);
+      const ytRaw = $("acYoutube").value;
+      const pdfFile = $("acReportFile").files?.[0] || null;
+
+      if(!club){ setStatus($("acStatus"), "Select club.", "warn"); return; }
+      if(!title || !date){ setStatus($("acStatus"), "Enter event title and date.", "warn"); return; }
+      if(photoFiles.length === 0){ setStatus($("acStatus"), "Select at least 1 photo.", "warn"); return; }
+
+      setStatus($("acStatus"), "Uploading...");
+      showLoading("Saving content...");
+      try{
+        await api.addContent(s.token, { club, title, date, desc, youtubeLinks: ytRaw, photoFiles, reportFile: pdfFile });
+        setStatus($("acStatus"), "✅ Content saved.", "ok");
+        $("acTitle").value=""; $("acDate").value=""; $("acDesc").value="";
+        $("acPhotoFiles").value = "";
+        $("acYoutube").value = "";
+        $("acReportFile").value = "";
+        refreshAdminStats();
+      }catch(e){
+        setStatus($("acStatus"), "❌ " + e.message, "err");
+      }finally{ hideLoading(); }
+    });
+
+    let certClubName = "";
+    let certSelectedEventId = null;
+
+    function selectCertClub(club){
+      certClubName = club;
+      certSelectedEventId = null;
+      $("certSelectedClub").value = club;
+      $("certClubPicker").classList.add("hidden");
+      $("certEventPicker").classList.remove("hidden");
+      $("certUploadForm").classList.add("hidden");
+      loadPastEventsForCert();
+    }
+
+    $("certBackToClubs")?.addEventListener("click", ()=>{
+      certClubName = "";
+      certSelectedEventId = null;
+      $("certEventPicker").classList.add("hidden");
+      $("certClubPicker").classList.remove("hidden");
+      renderClubTiles($("certClubTiles"), (club)=>selectCertClub(club));
+    });
+
+    async function loadPastEventsForCert(){
+      try{
+        const res = await api.listEvents(certClubName);
+        const items = safeArray(res);
+        const past = items.filter(e => classifyEventDate(e.date) === "PAST");
+        if(!past.length){
+          $("certPastEvents").innerHTML = `<div class="muted" style="font-weight:1000;">No past events.</div>`;
+          return;
+        }
+        $("certPastEvents").innerHTML = "";
+        past.forEach(e=>{
+          const div = document.createElement("div");
+          div.className = "tile";
+          div.innerHTML = `<div class="t-title">${escapeHtml(e.title || "")}</div><div class="t-sub">${escapeHtml(e.date || "")}</div>`;
+          div.addEventListener("click", ()=>{
+            certSelectedEventId = e.id;
+            $("certUploadForm").classList.remove("hidden");
+            setStatus($("certAdminStatus"), `Selected: ${e.title}`, "ok");
+          });
+          $("certPastEvents").appendChild(div);
+        });
+      }catch(e){
+        $("certPastEvents").innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load events.</div>`;
+      }
+    }
+
+    $("btnUploadCert")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("certUploadStatus"), "Login again.", "err"); return; }
+      const username = $("certUsername").value.trim();
+      const file = $("certFile").files?.[0] || null;
+      if(!certClubName || !certSelectedEventId){ setStatus($("certUploadStatus"), "Select club and event.", "warn"); return; }
+      if(!username || !file){ setStatus($("certUploadStatus"), "Enter username and file.", "warn"); return; }
+
+      setStatus($("certUploadStatus"), "Uploading...");
+      showLoading("Uploading certificate...");
+      try{
+        await api.uploadCertificateByUsername(s.token, { club: certClubName, eventId: certSelectedEventId, username, file });
+        setStatus($("certUploadStatus"), "✅ Uploaded.", "ok");
+        $("certUsername").value = "";
+        $("certFile").value = "";
+      }catch(e){
+        setStatus($("certUploadStatus"), "❌ " + e.message, "err");
+      }finally{ hideLoading(); }
+    });
+
+    let lsClubName = "";
+    let lsEventId = null;
+    let lsRoundNo = 1;
+    let lsTeams = [];
+
+    function selectLiveScoreClub(club){
+      lsClubName = club;
+      lsEventId = null;
+      lsTeams = [];
+      $("lsSelectedClub").value = club;
+      $("lsClubPicker").classList.add("hidden");
+      $("lsEventPicker").classList.remove("hidden");
+      $("lsScoreForm").classList.add("hidden");
+      loadPresentEventsForLiveScore();
+    }
+
+    $("lsBackToClubs")?.addEventListener("click", ()=>{
+      lsClubName = "";
+      lsEventId = null;
+      lsTeams = [];
+      $("lsEventPicker").classList.add("hidden");
+      $("lsClubPicker").classList.remove("hidden");
+      renderClubTiles($("lsClubTiles"), (club)=>selectLiveScoreClub(club));
+    });
+
+    async function loadPresentEventsForLiveScore(){
+      try{
+        const res = await api.listEvents(lsClubName);
+        const items = safeArray(res);
+        const present = items.filter(e => classifyEventDate(e.date) === "PRESENT");
+        if(!present.length){
+          $("lsPresentEvents").innerHTML = `<div class="muted" style="font-weight:1000;">No present events.</div>`;
+          return;
+        }
+        $("lsPresentEvents").innerHTML = "";
+        present.forEach(e=>{
+          const div = document.createElement("div");
+          div.className = "tile";
+          div.innerHTML = `<div class="t-title">${escapeHtml(e.title || "")}</div><div class="t-sub">${escapeHtml(e.date || "")}</div>`;
+          div.addEventListener("click", ()=>{
+            lsEventId = e.id;
+            $("lsSelectedEventTitle").textContent = `Event: ${e.title} (${e.date})`;
+            $("lsScoreForm").classList.remove("hidden");
+            setStatus($("lsAdminStatus"), `Selected: ${e.title}`, "ok");
+          });
+          $("lsPresentEvents").appendChild(div);
+        });
+      }catch(e){
+        $("lsPresentEvents").innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load events.</div>`;
+      }
+    }
+
+    function buildRound(roundNo){
+      lsRoundNo = roundNo;
+      const n = Number(prompt(`Enter number of teams for Round ${roundNo}`, "10"));
+      if(!Number.isFinite(n) || n <= 0){
+        setStatus($("lsSaveStatus"), "Invalid team count.", "warn");
+        return;
+      }
+      lsTeams = Array.from({length:n}, (_,i)=>({ teamNo:i+1, score:0 }));
+      renderLsInputs();
+    }
+    $("btnRound1")?.addEventListener("click", ()=>buildRound(1));
+    $("btnRound2")?.addEventListener("click", ()=>buildRound(2));
+
+    function renderLsInputs(){
+      const box = $("lsTeamsBox");
+      box.innerHTML = "";
+      lsTeams.forEach(t=>{
+        const div = document.createElement("div");
+        div.className = "row";
+        div.style.marginBottom = "10px";
+        div.innerHTML = `
+          <div class="grow">
+            <div class="label-dark">Round ${lsRoundNo} - Team ${t.teamNo}</div>
+            <input class="field" type="number" min="0" value="${t.score}" data-team="${t.teamNo}" />
+          </div>
+        `;
+        box.appendChild(div);
+      });
+      box.querySelectorAll("input[data-team]").forEach(inp=>{
+        inp.addEventListener("input", ()=>{
+          const teamNo = Number(inp.getAttribute("data-team"));
+          const t = lsTeams.find(x=>x.teamNo === teamNo);
+          if(t) t.score = Number(inp.value || 0);
+        });
+      });
+    }
+
+    $("btnSaveLiveScore")?.addEventListener("click", async ()=>{
+      const s = loadSession();
+      if(!s?.token){ setStatus($("lsSaveStatus"), "Login again.", "err"); return; }
+      if(!lsClubName || !lsEventId){ setStatus($("lsSaveStatus"), "Select club and present event.", "warn"); return; }
+      if(!lsTeams.length){ setStatus($("lsSaveStatus"), "Choose round and create teams first.", "warn"); return; }
+
+      setStatus($("lsSaveStatus"), "Saving...");
+      showLoading("Saving live score...");
+      try{
+        await api.saveLiveScoreRound(s.token, {
+          club: lsClubName,
+          eventId: lsEventId,
+          roundNo: lsRoundNo,
+          teamScores: lsTeams
+        });
+        setStatus($("lsSaveStatus"), `✅ Round ${lsRoundNo} saved.`, "ok");
+      }catch(e){
+        setStatus($("lsSaveStatus"), "❌ " + e.message, "err");
+      }finally{ hideLoading(); }
+    });
+
+    function clearUserDetailsUI(){
+      $("udEditBox").classList.add("hidden");
+      setStatus($("udLookupStatus"), "");
+      setStatus($("udSaveStatus"), "");
+      $("udLookupUser").value = "";
+      $("udEUsername").value = "";
+      $("udERole").value = "user";
+      $("udEPassword").value = "";
+      $("udEName").value = "";
+      $("udEPhone").value = "";
+      $("udEEmail").value = "";
+      $("udEBranch").value = "";
+      $("udEGender").value = "";
+      $("udEDob").value = "";
+      $("udEAddress").value = "";
+    }
+    $("btnClearUserDetails")?.addEventListener("click", clearUserDetailsUI);
+
+    $("btnLookupUser")?.addEventListener("click", async ()=>{
+      const uname = $("udLookupUser").value.trim();
+      if(!uname){ setStatus($("udLookupStatus"), "Enter username.", "warn"); return; }
+      const s = loadSession();
+      setStatus($("udLookupStatus"), "Loading...");
+      showLoading("Loading user...");
+      try{
+        const res = await api.getUserDetails(s.token, uname);
+        $("udEditBox").classList.remove("hidden");
+        setStatus($("udLookupStatus"), "✅ Loaded.", "ok");
+        const u = res.user || {};
+        const p = res.profile || {};
+        $("udEUsername").value = u.username || uname;
+        $("udERole").value = u.role || "user";
+        $("udEPassword").value = u.password || "";
+        $("udEName").value = p.name || "";
+        $("udEPhone").value = p.phone || "";
+        $("udEEmail").value = p.email || "";
+        $("udEBranch").value = p.branch || "";
+        $("udEGender").value = p.gender || "";
+        $("udEDob").value = p.dob || "";
+        $("udEAddress").value = p.address || "";
+      }catch(e){
+        setStatus($("udLookupStatus"), "❌ " + e.message, "err");
+        $("udEditBox").classList.add("hidden");
+      }finally{ hideLoading(); }
+    });
+
+    $("btnSaveUserDetails")?.addEventListener("click", async ()=>{
+      const uname = $("udEUsername").value.trim();
+      if(!uname){ setStatus($("udSaveStatus"), "Load a user first.", "warn"); return; }
+      const s = loadSession();
+      setStatus($("udSaveStatus"), "Saving...");
+      showLoading("Saving user changes...");
+      try{
+        await api.updateUserDetails(s.token, uname, {
+          user: { username: uname, password: $("udEPassword").value, role: $("udERole").value },
+          profile: {
+            name: $("udEName").value.trim(),
+            phone: $("udEPhone").value.trim(),
+            email: $("udEEmail").value.trim(),
+            branch: $("udEBranch").value.trim(),
+            gender: $("udEGender").value,
+            dob: $("udEDob").value,
+            address: $("udEAddress").value.trim()
+          }
+        });
+        setStatus($("udSaveStatus"), "✅ Saved changes.", "ok");
+      }catch(e){
+        setStatus($("udSaveStatus"), "❌ " + e.message, "err");
+      }finally{ hideLoading(); }
+    });
+
+        $("btnLoadRecruitments")?.addEventListener("click", loadAdminRecruitments);
+    $("btnLoadAllApplications")?.addEventListener("click", ()=>loadRecruitmentApplicationsForClub(""));
+
+    function normalizeRecruitmentItem(item){
+      return {
+        id: item?.id ?? item?.appId ?? item?.applicationId ?? "",
+        club: item?.club ?? item?.clubName ?? item?.club_name ?? "",
+        username: item?.username ?? item?.userName ?? item?.regNo ?? item?.reg_no ?? "",
+        name: item?.studentName ?? item?.name ?? item?.fullName ?? "",
+        role: item?.roleInterested ?? item?.role ?? item?.clubRole ?? item?.club_role ?? "",
+        email: item?.email ?? "",
+        phone: item?.phone ?? "",
+        branch: item?.branch ?? "",
+        year: item?.year ?? "",
+        status: String(item?.status ?? "PENDING").toUpperCase(),
+        appliedAt: item?.appliedAt ?? item?.applied_at ?? ""
+      };
+    }
+
+    async function loadAdminRecruitments(){
+      const s = loadSession();
+      const box = $("recAdminBox");
+      setStatus($("recAdminStatus"), "Loading...", "warn");
+      box.innerHTML = `<div class="muted" style="font-weight:1000;">Loading clubs...</div>`;
+      try{
+        const clubs = await getClubs();
+        const recruitRes = await api.adminRecruitments(s.token).catch(()=>[]);
+        const recruitList = safeArray(recruitRes);
+
+        if(!clubs.length){
+          box.innerHTML = `<div class="muted" style="font-weight:1000;">No clubs found.</div>`;
+          setStatus($("recAdminStatus"), "No clubs in database.", "warn");
+          return;
+        }
+
+        const recruitMap = new Map();
+        recruitList.forEach(r=>{
+          const club = String(r?.club ?? r?.clubName ?? r?.club_name ?? "").trim();
+          if(club) recruitMap.set(club, r);
+        });
+
+        const finalList = clubs.map(clubName => {
+          const r = recruitMap.get(String(clubName).trim()) || {};
+          return {
+            club: clubName,
+            open: !!(r.open ?? r.isOpen ?? r.is_open ?? false)
+          };
+        });
+
+        box.innerHTML = `
+          <table>
+            <thead><tr><th>Club</th><th>Status</th><th>Type</th><th>Applications</th><th>Action</th></tr></thead>
+            <tbody>
+              ${finalList.map(r => {
+                const st = r.open ? `<span class="status-pill pill-active">● OPEN</span>` : `<span class="status-pill pill-expired">● CLOSED</span>`;
+                return `
+                  <tr>
+                    <td>${escapeHtml(r.club)}</td>
+                    <td>${st}</td>
+                    <td><span class="muted">Internal Recruitment</span></td>
+                    <td><button class="btn btn-secondary" data-view-rec-apps="${escapeHtmlAttr(r.club)}">View Applications</button></td>
+                    <td>
+                      <button class="btn btn-primary" data-open-rec="${escapeHtmlAttr(r.club)}">Open</button>
+                      <button class="btn btn-danger" data-close-rec="${escapeHtmlAttr(r.club)}">Close</button>
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+
+        box.querySelectorAll("[data-open-rec]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const club = btn.getAttribute("data-open-rec");
+            try{
+              await api.openRecruit(s.token, club);
+              setStatus($("recAdminStatus"), "✅ Internal recruitment opened.", "ok");
+              loadAdminRecruitments();
+            }catch(e){ setStatus($("recAdminStatus"), "❌ " + e.message, "err"); }
+          });
+        });
+
+        box.querySelectorAll("[data-close-rec]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const club = btn.getAttribute("data-close-rec");
+            if(!confirm(`Close recruitment for "${club}"?`)) return;
+            try{
+              await api.closeRecruit(s.token, club);
+              setStatus($("recAdminStatus"), "✅ Internal recruitment closed.", "ok");
+              loadAdminRecruitments();
+            }catch(e){ setStatus($("recAdminStatus"), "❌ " + e.message, "err"); }
+          });
+        });
+
+        box.querySelectorAll("[data-view-rec-apps]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const club = btn.getAttribute("data-view-rec-apps") || "";
+            await loadRecruitmentApplicationsForClub(club);
+          });
+        });
+
+        setStatus($("recAdminStatus"), "✅ Clubs loaded.", "ok");
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load clubs.</div>`;
+        setStatus($("recAdminStatus"), "❌ " + e.message, "err");
+      }
+    }
+
+    async function loadRecruitmentApplicationsForClub(club){
+      const s = loadSession();
+      const box = $("recAdminBox");
+      setStatus($("recAdminStatus"), club ? `Loading applications for ${club}...` : "Loading all applications...", "warn");
+      box.innerHTML = `<div class="muted" style="font-weight:1000;">Loading applications...</div>`;
+      try{
+        const res = await api.recruitmentApplications(s.token, club || null);
+        const apps = safeArray(res).map(normalizeRecruitmentItem);
+
+        if(!apps.length){
+          box.innerHTML = `
+            <div class="muted" style="font-weight:1000;">No applications found${club ? ` for ${escapeHtml(club)}` : ""}.</div>
+            <div style="margin-top:12px;"><button class="btn btn-secondary" id="btnBackRecruitmentList">Back</button></div>
+          `;
+          $("btnBackRecruitmentList")?.addEventListener("click", loadAdminRecruitments);
+          setStatus($("recAdminStatus"), "No applications found.", "warn");
+          return;
+        }
+
+        box.innerHTML = `
+          <div class="row" style="align-items:center; margin-bottom:12px;">
+            <div style="font-weight:1100;">${club ? `Applications - ${escapeHtml(club)}` : "All Applications"}</div>
+            <div><button class="btn btn-secondary" id="btnBackRecruitmentList">Back</button></div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Club</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Contact</th>
+                <th>Status</th>
+                <th>Applied</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${apps.map(a=>{
+                const statusClass = a.status === "SELECTED" ? "pill-active" : (a.status === "REJECTED" ? "pill-expired" : "pill-present");
+                return `
+                  <tr>
+                    <td>${escapeHtml(a.club || "-")}</td>
+                    <td>${escapeHtml(a.username || "-")}</td>
+                    <td>${escapeHtml(a.name || "-")}</td>
+                    <td>${escapeHtml(a.role || "-")}</td>
+                    <td>
+                      <div>${escapeHtml(a.email || "-")}</div>
+                      <div class="muted">${escapeHtml(a.phone || "")}</div>
+                      <div class="muted">${escapeHtml(a.branch || "")} ${escapeHtml(a.year || "")}</div>
+                    </td>
+                    <td><span class="status-pill ${statusClass}">● ${escapeHtml(a.status)}</span></td>
+                    <td>${escapeHtml(a.appliedAt || "-")}</td>
+                    <td>
+                      <button class="btn btn-primary" data-app-status="SELECTED" data-app-id="${escapeHtmlAttr(a.id)}" data-app-club="${escapeHtmlAttr(a.club)}" data-app-user="${escapeHtmlAttr(a.username)}">Approve</button>
+                      <button class="btn btn-danger" data-app-status="REJECTED" data-app-id="${escapeHtmlAttr(a.id)}" data-app-club="${escapeHtmlAttr(a.club)}" data-app-user="${escapeHtmlAttr(a.username)}">Reject</button>
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+
+        $("btnBackRecruitmentList")?.addEventListener("click", loadAdminRecruitments);
+
+        box.querySelectorAll("[data-app-status]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const status = btn.getAttribute("data-app-status");
+            const id = btn.getAttribute("data-app-id") || "";
+            const clubName = btn.getAttribute("data-app-club") || "";
+            const username = btn.getAttribute("data-app-user") || "";
+            const actionWord = status === "SELECTED" ? "approve" : "reject";
+            if(!confirm(`Do you want to ${actionWord} ${username} for ${clubName}?`)) return;
+            try{
+              await api.updateRecruitmentStatus(s.token, { id, club: clubName, username, status });
+              const msg = status === "SELECTED"
+                ? "✅ Approved. Backend should send congratulation mail now."
+                : "✅ Rejected.";
+              setStatus($("recAdminStatus"), msg, "ok");
+              await loadRecruitmentApplicationsForClub(club || clubName);
+            }catch(e){
+              setStatus($("recAdminStatus"), "❌ " + e.message, "err");
+            }
+          });
+        });
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load applications.</div>`;
+        setStatus($("recAdminStatus"), "❌ " + e.message, "err");
+      }
+    }
+
+    let selectedClubStudentsClub = "";
+    function selectClubStudentsClub(club){
+      selectedClubStudentsClub = club;
+      $("clubStudentsSelectedClub").value = club;
+      $("clubStudentsClubPicker").classList.add("hidden");
+      $("clubStudentsView").classList.remove("hidden");
+      loadClubStudents(club);
+    }
+    $("clubStudentsBackToClubs")?.addEventListener("click", ()=>{
+      selectedClubStudentsClub = "";
+      $("clubStudentsView").classList.add("hidden");
+      $("clubStudentsClubPicker").classList.remove("hidden");
+      $("clubStudentsBox").innerHTML = `<div class="muted" style="font-weight:1000;">Select a club to view approved students.</div>`;
+      setStatus($("clubStudentsStatus"), "", "");
+      renderClubTiles($("clubStudentsClubTiles"), (club)=>selectClubStudentsClub(club));
+    });
+
+    async function loadClubStudents(club){
+      const s = loadSession();
+      const box = $("clubStudentsBox");
+      setStatus($("clubStudentsStatus"), `Loading approved students for ${club}...`, "warn");
+      box.innerHTML = `<div class="muted" style="font-weight:1000;">Loading approved students...</div>`;
+      try{
+        const res = await api.listClubStudents(s.token, club);
+        const items = safeArray(res);
+        if(!items.length){
+          box.innerHTML = `<div class="muted" style="font-weight:1000;">No approved students found for ${escapeHtml(club)}.</div>`;
+          setStatus($("clubStudentsStatus"), "No approved students found.", "warn");
+          return;
+        }
+
+        box.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items.map(st=>{
+                const username = st.username ?? st.userName ?? st.regNo ?? st.reg_no ?? "";
+                const name = st.name ?? st.studentName ?? "";
+                const role = st.role ?? st.clubRole ?? st.club_role ?? st.roleInterested ?? "";
+                const email = st.email ?? "";
+                const phone = st.phone ?? "";
+                return `
+                  <tr>
+                    <td>${escapeHtml(username || "-")}</td>
+                    <td>${escapeHtml(name || "-")}</td>
+                    <td>${escapeHtml(role || "-")}</td>
+                    <td>${escapeHtml(email || "-")}</td>
+                    <td>${escapeHtml(phone || "-")}</td>
+                    <td><button class="btn btn-danger" data-del-club-student="${escapeHtmlAttr(username)}">Delete</button></td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+
+        box.querySelectorAll("[data-del-club-student]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const username = btn.getAttribute("data-del-club-student") || "";
+            if(!confirm(`Remove ${username} from ${club}?`)) return;
+            try{
+              await api.deleteClubStudent(s.token, { club, username });
+              setStatus($("clubStudentsStatus"), "✅ Student removed from club.", "ok");
+              loadClubStudents(club);
+            }catch(e){
+              setStatus($("clubStudentsStatus"), "❌ " + e.message, "err");
+            }
+          });
+        });
+
+        setStatus($("clubStudentsStatus"), "✅ Approved students loaded.", "ok");
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load approved students.</div>`;
+        setStatus($("clubStudentsStatus"), "❌ " + e.message, "err");
+      }
+    }
+
+let manageMode = "events";
+    $("btnManageUpcoming")?.addEventListener("click", ()=>{ manageMode = "events"; loadAdminUpcoming(); });
+    $("btnManageContent")?.addEventListener("click", ()=>{ manageMode = "contents"; loadAdminContents(); });
+    $("manageSearch")?.addEventListener("input", ()=>{ manageMode === "events" ? loadAdminUpcoming() : loadAdminContents(); });
+
+    async function loadAdminUpcoming(){
+      const s = loadSession();
+      const box = $("adminManageBox");
+      box.innerHTML = "";
+      setStatus($("amStatus"), "Loading...");
+      try{
+        const list = safeArray(await api.listEvents());
+        const q = ($("manageSearch").value || "").trim().toLowerCase();
+        const filtered = list.filter(e => String(e.club || "").toLowerCase().includes(q) || String(e.title || "").toLowerCase().includes(q));
+        if(!filtered.length){
+          box.innerHTML = `<div class="muted" style="font-weight:1000;">No events found.</div>`;
+          setStatus($("amStatus"), "");
+          return;
+        }
+        box.innerHTML = `
+          <table>
+            <thead><tr><th>Club</th><th>Title</th><th>Date</th><th>Status</th><th>Photo</th><th>Register</th><th>Action</th></tr></thead>
+            <tbody>
+              ${filtered.map(e => {
+                const photo = e.photoUrl ? `<a href="${escapeHtmlAttr(e.photoUrl)}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
+                const reg = e.regLink ? `<a href="${escapeHtmlAttr(e.regLink)}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">-</span>`;
+                const st = e.date ? classifyEventDate(e.date) : "PAST";
+                const pill = st==="UPCOMING" ? `<span class="status-pill pill-upcoming">● Upcoming</span>` : st==="PRESENT" ? `<span class="status-pill pill-present">● Present</span>` : `<span class="status-pill pill-expired">● Past</span>`;
+                return `
+                  <tr>
+                    <td>${escapeHtml(e.club || "-")}</td>
+                    <td>${escapeHtml(e.title || "")}</td>
+                    <td>${escapeHtml(e.date || "")}</td>
+                    <td>${pill}</td>
+                    <td>${photo}</td>
+                    <td>${reg}</td>
+                    <td><button class="btn btn-danger" data-del-event="${Number(e.id)}">Delete</button></td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+
+        box.querySelectorAll("[data-del-event]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const id = Number(btn.getAttribute("data-del-event"));
+            if(!confirm("Delete this event?")) return;
+            try{
+              await api.delEvent(s.token, id);
+              loadAdminUpcoming();
+              refreshAdminStats();
+            }catch(e){ setStatus($("amStatus"), "❌ " + e.message, "err"); }
+          });
+        });
+        setStatus($("amStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load events.</div>`;
+        setStatus($("amStatus"), "❌ " + e.message, "err");
+      }
+    }
+
+    async function loadAdminContents(){
+      const s = loadSession();
+      const box = $("adminManageBox");
+      box.innerHTML = "";
+      setStatus($("amStatus"), "Loading...");
+      try{
+        const list = safeArray(await api.listContents());
+        const q = ($("manageSearch").value || "").trim().toLowerCase();
+        const filtered = list.filter(c => String(c.club || "").toLowerCase().includes(q) || String(c.title || "").toLowerCase().includes(q));
+        if(!filtered.length){
+          box.innerHTML = `<div class="muted" style="font-weight:1000;">No contents found.</div>`;
+          setStatus($("amStatus"), "");
+          return;
+        }
+        box.innerHTML = `
+          <table>
+            <thead><tr><th>Club</th><th>Event</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody>
+              ${filtered.map(c => `
+                <tr>
+                  <td>${escapeHtml(c.club || "-")}</td>
+                  <td>${escapeHtml(c.title || "")}</td>
+                  <td>${escapeHtml(c.date || "")}</td>
+                  <td><button class="btn btn-danger" data-del-content="${Number(c.id)}">Delete</button></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `;
+
+        box.querySelectorAll("[data-del-content]").forEach(btn=>{
+          btn.addEventListener("click", async ()=>{
+            const id = Number(btn.getAttribute("data-del-content"));
+            if(!confirm("Delete this content?")) return;
+            try{
+              await api.delContent(s.token, id);
+              loadAdminContents();
+              refreshAdminStats();
+            }catch(e){ setStatus($("amStatus"), "❌ " + e.message, "err"); }
+          });
+        });
+        setStatus($("amStatus"), "✅ Loaded.", "ok");
+      }catch(e){
+        box.innerHTML = `<div class="muted" style="font-weight:1000;">Failed to load contents.</div>`;
+        setStatus($("amStatus"), "❌ " + e.message, "err");
+      }
+    }
+
+    $("btnCoordLogout").addEventListener("click", ()=>{
+      clearSession();
+      location.href = "login.html";
+    });
+
+    // Coordinator restrictions
+    const _origListEvents = api.listEvents;
+    api.listEvents = (tokenOrClub, maybeClub=null) => {
+      const s = loadSession();
+      return _origListEvents(s.token, coordinatorClub);
+    };
+    const _origListContents = api.listContents;
+    api.listContents = (tokenOrClub, maybeClub=null) => {
+      const s = loadSession();
+      return _origListContents(s.token, coordinatorClub);
+    };
+    const _origAddEvent = api.addEvent;
+    api.addEvent = (token, payload) => _origAddEvent(token, { ...payload, club: coordinatorClub });
+    const _origSendEventMail = api.sendEventMail;
+    api.sendEventMail = (token, payload) => _origSendEventMail(token, { ...payload, club: coordinatorClub });
+    const _origAddContent = api.addContent;
+    api.addContent = (token, payload) => _origAddContent(token, { ...payload, club: coordinatorClub });
+    const _origUploadCertificateByUsername = api.uploadCertificateByUsername;
+    api.uploadCertificateByUsername = (token, payload) => _origUploadCertificateByUsername(token, { ...payload, club: coordinatorClub });
+    const _origOpenRecruit = api.openRecruit;
+    api.openRecruit = (token, club) => _origOpenRecruit(token, coordinatorClub);
+    const _origCloseRecruit = api.closeRecruit;
+    api.closeRecruit = (token, club) => _origCloseRecruit(token, coordinatorClub);
+    const _origRecruitmentApplications = api.recruitmentApplications;
+    api.recruitmentApplications = (token, club=null) => _origRecruitmentApplications(token, coordinatorClub);
+    const _origListClubStudents = api.listClubStudents;
+    api.listClubStudents = (token, club) => _origListClubStudents(token, coordinatorClub);
+
+    function forceFixedClubUI(){
+      ["aeSelectedClub","certSelectedClub","lsSelectedClub","csSelectedClub"].forEach(id=>{ if($(id)) $(id).value = coordinatorClub; });
+      if($("acClub")){
+        $("acClub").innerHTML = `<option value="${escapeHtml(coordinatorClub)}">${escapeHtml(coordinatorClub)}</option>`;
+        $("acClub").value = coordinatorClub;
+      }
+    }
+
+    const _baseOpenAdminTab = openAdminTab;
+    openAdminTab = function(name){
+      _baseOpenAdminTab(name);
+      setTimeout(forceFixedClubUI, 0);
+    };
+
+    (function boot(){
+      const s = loadSession();
+      if(!s?.token){
+        location.href = "login.html";
+        return;
+      }
+      const role = (s.role || "").toLowerCase();
+      if(!(role === "club_coordinator" || role === "coordinator" || role === "admin")){
+        alert("Coordinator only");
+        location.href = "login.html";
+        return;
+      }
+      if(!coordinatorClub){
+        alert("Coordinator club missing in session/localStorage");
+      }
+      $("adminName").textContent = s.username || "Coordinator";
+      if($("aStatClubs")) $("aStatClubs").textContent = coordinatorClub || "-";
+      forceFixedClubUI();
+      openAdminTab("HOME");
+    })();
+  </script>
+</body>
+</html>

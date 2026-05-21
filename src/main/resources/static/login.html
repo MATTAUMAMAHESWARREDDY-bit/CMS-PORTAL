@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CMS Portal - Login</title>
+
+<style>
+  :root{
+    --muted:#94a3b8; --text:#e2e8f0; --text2:#0f172a;
+    --accent:#eab308; --accent2:#facc15; --danger:#ef4444;
+    --nav:#0f172a; --navbtn:#1e293b; --navhover:#334155;
+    --shadow: 0 18px 55px rgba(0,0,0,.35);
+    --shadow2: 0 16px 30px rgba(15,23,42,.16);
+    --radius: 18px; --font:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    --ok:#16a34a; --warn:#d97706; --info:#2563eb;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; font-family:var(--font); }
+  body{
+    background:
+      radial-gradient(1200px 700px at 20% 10%, rgba(56,189,248,.16), transparent 55%),
+      radial-gradient(900px 600px at 80% 30%, rgba(234,179,8,.14), transparent 55%),
+      linear-gradient(140deg, #0b1220, #0f172a 45%, #0b1220);
+    color:var(--text);
+    overflow-x:hidden;
+  }
+  .bg-photo{
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
+      url("https://www.kalasalingam.ac.in/wp-content/uploads/2021/06/IMG_1793-scaled.jpg");
+    background-size:cover; background-position:center; z-index:-2;
+  }
+  .hidden{ display:none !important; }
+  .row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .grow{ flex:1; min-width:240px; }
+  .muted{ color:var(--muted); }
+  .hr{ height:1px; background:rgba(226,232,240,.16); margin:14px 0; }
+  .btn{
+    border:0; outline:0; padding:11px 14px; border-radius:12px; cursor:pointer;
+    font-weight:900; letter-spacing:.2px; font-family:var(--font);
+    transition: transform .12s ease, background .12s ease, opacity .12s ease; user-select:none;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-primary{ background:var(--accent); color:#0b1220; }
+  .btn-primary:hover{ background:var(--accent2); }
+  .btn-secondary{ background:#e2e8f0; color:#0f172a; }
+  .btn-danger{ background:var(--danger); color:#fff; }
+  .btn-ghost{ background:transparent; color:var(--text); border:1px solid rgba(226,232,240,.2); }
+  .btn:disabled{ opacity:.55; cursor:not-allowed; }
+  .field{
+    width:100%; padding:12px; border-radius:12px; border:1px solid rgba(148,163,184,.45);
+    background:rgba(255,255,255,.96); color:#0f172a; font-size:14px; outline:none;
+  }
+  .field:focus{
+    border-color: rgba(234,179,8,.85);
+    box-shadow: 0 0 0 4px rgba(234,179,8,.18);
+  }
+  .label{ font-size:13px; color: rgba(226,232,240,.92); margin:0 0 6px 2px; }
+  .label-dark{ font-size:13px; color:#0f172a; margin:0 0 6px 2px; font-weight:800; }
+  textarea.field{ min-height:92px; resize:vertical; }
+  select.field{ padding:11px 10px; }
+  .hint{ font-size:12px; color:rgba(226,232,240,.75); margin-top:6px; }
+  .hint-dark{ font-size:12px; color:#475569; margin-top:6px; }
+  .status{ font-size:13px; font-weight:1000; color:#334155; }
+  .status.ok{ color:#166534; } .status.err{ color:#991b1b; } .status.warn{ color:#92400e; }
+  .glass-card{
+    width:min(520px, 92vw); border-radius:22px; background: rgba(0,0,0,.56);
+    backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,.12);
+    box-shadow: var(--shadow); padding:18px 22px 16px;
+  }
+  .panel{
+    width:min(1180px,95vw); margin:18px auto; background:rgba(255,255,255,.92);
+    border:1px solid #e2e8f0; border-radius:var(--radius); box-shadow:var(--shadow2);
+    overflow:hidden; color:var(--text2);
+  }
+  .panel-inner{ padding:18px; }
+  .topbar{
+    background:var(--nav); color:white; padding:12px 16px; display:flex; align-items:center;
+    justify-content:space-between; gap:12px; border-bottom:1px solid rgba(226,232,240,.12);
+  }
+  .topbar .title{ display:flex; align-items:center; gap:10px; font-weight:1000; }
+  .badge{
+    font-size:12px; padding:4px 10px; border-radius:999px; background: rgba(234,179,8,.18);
+    color:#fde68a; border:1px solid rgba(234,179,8,.35); font-weight:1000;
+  }
+  .nav{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .nav .navbtn{
+    background: var(--navbtn); color:white; border:1px solid rgba(226,232,240,.12);
+    padding:10px 12px; border-radius:12px; font-weight:1000; cursor:pointer;
+  }
+  .nav .navbtn:hover{ background:var(--navhover); }
+  .nav .logout{ background:var(--accent); color:#0b1220; }
+  .section-title{ font-size:20px; font-weight:1100; margin:0 0 12px; }
+  .sub{ margin:0 0 14px; color:#475569; font-size:13px; line-height:1.45; }
+  .card-soft{ border:1px solid #e2e8f0; border-radius:16px; padding:14px; background:#fff; }
+  table{ width:100%; border-collapse:collapse; }
+  th,td{ padding:12px 10px; border-bottom:1px solid #e2e8f0; text-align:left; font-size:14px; vertical-align:top; }
+  th{ font-size:12px; color:#475569; text-transform:uppercase; letter-spacing:.5px; }
+  tr:hover td{ background:#f8fafc; }
+  .tile-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; }
+  .tile{
+    border:1px solid #e2e8f0; border-radius:16px; padding:14px; background:#fff;
+    box-shadow:0 10px 22px rgba(15,23,42,.07);
+  }
+  .tile .t-title{ font-weight:1100; color:#0f172a; }
+  .tile .t-sub{ margin-top:6px; font-size:12px; color:#64748b; font-weight:800; }
+  .stats-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+  .stat-box{ background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:14px; box-shadow:0 10px 22px rgba(15,23,42,.06); }
+  .stat-num{ font-size:28px; font-weight:1100; color:#0f172a; }
+  .stat-lab{ font-size:12px; color:#64748b; font-weight:900; margin-top:4px; text-transform:uppercase; }
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center;
+    padding:20px; z-index:50;
+  }
+  .modal{ width:min(760px,96vw); background:#fff; color:#0f172a; border-radius:18px; box-shadow:var(--shadow); overflow:hidden; }
+  .modal-head{ padding:12px 14px; background:#0f172a; color:#fff; display:flex; align-items:center; justify-content:space-between; }
+  .modal-body{ padding:14px; }
+  @media (max-width: 720px){
+    .topbar{ flex-direction:column; align-items:flex-start; }
+    .nav{ justify-content:flex-start; }
+  }
+</style>
+
+</head>
+<body>
+<div class="bg-photo"></div>
+<section id="screen-login" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:26px 12px;">
+  <div class="glass-card">
+    <div style="display:flex;justify-content:center;margin:6px 0 18px;">
+      <img alt="Kalasalingam University Logo" src="https://www.kalasalingam.ac.in/wp-content/uploads/2022/02/Logo.png" style="width:360px;max-width:92%;height:auto;filter:drop-shadow(0 10px 22px rgba(0,0,0,.35));" />
+    </div>
+    <div class="label">Username</div>
+    <input id="loginUser" class="field" type="text" autocomplete="username" />
+    <div style="margin-top:12px;" class="label">Password</div>
+    <input id="loginPass" class="field" type="password" autocomplete="current-password" />
+    <label style="display:flex;align-items:center;gap:8px;margin:10px 0 0;">
+      <input id="showPass" type="checkbox" style="width:16px;height:16px;" />
+      <span style="font-size:13px;color:rgba(226,232,240,.92);">Show password</span>
+    </label>
+    <button class="btn btn-primary" id="btnLogin" style="width:100%;margin-top:12px;">LOGIN</button>
+    <button class="btn btn-ghost hidden" id="btnForgotOpen" style="width:100%;margin-top:10px;">Forgot Password (OTP)</button>
+    <div class="hint" id="forgotHint" style="text-align:center;"></div>
+    <div class="hint" id="loginStatus" style="margin-top:10px;"></div>
+  </div>
+</section>
+
+<div id="forgotModal" class="modal-backdrop hidden">
+  <div class="modal" style="width:min(720px,96vw);">
+    <div class="modal-head"><div style="font-weight:1100;">Forgot Password (OTP)</div><button class="btn btn-ghost" id="btnForgotClose">Close</button></div>
+    <div class="modal-body">
+      <div id="fpStep1">
+        <div class="label-dark">Username / Register Number</div>
+        <input id="fpUsername" class="field" type="text" />
+        <div style="margin-top:12px;"><button class="btn btn-primary" id="btnFpSendOtp">Send OTP</button> <span class="status" id="fpStatus"></span></div>
+      </div>
+      <div id="fpStep2" class="hidden">
+        <div class="label-dark">OTP</div>
+        <input id="fpOtp" class="field" type="text" />
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="btnFpVerifyOtp">Verify OTP</button>
+          <button class="btn btn-secondary" id="btnFpResend">Resend OTP</button>
+          <button class="btn btn-secondary" id="btnFpBack1">Back</button>
+          <span class="status" id="fpStatus2"></span>
+        </div>
+      </div>
+      <div id="fpStep3" class="hidden">
+        <div class="row">
+          <div class="grow"><div class="label-dark">New Password</div><input id="fpNewPass" class="field" type="password" /></div>
+          <div class="grow"><div class="label-dark">Confirm Password</div><input id="fpConPass" class="field" type="password" /></div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="btnFpReset">Reset</button>
+          <button class="btn btn-secondary" id="btnFpBack2">Back</button>
+          <span class="status" id="fpStatus3"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+const $ = (id) => document.getElementById(id);
+const API_BASE = window.CMS_API_BASE || (location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+  ? 'http://localhost:8080/api'
+  : `${location.origin}/api`);
+
+const KEY_SESSION = 'cms_session_backend';
+function saveSession(s){ localStorage.setItem(KEY_SESSION, JSON.stringify(s)); }
+function loadSession(){ try{ return JSON.parse(localStorage.getItem(KEY_SESSION) || 'null'); }catch{ return null; } }
+function clearSession(){ localStorage.removeItem(KEY_SESSION); }
+
+function setStatus(el, msg, type=''){
+  if(!el) return;
+  el.textContent = msg || '';
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+function esc(s){ return String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
+function dateOnly(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
+function classifyEventDate(v){
+  try{
+    const d = dateOnly(new Date(v + 'T00:00:00'));
+    const t = dateOnly(new Date());
+    if(d.getTime() > t.getTime()) return 'UPCOMING';
+    if(d.getTime() === t.getTime()) return 'PRESENT';
+    return 'PAST';
+  }catch{ return 'PAST'; }
+}
+async function apiFetch(path, { method='GET', token=null, headers={}, body=null } = {}){
+  const h = { ...headers };
+  if(token) h['X-Auth-Token'] = token;
+  const res = await fetch(`${API_BASE}${path}`, { method, headers:h, body });
+  const data = await res.json().catch(()=>({}));
+  if(res.status === 401){
+    clearSession();
+    location.href = 'login.html';
+    throw new Error('Session expired');
+  }
+  if(!res.ok) throw new Error(data.message || data.error || `HTTP ${res.status}`);
+  if(data && data.ok === false) throw new Error(data.message || data.error || 'Request failed');
+  return data;
+}
+function safeArray(res){
+  if(Array.isArray(res)) return res;
+  if(Array.isArray(res.items)) return res.items;
+  if(Array.isArray(res.data)) return res.data;
+  if(Array.isArray(res.clubs)) return res.clubs;
+  return [];
+}
+const api = {
+  login: (username, password) => apiFetch('/login', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ username, password })
+  }),
+  clubs: () => apiFetch('/clubs'),
+  addClub: (token, payload) => apiFetch('/clubs', {
+    method:'POST', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+  }),
+  deleteClub: (token, club) => apiFetch(`/clubs/${encodeURIComponent(club)}`, { method:'DELETE', token }),
+  listEvents: (club=null) => apiFetch(`/events${club ? `?club=${encodeURIComponent(club)}` : ''}`),
+  addEvent: (token, payload) => {
+    const fd = new FormData();
+    Object.entries(payload).forEach(([k,v])=>{
+      if(v !== null && v !== undefined && v !== '') fd.append(k, v);
+    });
+    return apiFetch('/admin/event', { method:'POST', token, body:fd });
+  },
+  listContents: (club=null) => apiFetch(`/contents${club ? `?club=${encodeURIComponent(club)}` : ''}`),
+  addContent: (token, { club, title, date, desc, youtubeLinks, photos, report }) => {
+    const fd = new FormData();
+    fd.append('club', club); fd.append('title', title); fd.append('date', date);
+    if(desc) fd.append('desc', desc);
+    if(youtubeLinks) fd.append('youtubeLinks', youtubeLinks);
+    (photos || []).forEach(f => fd.append('photos', f));
+    if(report) fd.append('report', report);
+    return apiFetch('/admin/content', { method:'POST', token, body:fd });
+  },
+  contentDetails: (club, title, date) => apiFetch(`/content/details?club=${encodeURIComponent(club)}&title=${encodeURIComponent(title)}&date=${encodeURIComponent(date)}`),
+  myProfile: (token) => apiFetch('/me/profile', { token }),
+  saveMyProfile: (token, profile) => apiFetch('/me/profile', {
+    method:'POST', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify(profile)
+  }),
+  changePassword: (token, oldPassword, newPassword) => apiFetch('/me/change-password', {
+    method:'POST', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify({ oldPassword, newPassword })
+  }),
+  createUser: (token, payload) => apiFetch('/admin/users', {
+    method:'POST', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+  }),
+  getUserDetails: (token, username) => apiFetch(`/admin/users/${encodeURIComponent(username)}`, { token }),
+  updateUserDetails: (token, username, payload) => apiFetch(`/admin/users/${encodeURIComponent(username)}`, {
+    method:'PUT', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+  }),
+  openRecruitmentsPublic: () => apiFetch('/recruitments/open'),
+  uploadCertificate: (token, payload) => {
+    const fd = new FormData();
+    Object.entries(payload).forEach(([k,v])=> fd.append(k, v));
+    return apiFetch('/admin/certificates/upload', { method:'POST', token, body:fd });
+  },
+  getCertificate: (club, eventId, regNo) => apiFetch(`/certificates/get?club=${encodeURIComponent(club)}&eventId=${encodeURIComponent(eventId)}&regNo=${encodeURIComponent(regNo)}`),
+  saveLiveScore: (token, body) => apiFetch('/admin/livescore/save', {
+    method:'POST', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
+  }),
+  getLiveScore: (club, eventId) => apiFetch(`/livescore/get?club=${encodeURIComponent(club)}&eventId=${encodeURIComponent(eventId)}`),
+  forgotSendOtp: (username) => apiFetch('/auth/forgot/send-otp', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username })
+  }),
+  forgotVerifyOtp: (username, otp) => apiFetch('/auth/forgot/verify-otp', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username, otp })
+  }),
+  forgotReset: (username, otp, newPassword) => apiFetch('/auth/forgot/reset', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username, otp, newPassword })
+  }),
+  profileSendOtp: (token) => apiFetch('/me/profile/send-otp', { method:'POST', token }),
+  profileVerifyOtp: (token, otp) => apiFetch('/me/profile/verify-otp', {
+    method:'POST', token, headers:{'Content-Type':'application/json'}, body: JSON.stringify({ otp })
+  })
+};
+async function getClubs(){ return safeArray(await api.clubs()); }
+async function fillClubSelect(el, onlyClub=null){
+  if(!el) return;
+  const clubs = await getClubs();
+  el.innerHTML = '';
+  const filtered = onlyClub ? clubs.filter(c => c === onlyClub) : clubs;
+  if(!filtered.length){ el.innerHTML = `<option value="">(no clubs)</option>`; return; }
+  filtered.forEach(c => {
+    const o = document.createElement('option'); o.value = c; o.textContent = c; el.appendChild(o);
+  });
+}
+async function renderClubTiles(container, onClick, onlyClub=null){
+  const clubs = await getClubs();
+  container.innerHTML = '';
+  const filtered = onlyClub ? clubs.filter(c => c === onlyClub) : clubs;
+  if(!filtered.length){ container.innerHTML = '<div class="muted">No clubs available.</div>'; return; }
+  filtered.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'tile';
+    div.innerHTML = `<div class="t-title">${esc(c)}</div><div class="t-sub">Click to open</div>`;
+    div.onclick = () => onClick(c);
+    container.appendChild(div);
+  });
+}
+function ensureRole(allowed){
+  const s = loadSession();
+  if(!s?.token || !allowed.includes((s.role || '').toLowerCase())){
+    location.href = 'login.html';
+    return null;
+  }
+  return s;
+}
+function logout(){ clearSession(); location.href = 'login.html'; }
+</script>
+
+<script>
+const KEY_FAILS = 'cms_login_fails';
+const getFailCount = () => Number(localStorage.getItem(KEY_FAILS) || '0') || 0;
+function setFailCount(n){ localStorage.setItem(KEY_FAILS, String(Math.max(0, Number(n)||0))); updateForgotVisibility(); }
+function incFailCount(){ setFailCount(getFailCount()+1); }
+function resetFailCount(){ setFailCount(0); }
+function updateForgotVisibility(){
+  const fails = getFailCount();
+  $('btnForgotOpen').classList.toggle('hidden', fails < 3);
+  $('forgotHint').textContent = fails >= 3 ? 'Too many failed attempts. Use OTP to reset password.' : '';
+}
+$('showPass').addEventListener('change', ()=> $('loginPass').type = $('showPass').checked ? 'text' : 'password');
+
+async function doLogin(){
+  const username = $('loginUser').value.trim();
+  const password = $('loginPass').value;
+  if(!username || !password) return setStatus($('loginStatus'), 'Enter username and password.', 'warn');
+  setStatus($('loginStatus'), 'Signing in...');
+  try {
+    const data = await api.login(username, password);
+    resetFailCount();
+    saveSession({
+      token: data.token,
+      username: data.username,
+      role: data.role,
+      profileComplete: !!data.profileComplete,
+      club: data.club || data.clubName || null
+    });
+    const role = String(data.role || '').toLowerCase();
+    if(role === 'admin') location.href = 'admin.html';
+    else if(role === 'club_coordinator') location.href = 'coordinator.html';
+    else location.href = 'user.html';
+  } catch (e) {
+    incFailCount();
+    setStatus($('loginStatus'), e.message || 'Login failed', 'err');
+  }
+}
+$('btnLogin').onclick = doLogin;
+document.addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+
+function openForgotModal(){ $('fpUsername').value = $('loginUser').value.trim(); $('forgotModal').classList.remove('hidden'); }
+function closeForgotModal(){ $('forgotModal').classList.add('hidden'); }
+$('btnForgotOpen').onclick = openForgotModal;
+$('btnForgotClose').onclick = closeForgotModal;
+$('forgotModal').onclick = (e) => { if(e.target === $('forgotModal')) closeForgotModal(); };
+$('btnFpSendOtp').onclick = async () => {
+  const u = $('fpUsername').value.trim();
+  if(!u) return setStatus($('fpStatus'), 'Enter username.', 'warn');
+  try {
+    await api.forgotSendOtp(u);
+    setStatus($('fpStatus'), 'OTP sent.', 'ok');
+    $('fpStep1').classList.add('hidden'); $('fpStep2').classList.remove('hidden');
+  } catch(e) { setStatus($('fpStatus'), e.message, 'err'); }
+};
+$('btnFpResend').onclick = async () => {
+  try { await api.forgotSendOtp($('fpUsername').value.trim()); setStatus($('fpStatus2'), 'OTP resent.', 'ok'); }
+  catch(e) { setStatus($('fpStatus2'), e.message, 'err'); }
+};
+$('btnFpBack1').onclick = () => { $('fpStep2').classList.add('hidden'); $('fpStep1').classList.remove('hidden'); };
+$('btnFpVerifyOtp').onclick = async () => {
+  try {
+    await api.forgotVerifyOtp($('fpUsername').value.trim(), $('fpOtp').value.trim());
+    setStatus($('fpStatus2'), 'OTP verified.', 'ok');
+    $('fpStep2').classList.add('hidden'); $('fpStep3').classList.remove('hidden');
+  } catch(e) { setStatus($('fpStatus2'), e.message, 'err'); }
+};
+$('btnFpBack2').onclick = () => { $('fpStep3').classList.add('hidden'); $('fpStep2').classList.remove('hidden'); };
+$('btnFpReset').onclick = async () => {
+  const p1 = $('fpNewPass').value, p2 = $('fpConPass').value;
+  if(!p1 || p1 !== p2) return setStatus($('fpStatus3'), 'Passwords do not match.', 'warn');
+  try {
+    await api.forgotReset($('fpUsername').value.trim(), $('fpOtp').value.trim(), p1);
+    resetFailCount();
+    setStatus($('fpStatus3'), 'Password reset. Login now.', 'ok');
+  } catch(e) { setStatus($('fpStatus3'), e.message, 'err'); }
+};
+updateForgotVisibility();
+const s = loadSession();
+if(s?.token && s?.role){
+  const role = String(s.role || '').toLowerCase();
+  if(role === 'admin') location.href = 'admin.html';
+  else if(role === 'club_coordinator') location.href = 'coordinator.html';
+  else location.href = 'user.html';
+}
+</script>
+</body>
+</html>
